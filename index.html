@@ -1,0 +1,822 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Twisted Skyrim - Wabbajack Modlist</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <nav class="sidebar">
+        <div class="sidebar-header">
+            <div class="search-container">
+                <input type="text" id="search-input" class="search-input" placeholder="Search content...">
+                <button type="button" class="search-button">🔍</button>
+            </div>
+        </div>
+        <ul class="sidebar-menu">
+            <li><a href="#overview" class="sidebar-link active" data-section="overview">Overview</a></li>
+            <li><a href="#features" class="sidebar-link" data-section="features">Features</a></li>
+            <li><a href="#requirements" class="sidebar-link" data-section="requirements">Requirements</a></li>
+            <li><a href="#installation" class="sidebar-link" data-section="installation">Installation</a></li>
+            <li><a href="#gameplay" class="sidebar-link" data-section="gameplay">Gameplay Guide</a></li>
+            <li><a href="#performance" class="sidebar-link" data-section="performance">Performance Guide</a></li>
+            <li><a href="#faq" class="sidebar-link" data-section="faq">FAQ</a></li>
+            <li><a href="#mods" class="sidebar-link" data-section="mods">Mod List</a></li>
+            <li><a href="#screenshots" class="sidebar-link" data-section="screenshots">Screenshots</a></li>
+            <li><a href="#support" class="sidebar-link" data-section="support">Support</a></li>
+        </ul>
+        <div class="sidebar-footer">
+            <a href="https://www.nexusmods.com/skyrimspecialedition/mods/132034" target="_blank" class="btn btn-nexus">Nexus Page</a>
+            <a href="https://discord.gg/wakingdreams" target="_blank" class="btn btn-discord">Discord</a>
+            <a href="https://www.patreon.com/c/TwistedModding" target="_blank" class="btn btn-patreon">Patreon</a>
+            <a href="https://ko-fi.com/twistedmodding1" target="_blank" class="btn btn-kofi">Ko-fi</a>
+        </div>
+    </nav>
+
+    <main class="main-content">
+        <section id="overview" class="content-section active">
+            <div class="section-header">
+                <h1>Twisted Skyrim</h1>
+                <p class="subtitle">A Complete Skyrim Overhaul</p>
+            </div>
+            
+            <div class="image-embed">
+                <img src="https://raw.githubusercontent.com/Oghma-Infinium/Twisted-Skyrim/refs/heads/main/Twisted%20Skyrim%20Logo%20(1).webp" alt="Twisted Skyrim Logo">
+                <div class="image-caption">A Wabbajack Modlist</div>
+            </div>
+            
+            <div class="content-text">
+                <p>
+                    Twisted Skyrim is modlist for TES V: Special Edition. Its been made easy to install thanks to Wabbajack. Twisted Skyrim presents you with an entirely hand-crafted suite of visuals, a total combat system overhaul, new & expanded locations, worlds, quests, and achievements. Contains both a SFW and NSFW profile.
+                </p>
+                
+                <h3>Design Philosophy</h3>
+                <p>
+                    Twisted Skyrim was designed as a graphics-first modlist. What that means is that I've spared no expense in terms of visual fidelity, and I strive to make everything as visually consistent as possible. With that said, Twisted Skyrim is not just about visuals, it also offers a complete overhaul of pretty much every corner of the game. I noticed most lists don't cater to a graphics-first approach leaving users with high-end hardware feeling like they are leaving something on the table.
+                </p>
+                
+                <p><strong>Featuring:</strong></p>
+                <ul>
+                    <li>4000+ mods</li>
+                    <li>ENB</li>
+                    <li>Legacy of the Dragonborn</li>
+                    <li>A Complete Combat Overhaul</li>
+                </ul>
+            </div>
+        </section>
+
+        <section id="features" class="content-section">
+            <div class="section-header">
+                <h1>Key Features</h1>
+                <p class="subtitle">What makes Twisted Skyrim unique</p>
+            </div>
+            
+            <div class="content-text">
+                <h3>Modern Combat</h3>
+                <p>Melee combat has been modernized with the help of BFCO, a modern MCO replacement for all intents and purposes. For those unfamiliar, it allows for jump attacks, swimming attacks, and attack speed buffs on movesets.</p>
+                
+                <h3>World Overhaul</h3>
+                <p>Expanded cities, new dungeons, and unique mashups for several locations.</p>
+
+                <h3>New Quests and Lands</h3>
+                <p>Completely new questlines, characters, locations, and lands to explore.</p>
+
+                <h3>Survival Elements</h3>
+                <p>Temperature, hunger, and fatigue systems remain true to vanilla, and fast travel requires travel packs.
+                </p>
+                
+                <h3>Visual Overhaul</h3>
+                <p>The ENB preset used is based on Rudy ENB, but has many custom changes to both the weather and ENB itself for a completely unique experience. Textures have been hand selected from hundreds of different mods, making sure everything is as consistent as possible.</p>
+
+                <h3>Lore-focused</h3>
+                <p>Most, if not all, content that has been added is well within the bounds of the established lore.</p>
+            </div>
+        </section>
+
+        <section id="requirements" class="content-section">
+            <div class="section-header">
+                <h1>System Requirements</h1>
+                <p class="subtitle">Hardware specifications and installation requirements</p>
+            </div>
+            
+            <div class="content-text">
+                <h3>Development Setup</h3>
+                <ul>
+                    <li><strong>CPU:</strong> AMD Ryzen 7 7800X3D</li>
+                    <li><strong>GPU:</strong> NVIDIA RTX 4090</li>
+                    <li><strong>RAM:</strong> 64GB DDR5 6000MHz</li>
+                    <li><strong>Storage:</strong> NVMe SSD</li>
+                    <li><strong>OS:</strong> Windows 11 64-bit</li>
+                </ul>
+                
+                <h3>Performance Notes</h3>
+                <ul>
+                    <li><strong>Resolution:</strong> Tested at 4K (3840x2160)</li>
+                    <li><strong>Memory Usage:</strong> ~40GBs of RAM used</li>
+                    <li><strong>Performance:</strong> ~40 FPS exteriors & ~60 FPS interiors</li>
+                </ul>
+                
+                <h3>Basic Requirements</h3>
+                <ul>
+                    <li>Skyrim Special Edition + Paid Anniversary Upgrade (Steam version)</li>
+                    <li>Wabbajack</li>
+                    <li>Microsoft Visual C++ Redistributables</li>
+                </ul>
+                
+                <div class="warning">
+                    <h3>Important Notice</h3>
+                    <p><strong>Twisted Skyrim requires the full AE upgrade, which means you must purchase the AE edition of the game for the list to function.</strong></p>
+                    <p><strong>You must update Skyrim to the latest version (1.6.1170) on Steam to install this list.</strong></p>
+                    <p><strong>THESE ARE DESKTOP RECOMMENDED SPECS, THIS LIST WILL NOT WORK ON LAPTOPS</strong></p>
+                </div>
+                
+                <h3>Storage Requirements</h3>
+                <ul>
+                    <li><strong>Downloads:</strong> ~484 GB</li>
+                    <li><strong>Install:</strong> ~716 GB</li>
+                    <li><strong>Temp Files:</strong> ~100 GB (on OS drive)</li>
+                    <li><strong>Pagefile:</strong> 40 GB</li>
+                    <li><strong>TOTAL:</strong> ~1.3 TB</li>
+                </ul>
+                <p><em>Wabbajack requires around 30-40 GB of space on your main OS drive for temporary and working files during the installation.</em></p>
+            </div>
+        </section>
+
+        <!-- Installation Section -->
+        <section id="installation" class="content-section">
+            <div class="section-header">
+                <h1>Installation Guide</h1>
+                <p class="subtitle">These steps are only required for installing the Modlist for the first time</p>
+            </div>
+            
+            <div class="content-text">
+                <div class="warning">
+                    <h3>Pre-Installation Steps</h3>
+                    <p><strong>These steps are required before installation. Many may be covered in other modlist installs, but new users should read through regardless.</strong></p>
+                </div>
+                
+                <div class="installation-steps">
+                    <div class="step-item">
+                        <h3><span class="step-number">1</span>Install Visual C++ & .NET Runtime</h3>
+                        <div class="step-description">
+                            <p>1. Install <a href="https://aka.ms/vs/16/release/vc_redist.x64.exe" target="_blank">Visual C++ x64</a> & <a href="https://dotnet.microsoft.com/en-us/download/dotnet/6.0/runtime" target="_blank">.Net Runtime v6 desktop x64</a></p>
+                            <p>2. Change Skyrim so it does not <a href="https://help.steampowered.com/en/faqs/view/71AB-698D-57EB-178C#disable" target="_blank">automatically update</a></p>
+                            <p>3. Right click on Skyrim SE and click on properties, untick the "Enable Steam Overlay while in-game."</p>
+                            <p>4. <strong>You also need to start the games to the main menu in order to download all the creations. DO NOT SKIP THIS STEP, IF YOU DO SO WABBAJACK WILL FAIL</strong></p>
+                        </div>
+                    </div>
+                    
+                    <div class="step-item">
+                        <h3><span class="step-number">2</span>Setup Pagefile (REQUIRED)</h3>
+                        <div class="step-description">
+                            <p><strong>Due to Twisted Skyrim's size and number of files required to be handled for the list, this step is NOT optional, I do not care how much RAM or VRAM you have, please do this step.</strong></p>
+                            <p>1. Press Win Key + R<br>
+                            2. Type sysdm.cpl ,3 and hit ENTER<br>
+                            3. Navigate to Performance and click "Settings..."<br>
+                            4. Click the Advanced tab at the top<br>
+                            5. Under Virtual Memory click "Change..."<br>
+                            6. Uncheck Automatically manage if it is checked<br>
+                            7. Select your disk drive, ideally your fastest solid state drive<br>
+                            8. Click the Custom size: button<br>
+                            9. In Initial Size (MB) type <strong>40000</strong><br>
+                            10. In Maximum Size (MB) type <strong>40000</strong><br>
+                            11. Click Set → OK → Apply → OK<br>
+                            12. <strong>Restart your computer</strong></p>
+                        </div>
+                    </div>
+                    
+                    <div class="step-item">
+                        <h3><span class="step-number">3</span>NVIDIA Shader Cache Setup</h3>
+                        <div class="step-description">
+                            <p><strong>If you have an NVIDIA GeForce Graphics Card:</strong></p>
+                            <p>1. Right-click desktop and select NVIDIA Control Panel<br>
+                            2. Navigate to "Manage 3D settings" (2nd from top)<br>
+                            3. Scroll down to "Shader Cache Size"<br>
+                            4. Double Click "Driver Default" and select <strong>10 GB</strong><br>
+                            5. Click Apply</p>
+                        </div>
+                    </div>
+                    
+                    <div class="step-item">
+                        <h3><span class="step-number">4</span>Steam Setup & Game Language</h3>
+                        <div class="step-description">
+                            <p><strong>Steam Library Location:</strong> If you have your Steam Library in Program Files, <a href="https://github.com/LostDragonist/steam-library-setup-tool/wiki/Usage-Guide" target="_blank">read this</a> and move it elsewhere. Locations such as Desktop, Documents, Downloads, OneDrive, etc. will cause issues.</p>
+                            <p><strong>Set Game Language to English:</strong><br>
+                            1. Right click on Skyrim in Steam<br>
+                            2. Click Properties → Language<br>
+                            3. Set Language to <strong>English</strong></p>
+                        </div>
+                    </div>
+                    
+                    <div class="step-item">
+                        <h3><span class="step-number">5</span>Purchase & Install Creation Club Content</h3>
+                        <div class="step-description">
+                            <p><strong>REQUIRED:</strong> Purchase the Skyrim Anniversary Edition Upgrade from Steam. If you do not do this, you can not install or play the list.</p>
+                            <p><strong>There is no work around for this and pirating this content will not work. If you pirate the content and come asking for assistance, you will be banned.</strong></p>
+                            <p>1. In Steam Library, right-click Skyrim → Properties → Local Files<br>
+                            2. Click "Verify Integrity of Game Files" and wait<br>
+                            3. Launch the game once from Steam<br>
+                            4. When Skyrim logo appears, accept "Download All Content?" prompt<br>
+                            5. If no prompt appears, select Creation Club from menu and find "Download All"<br>
+                            6. <strong>Wait for download to complete. Do NOT ALT-TAB during this process</strong></p>
+                        </div>
+                    </div>
+                    
+                    <div class="step-item">
+                        <h3><span class="step-number">6</span>Install Creation Kit</h3>
+                        <div class="step-description">
+                            <p>Install the <a href="https://store.steampowered.com/app/1946180/Skyrim_Special_Edition_Creation_Kit/" target="_blank">Special Edition Creation Kit</a> in the same location/drive where you have Skyrim installed.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="step-item">
+                        <h3><span class="step-number">7</span>Download & Install Wabbajack</h3>
+                        <div class="step-description">
+                            <p>1. Download the <a href="https://github.com/wabbajack-tools/wabbajack/releases" target="_blank">latest version of Wabbajack</a><br>
+                            2. Place it in a folder such as <code>C:\Wabbajack</code><br>
+                            3. <strong>DO NOT</strong> place it in Program Files, User folders (Desktop, Documents, Downloads, OneDrive, etc.), or in your Skyrim's Steam folder<br>
+                            4. <strong>Requires Wabbajack version 3.5.0.1 or later</strong></p>
+                        </div>
+                    </div>
+                    
+                    <div class="step-item">
+                        <h3><span class="step-number">8</span>Install Twisted Skyrim</h3>
+                        <div class="step-description">
+                            <p>1. Open Wabbajack and click "Browse Modlists"<br>
+                            2. Press the "Show NSFW" check box at the top<br>
+                            3. Press the download button on Twisted Skyrim and wait<br>
+                            4. Set installation folder to <code>C:\Games\Twisted Skyrim</code><br>
+                            5. <strong>DO NOT</strong> place it in Program Files, User folders, or Skyrim's Steam folder<br>
+                            6. Press the play button to begin<br>
+                            7. Turn on your favorite show - this will take a while!</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="warning">
+                    <h3>Common Installation Issues</h3>
+                    <p><strong>If you encounter problems:</strong></p>
+                    <ul>
+                        <li><strong>Could not download X:</strong> Big files can fail due to connection issues. Run Wabbajack again or download manually</li>
+                        <li><strong>X is not a whitelisted download:</strong> Check for modlist updates</li>
+                        <li><strong>Wabbajack could not find game folder:</strong> Buy the game or return to Pre-Installation</li>
+                        <li><strong>Antivirus reports virus:</strong> Add exclusion for Mod Organizer in Windows Defender</li>
+                        <li><strong>Unable to download Creation Club files:</strong> Follow Creation Club installation steps again</li>
+                        <li><strong>Unable to download Skyrim_Default.ini:</strong> Set game language to English</li>
+                    </ul>
+                </div>
+                
+                <h3>Manual Downloads (if needed)</h3>
+                <p><strong>These are some commonly failed downloads. Download them manually and place them in your Twisted Skyrim downloads folder.:</strong></p>
+                <ul>
+                    <li><a href="https://drive.google.com/file/d/1bQhAF9X4MrPUos9JoXiXjrj9p5MgzJHu/view" target="_blank">Kaidan</a></li>
+                    <li><a href="https://drive.google.com/uc?id=15_0njBUjHKidNnJPmLXEygzGVWsA3Zbq&export=download" target="_blank">High Poly Head v1.4 (SE)</a></li>
+                    <li><a href="https://www.mediafire.com/file/ez44pa42bbinh0l/Paragon+Sparrow+Huntress.7z/file" target="_blank">Paragon Sparrow Huntress</a></li>
+                    <li><a href="https://www.loverslab.com/files/file/32657-osimpledefeat-ostim-addon-for-acheron/?do=download&r=1956260&confirm=1&t=1&csrfKey=4d1f19cd330699cd97557955da2b1951" target="_blank">OSimple Defeat</a></li>
+                    <li><a href="https://www.loverslab.com/files/file/32618-osimpleassault-ostim-addon-for-acheron/?do=download&r=1956259&confirm=1&t=1&csrfKey=4d1f19cd330699cd97557955da2b1951" target="_blank">OSimple Assault</a></li>
+                    <li><a href="https://www.loverslab.com/files/file/5051-halo-poser-se/?do=download&r=684897&confirm=1&t=1&csrfKey=4c3ef16dc2fc6dcf7bece61bc01d49bd" target="_blank">Halos Poser Pack</a></li>
+                    <li><a href="https://drive.google.com/file/d/1cHuLCUzX_wXuyXZCSjU75OTL_rlz5WSE/" target="_blank">Mofu_EldenRing Attack Animations GreatSword SE MCO</a></li>
+                    <li><a href="https://www.mediafire.com/file/d29mvsta04l1wio/Nekos_Poser_Pack_1.1.7z/file" target="_blank">Neko's Poser Pack</a></li>
+                    <li><a href="https://www.mediafire.com/file/qchk12cwaiuuknf/ScreenArcherMenuSkyrim0.5.1AE.zip/file" target="_blank">Screen Archer Menu</a></li>
+                </ul>
+                <p><em><strong>Note:</strong> Some of these links are from LoversLab which is a site that contains adult content.</em></p>
+            </div>
+        </section>
+
+        <section id="gameplay" class="content-section">
+            <div class="section-header">
+                <h1>Gameplay Guide</h1>
+                <p class="subtitle">Essential setup and gameplay information</p>
+            </div>
+            
+            <div class="content-text">
+                <div class="warning">
+                    <h3>Initial Setup</h3>
+                    <p>Before reading this guide, please follow the Installation Guide and read through the FAQ, both of these will answer almost all the questions you will ask.</p>
+                    <p><strong>I suggest looking through the keybinds for the list in game, by pressing F11</strong></p>
+                </div>
+                
+                <h3>Overview</h3>
+                <p>This section will cover the absolute basics of the list. I suggest reading, or at the very least, skimming, all of the linked mod pages in this section if you are unfamiliar with the following mods.</p>
+                
+                <h3>Core Overhauls</h3>
+                <p>Twisted Skyrim uses the <strong>entire simonrim suite</strong>, except for Arena, Blade and Blunt, and Candlehearth. I highly recommend getting familiar with all of his mods. This modlist also has survival mode enabled by default. It makes use of Survival Mode Improved, Starfrost, and Journeyman. To disable survival mode for your playthrough, simply uncheck the checkbox in settings while in game.</p>
+                
+                <h3>Combat Foundations</h3>
+                <p>The following mods are considered the "foundations" of the combat and gameplay for Twisted Skyrim:</p>
+                
+                <h4>BFCO - Attack Behavior Framework</h4>
+                <p>Introduces attack commitment to the game, for both NPCs and the Player. If you're familiar with MCO, this will be right at home for you.</p>
+                <ul>
+                    <li>Time your attacks precisely, aggressive NPCs can and will take advantage of poor planning.</li>
+                </ul>
+                
+                <h4>Stances NG</h4>
+                <p>Adds 3 different stances, which contain unique moveset for each weapon type.</p>
+                <ul>
+                    <li><strong>Shift + X</strong> to swap stances.</li>
+                </ul>
+                
+                <h4>TK Dodge RE</h4>
+                <p>Adds dodging to the game</p>
+                <ul>
+                    <li>Adds I-Frames, which you should take advantage of.</li>
+                    <li>Costs stamina, or magicka depending on your class, be sure to manage your resources wisely.</li>
+                </ul>
+                
+                <h4>Combat Pathing Revolution</h4>
+                <p>It basically completely overhauls NPC AI in combat. TL;DR it makes them much smarter and is designed specifically for MCO/BFCO.</p>
+                
+                <h4>Valhalla Combat</h4>
+                <p>Reworks stamina, adds a timed block, stuns, and executions.</p>
+                <ul>
+                    <li>NPCs can't attack when out of stamina, player deals 50% less damage.</li>
+                    <li>Attacks cost stamina, missed attacks drain significantly, landed attacks regenerate your stamina.</li>
+                    <li>Stamina regenerates slower while blocking; getting hit while out of stamina and blocking can cause you to stagger.</li>
+                </ul>
+                
+                <h4>Precision - Accurate Melee Collisions</h4>
+                <p>Adds accurate melee collisions to the game.</p>
+                <ul>
+                    <li>You can very easily miss attacks if your sword does not directly collide with an enemy, make sure to be precise!</li>
+                    <li>Hitstop: if you hit a wall your sword will bounce back and prevent you from attacking for a very brief time.</li>
+                </ul>
+                
+                <h4>Maxsu Poise & Modern Stagger Lock</h4>
+                <p>Implement a Poise system. Poise Health can be seen on the Special Bar of TrueHUD (the yellow bar above Health on player and target widgets).</p>
+                
+                <h4>Additional Combat Mods</h4>
+                <ul>
+                    <li><strong>SCAR</strong> brings movesets to NPCs</li>
+                    <li><strong>Ultimate NPC Dodging</strong> brings dodging to NPCs, makes fights less 2 dimensional, and of course more difficult</li>
+                    <li><strong>Modern Combat AI</strong> makes NPCs far more aggressive, meaning you need to space better and carefully plan your attacks</li>
+                </ul>
+                
+                <h3>Leveling and Progression</h3>
+                <p>Twisted Skyrim modifies the vanilla leveling system to have the player engage with the world around them more. Just using your skills will not be a sufficient enough way to level up, and you'll be more encouraged to explore and complete quests.</p>
+                
+                <h4>Changes to Leveling</h4>
+                <p>Leveling speed is still being worked on based on community feedback. The system uses Experience and Progression with Adamant and Custom Skills Framework for perks.</p>
+                
+                <h3>Difficulty</h3>
+                <p>As said previously, I highly recommend having a follower, or multiple. Playing solo in this list is possible, but not recommended and will increase the difficulty significantly.</p>
+                
+                <p>Twisted Skyrim has a unique approach to difficulty, putting an emphasis on resource management, making sure enemies aren't sponges, and intelligent AI.</p>
+                
+                <h4>AI Behavior</h4>
+                <p>To elaborate on AI more, put simply, they are much more aggressive. They use all spells they have in their arsenal unlike vanilla, attack you if you aim a bow at them, and make use of dodging.</p>
+                
+                <h4>Poise System</h4>
+                <p>A poise system has been added, and if the enemies (or yours) poise gets broken, a stagger will occur which is an opportunity for you, or them to attack without punishment. Archers can take advantage of headshots to deal bonus poise damage to keep them off of you for longer.</p>
+                
+                <h4>Dodging Mechanics</h4>
+                <p>Dodging is not locked behind any perks or powers simply because it's too important for all types of builds. There is a fairly long delay after a dodge is performed before you can use it again, or move at all to promote intelligent use of it rather than spamming.</p>
+                
+                <h4>Key Difficulty Mods</h4>
+                <ul>
+                    <li><strong>SkyValor</strong> changes experience gain, damage, health pools, resource regeneration, and much more.</li>
+                    <li><strong>Dragon War</strong> completely overhauls dragon behaviors and resistances. The dragon fights are much more unpredictable and difficult.</li>
+                    <li><strong>Skybane - The Logic of Death</strong> completely overhauls NPC resistances. Everything now has a weakness, but also will have resistances. This means that carrying multiple damage types is highly recommended.</li>
+                </ul>
+                
+                <p><strong>Potions have been significantly buffed due to the damage and health changes by SkyValor, and I highly recommend staying stocked up.</strong></p>
+                
+                <div class="warning">
+                    <h3>Important Notes</h3>
+                    <p><strong>Beware the bears.</strong></p>
+                </div>
+                
+                <h3>Summary</h3>
+                <p>Other than that, it should really just seem like you're playing Skyrim after a while. Aside from these changes, I've tried to make the list in a way you can build your character however you want, side with whomever you want and do whatever you want. Have fun!</p>
+            </div>
+        </section>
+
+        <section id="performance" class="content-section">
+            <div class="section-header">
+                <h1>Performance Guide</h1>
+                <p class="subtitle">Optimization tweaks for better FPS and visual quality balance</p>
+            </div>
+            
+            <div class="content-text">
+                <div class="warning">
+                    <h3>Important Notice</h3>
+                    <p>Although this is made to be as clear as possible, if you aren't a tech savvy person or have never modded before this probably isn't for you. I won't babysit people step by step on what to do as the guide is pretty much as clear as it possibly can be.</p>
+                    <p><strong>Any deviation from this guide counts as an unauthorized modification of the list and thus breaks rule 11.</strong> Please seek help using the <a href="https://discordapp.com/channels/1008047161281347606/1374528282883653733" target="_blank">#twisted-modified</a> channel on the <a href="https://discord.gg/wakingdreams" target="_blank">discord</a> for further help.</p>
+                    <p><strong>Most of these steps will need to be done after every update, I recommend backing up any changes so you can just copy and paste the files over the new update.</strong></p>
+                </div>
+                
+                <h3>Performance and YOU</h3>
+                <p>I suggest getting an overlay that lets you see GPU & RAM usage, CPU usage, despite what people think does NOT matter for gaming. If your GPU usage sits at or above 98% consistently, then a GPU upgrade would help the most. If your GPU usage sits consistently sits BELOW ~98% then a CPU upgrade would benefit you, the ONLY CPUs I will recommend are the x3D chips from AMD (5800x3d, 7800x3d & 9800x3d). If your RAM is always filled, or almost always filled, a RAM upgrade would likely reduce stuttering.</p>
+                
+                <h3>Contents</h3>
+                <ul>
+                    <li><a href="#modifying-game-inis">Modifying Game INIs</a></li>
+                    <li><a href="#modifying-enb">Modifying ENB</a></li>
+                    <li><a href="#disabling-enb">Disabling ENB (Optional)</a></li>
+                    <li><a href="#tintmask-resolution">Tintmask Resolution</a></li>
+                    <li><a href="#lods">LODs (xLODGEN, TexGen, DynDOLOD)</a></li>
+                    <li><a href="#vramr">VRAMr</a></li>
+                    <li><a href="#upscalers">Upscaler Info</a></li>
+                </ul>
+                
+                <h3 id="modifying-game-inis">Modifying Game INIs</h3>
+                <p>MO2 uses a profile system, which means any ini edits you make will only effect that profile you are currently on, make sure you are on the desired MO2 profile before continuing. <strong>MAKE SURE MO2 IS CURRENTLY CLOSED</strong></p>
+                
+                <div class="step-item">
+                    <h4>BethINI Setup</h4>
+                    <ol>
+                        <li>Open Twisted Skyrim's mo2 directory. Mine is located here: <code>E:\Twisted Skyrim</code></li>
+                        <li>Open the <code>Tools</code> folder.</li>
+                        <li>Open the <code>BethINI Standalone</code> folder.</li>
+                        <li>Open <code>BethINI.exe</code> <strong>MAKE SURE MO2 IS CLOSED.</strong></li>
+                        <li>Ignore any updates BethINI prompts you with.</li>
+                        <li>Select the <code>Edit</code> dropdown menu, and select <code>Setup</code>.</li>
+                        <li>Ensure the INI path is set properly, this will either be <code>\profiles\Twisted Skyrim\</code> or <code>\profiles\Twisted Skyrim SFW</code> depending on the profile you play on.</li>
+                        <li>Select the <code>Basic</code> tab.</li>
+                        <li>Select the <code>Medium</code> preset & press the <code>Apply Recommended Tweaks</code> button afterwards.</li>
+                        <li>Make sure <code>Borderless</code> is ticked & <code>64-Bit Render Targets</code> Antialiasing set to TAA is recommended but not required.</li>
+                    </ol>
+
+                    <ol start="11">
+                        <li>Select the <code>Shadows</code> tab.</li>
+                        <li>Shadow bias <code>0.15</code>, Shadow filtering <code>4.0</code>.</li>
+                        <li>Detailed draw distance default is <code>2800</code>, I would not recommend going lower than <code>2000</code></li>
+                        <li>Exterior draw distance default is <code>10000</code>, I would not recommend going lower than <code>6000</code></li>
+                        <li>Make sure the ambient occlusion checkbox is unchecked. You can leave this enabled if you disable ENB's ambient occlusion for more performance. This is recommended if you care more about performance than visuals</li>
+                    </ol>
+
+                    <ol start="16">
+                        <li>Go to the <code>Visuals</code> tab.</li>
+                        <li>Set godrays to <code>low</code>.</li>
+                        <li>Set particles to no lower than <code>6000</code>.</li>
+                        <li>Keep depth of field <code>on</code>, otherwise it will break the underwater shader.</li>
+                        <li>Set SSR Resolution Divider to 9, not recommended to go lower. You can disable SSR all together by disabling the checkbox, however, it will make the game look a lot more flat.</li>
+                        <li>Select the file dropdown menu and hit <code>save</code>.</li>
+                        <li>Close BethINI.</li>
+                    </ol>
+
+
+                </div>
+                
+                <h3 id="modifying-enb">Modifying ENB</h3>
+                <div class="step-item">
+                    <ol>
+                        <li>Navigate to the <code>Stock Game</code> folder. Mine is here: <code>E:\Twisted Skyrim\Stock Game</code></li>
+                        <li>Open <code>enbseries.ini</code></li>
+                        <li>Set lines 40-45 to false. <code>EnableComplexParallax</code> <code>EnableComplexParallaxShadows</code> <code>EnableComplexTerrainParallax</code> <code>EnableComplexTerrainParallaxShadows</code> <code>EnableTerrainBlending=true</code> <code>EnableComplexMaterial</code> should all be false.</li>
+                        <li>Ctrl+F to search for <code>SSAO_SSIL</code></li>
+                        <li>Change <code>ResolutionScale</code> to 0.35</li>
+                        <li>Change <code>SourceTexturesScale</code> to 0.5</li>
+                        <li><code>Ctrl+S</code> to save.</li>
+                        <li>Close the file.</li>
+                    </ol>
+                    <p><strong>OPTIONAL:</strong> Set <code>EnableAmbientOcclusion</code> to false as well, this will give the biggest performance boost without actually disabling ENB. Make sure to enable game ambient occlusion as said in the previous step Modifying Game INIs</p>
+                    <p><em>Launch your game after these 2 steps to see if performance is satisfactory before continuing.</em></p>
+                </div>
+                
+                <h3 id="disabling-enb">Disabling ENB (OPTIONAL)</h3>
+                <div class="warning">
+                    <h4>Warning</h4>
+                    <p>This list heavily relies on ENB features for certain effects, it is NOT recommended to disable it completely.</p>
+                </div>
+                <ol>
+                    <li>Navigate to the <code>Stock Game</code> folder. Mine is here: <code>E:\Twisted Skyrim\Stock Game</code></li>
+                    <li>Change <code>d3d11.dll</code> to <code>d3d11.dll.bak</code> This will need to be done every update</li>
+                </ol>
+                
+                <h3 id="tintmask-resolution">Tintmask Resolution</h3>
+                <ol>
+                    <li>Go to <code>E:\Twisted Skyrim\mods\Vanilla Warpaints Absolution\SKSE</code></li>
+                    <li>Open <code>SKSE.ini</code></li>
+                    <li>Change <code>iTintTextureResolution=4096</code> to <code>iTintTextureResolution=2048</code> <em>*Note, this can go lower, if you really need the performance drop it to as low as 512(vanilla)</em></li>
+                    <li>Ctrl+S to save</li>
+                    <li>Exit</li>
+                </ol>
+                
+                <h3 id="lods">LODs Generation</h3>
+                <p>This section covers generating LODs for better performance vs quality balance. This is an advanced topic that requires careful following of instructions.</p>
+                
+                <h4>Deleting Outputs</h4>
+                <ol>
+                    <li>Locate the mod <code>ParallaxGen Output</code> open it by holding CTRL and double clicking it. Delete everything in the folder.</li>
+                    <li>Do the same for the mods <code>xLODGEN Output</code> <code>Road Output</code> <code>TexGen Output</code> & <code>DynDOLOD Output</code></li>
+                    <li>Disable the mod <code>ParallaxGen Output</code> after deleting its contents</li>
+                </ol>
+                
+                <h4>Generating ParallaxGen</h4>
+                <ol>
+                    <li>Launch <code>ParallaxGen</code> from the dropdown menu in MO2, once opened select <code>Start Patching</code></li>
+                    <li>Ignore any warnings/errors and once its done select any key on your keyboard to close the command prompt</li>
+                    <li>Reenable <code>ParallaxGen Output</code> and make sure its plugins are enabled and loaded last in the plugins tab of MO2</li>
+                </ol>
+                
+                <h4>xLODGEN</h4>
+                <ol>
+                    <li>Select the drop down menu in MO2, select <code>edit</code> in the <code>Arguments</code> section on xLODGen, make sure it looks like this: <code>-SSE -o:"C:\Users\jlbom\Desktop\xlodgen"</code> changing the given directory to match a similar place on your computer OUTSIDE of MO2. I recommend keeping it at your desktop.</li>
+                    <li>Hit <code>apply</code> and <code>ok</code>.</li>
+                    <li>Enable the mod <code>xLODGen Resource - SSE Terrain Tamriel</code> if its not present in the load order, download from <a href="https://www.nexusmods.com/skyrimspecialedition/mods/54680?tab=files" target="_blank">here</a> select the <code>SSE Terrain Tamriel Extend</code> version to download, install and enable it within MO2.</li>
+                    <li>Make sure the plugin <code>SSE-Terrain-Tamriel-Extend.esm</code> is enabled in the right pane of MO2 (plugins list).</li>
+                    <li>Launch xLODGen within MO2</li>
+                    <li>Copy the settings below EXACTLY:</li>
+                </ol>
+
+                <div class="image-grid-2x2">
+                    <div class="grid-item">
+                        <img src="https://raw.githubusercontent.com/Oghma-Infinium/Twisted-Skyrim/refs/heads/main/382360999-83b61ae7-8eaf-4891-889a-c004abe17d37.webp" alt="xLODGen Settings Configuration" style="max-width: 100%; height: auto;">
+                        <div class="image-caption">xLODGen LOD4</div>
+                    </div>
+                    <div class="grid-item">
+                        <img src="https://raw.githubusercontent.com/Oghma-Infinium/Twisted-Skyrim/refs/heads/main/382361070-cb7dd710-fda0-4334-ae62-0de79783e861.webp" alt="BethINI Basic Tab Settings" style="max-width: 100%; height: auto;">
+                        <div class="image-caption">xLODGen LOD8</div>
+                    </div>
+                    <div class="grid-item">
+                        <img src="https://raw.githubusercontent.com/Oghma-Infinium/Twisted-Skyrim/refs/heads/main/382361100-5f5030ef-7c27-42e5-bde2-a80a8a700528.webp" alt="BethINI Shadows Tab Settings" style="max-width: 100%; height: auto;">
+                        <div class="image-caption">xLODGen LOD16</div>
+                    </div>
+                    <div class="grid-item">
+                        <img src="https://raw.githubusercontent.com/Oghma-Infinium/Twisted-Skyrim/refs/heads/main/382361108-c873e5cc-813a-4491-8607-b200b25b8e54.webp" alt="BethINI Visuals Tab Settings" style="max-width: 100%; height: auto;">
+                        <div class="image-caption">xLODGen LOD32</div>
+                    </div>
+
+                </div>
+
+                <ol start="7">
+                    <li>Select <code>Generate</code> on the bottom of the screen and wait for it to finish.</li>
+                    <li>Once finished, locate and open the output folder, Cut (ctrl x) and paste it (ctrl V) into the mod <code>xLODGen output</code> within mo2.</li>
+                </ol>
+
+                <div class="image-embed">
+                    <img src="https://raw.githubusercontent.com/Oghma-Infinium/Twisted-Skyrim/refs/heads/main/382362183-5b446c3f-3539-411b-abb3-f55a6f5734cc.webp" alt="xLODGEN output" style="max-width: 100%; height: auto;">
+                    <div class="image-caption">xLODGEN output example</div>
+                </div>
+
+                <ol start="9">
+                    <li>Use ACMOS Road Generator to generate roads</li>
+                    <li>Disable the mod <code>xLODGen Resource - SSE Terrain Tamriel</code></li>
+                </ol>
+
+
+                
+                <h4>TexGen & DynDOLOD</h4>
+                <p>These tools require precise configuration and can take several hours to complete.</p>
+                
+                <h5>TexGen Configuration</h5>
+                <ol>
+                    <li>Right click <code>SKSE Output</code> and select <code>Open in Explorer</code>.</li>
+                    <li>Follow this directory <code>C:\Twisted Skyrim\mods\SKSE Output\SKSE\Plugins\GrassControl.ini</code>.</li>
+                    <li>Open <code>GrassControl.ini</code>.</li>
+                    <li>Change <code>DynDOLOD-Grass-Mode = 1</code> to <code>DynDOLOD-Grass-Mode = 0</code></li>
+                    <li>CTRL+S to save, then close.</li>
+                    <li>Go to <a href="https://www.nexusmods.com/skyrimspecialedition/mods/68518?tab=files" target="_blank">DynDOLOD's mod page</a> click manual download and extract the contents to whatever drive you want. Make sure that it is the root directory of that drive such as C:/ or D:/</li>
+                    <li>Where ever you extracted DynDOLOD, navigate to <code>DynDOLOD_SSE.ini</code>.</li>
+                    <li>Open the file</li>
+                    <li>Set <code>Expert=0</code> to <code>Expert=1</code> & <code>Level32=0</code> to <code>Level32=1</code> & <code>TreeLODComplexAtlas=0</code> to <code>TreeLODComplexAtlas=1</code></li>
+                    <li>Save the file with ctrl+s and close it.</li>
+                    <li>Configure MO2 executables to point to TexGen and DynDOLOD binaries</li>
+                    <li>Clear TexGen and DynDOLOD output folders</li>
+                    <li>Launch TexGen within MO2</li>
+                    <li>Make sure it matches the settings below EXACTLY:</li>
+                </ol>
+
+                <div class="image-embed">
+                    <img src="https://raw.githubusercontent.com/Oghma-Infinium/Twisted-Skyrim/refs/heads/main/382364341-781efad2-3149-441b-940c-2779739ed226.webp" alt="TexGen Settings Configuration" style="max-width: 100%; height: auto;">
+                    <div class="image-caption">TexGen Settings - Match these settings exactly</div>
+                </div>
+
+                <ol start="15">
+                    <li>Click start and wait for it to finish.</li>
+                    <li>Copy the output to <code>TexGen Output</code> mod folder</li>
+                </ol>
+
+                <h5>DynDOLOD Configuration</h5>
+                <div class="warning">
+                    <p>MAKE SURE STEPS 2-5 IN THE TEXGEN SECTION ARE COMPLETED BEFORE CONTINUING.</p>
+                </div>
+                <ol>
+                    <li>Launch DynDOLOD within MO2</li>
+                    <li>Right click the top left box and hit <code>Select all</code></li>
+                    <li>Select the <code>Medium</code> preset in the top right</li>
+                    <li>Scroll all the way down in the section in the middle</li>
+                    <li>Double click <code>tree</code> and change <code>LOD Level 32</code> to Billboard6 from whatever it is.</li>
+                    <li>Click <code>ok</code></li>
+                    <li>Double click <code>\</code> and change <code>Lod Level 32</code> to <code>Level0</code> from whatever it is.</li>
+                    <li>Make sure the rest matches the settings below EXACTLY:</li>
+                </ol>
+
+                <div class="image-embed">
+                    <img src="https://raw.githubusercontent.com/Oghma-Infinium/Twisted-Skyrim/refs/heads/main/382365724-9217e1e3-eb3e-4682-8257-272f7a8cbba3.webp" alt="DynDOLOD Settings Configuration" style="max-width: 100%; height: auto;">
+                    <div class="image-caption">DynDOLOD Settings - Copy these settings exactly</div>
+                </div>
+
+                <ol start="9">
+                    <li>Click ok and wait for it to finish. If it fails and errors on anything, that means you made unauthorized modifications to the list and I will not help you.</li>
+                    <li>Copy the output to <code>DynDOLOD Output</code> mod folder</li>
+                    <li>Refresh MO2 by clicking <code>F5</code> or just restart MO2</li>
+                    <li>Enable the plugins <code>DynDOLOD.esm</code>, <code>DynDOLOD.esp</code> & <code>Occlusion.esp</code></li>
+                    <li>Make sure at the bottom of your load order you have the following plugins: <code>ParallaxGen.esp</code> <code>PG_1.esp</code> <code>DynDOLOD.esp</code> <code>Occlusion.esp</code> ←---- <strong>MAKE SURE THEY ARE IN THAT ORDER</strong></li>
+                </ol>
+                
+                <h3 id="vramr">VRAMr</h3>
+                <div class="warning">
+                    <h4>Note</h4>
+                    <p>This tool has been reported to cause crashes when used with this list, before reporting any bugs, please make sure the crash happens without the output enabled.</p>
+                </div>
+                <p>A tool that I've never personally used, but have heard it works fairly well. <a href="https://www.nexusmods.com/skyrimspecialedition/mods/90557" target="_blank">VRAMr</a></p>
+                <p>VRAMr includes a user guide on the mod page, you should direct any and all questions towards the mod author on how to use it. Using this tool is unofficially supported by me(TwistedModding) and therefore I will not help you get it up and running.</p>
+                <p>With that said, it can take VRAM usage down as much as 10 gbs and make the list playable on much lower end hardware. It can take several hours and will significantly increase the amount of space needed for the list since (i think) outputs all textures to a new mod instead of replacing existing ones (which is a good thing, just takes up space obviously).</p>
+                <p>I'd suggest only running this if the rest of the performance guide did not do a good enough job at making the list playable on your hardware.</p>
+                
+                <h3 id="upscalers">Upscalers</h3>
+                <div class="warning">
+                    <h4>No Support Provided</h4>
+                    <p>I do not provide any support with upscalers</p>
+                </div>
+                <p>Both Puredark's and Doodlum's upscalers have issues of their own that may cause crashes or other oddities when using them in this list, I DO NOT recommend using either. You can try lossless scaling, but I haven't had amazing luck using it and getting good results in my own game.</p>
+                
+                <div class="warning">
+                    <h3>Final Notes</h3>
+                    <p>Remember that most of these optimizations will need to be reapplied after every modlist update. Consider backing up your configuration files to make future updates easier.</p>
+                    <p>For additional help with performance optimization, visit the <a href="https://discord.gg/wakingdreams" target="_blank">Discord support channels</a>.</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="faq" class="content-section">
+            <div class="section-header">
+                <h1>Frequently Asked Questions</h1>
+                <p class="subtitle">Common questions and troubleshooting</p>
+            </div>
+            
+            <div class="content-text">
+                <div class="warning">
+                    <h3>Before You Ask</h3>
+                    <p><strong>Do I have to read this?</strong> No, but if you ask me any question on this document, I will refer you back to here.</p>
+                </div>
+                
+                <h3>Crashes & Technical Issues</h3>
+                
+                <h4>Q: What do I do if my game crashes?</h4>
+                <p><strong>A:</strong> Post the crashlog, found here <code>C:\Users\{USERNAME}\Documents\My Games\Skyrim Special Edition\SKSE</code>, along with any changes done to the MCM or modlist to the <a href="https://github.com/Oghma-Infinium/Twisted-Skyrim/issues" target="_blank">GitHub issues page</a> or in the <a href="https://discord.com/channels/1008047161281347606/1374528223706349679" target="_blank">discord support channel</a>.</p>
+                
+                <h4>Q: My game is loading forever at the main menu and/or crashing before it.</h4>
+                <p><strong>A:</strong> If you are 100% sure you read through the entire readme and have all prerequisites, the only way to fix this is to reinstall Windows.</p>
+                
+                <h3>Performance</h3>
+                
+                <h4>Q: What is performance like?</h4>
+                <p><strong>A:</strong> Extremely system dependent, see the readme for my specs and recommended specs.</p>
+                
+                <h4>Q: What can I do to improve performance?</h4>
+                <p><strong>A:</strong> Follow the ENTIRE <a href="https://github.com/Oghma-Infinium/Twisted-Skyrim/blob/main/Performance%20Guide.md" target="_blank">performance guide</a>. This will significantly improve your frames for those who care more about framerate than visuals.</p>
+                
+                <h4>Q: How can I change the resolution?</h4>
+                <p><strong>A:</strong> Open the folder <code>F:\Twisted Skyrim\mods\SSE Display Tweaks\SKSE\Plugins</code> open the file <code>SSEDisplayTweaks.ini</code> set <code>BorderlessUpscale=false</code> to <code>BorderlessUpscale=true</code> & change your resolution to the desired.</p>
+                
+                <h3>Gameplay Mechanics</h3>
+                
+                <h4>Q: What mod is it that makes favorited items/potions/quest items show on my character?</h4>
+                <p><strong>A:</strong> <a href="https://www.nexusmods.com/skyrimspecialedition/mods/62001" target="_blank">Immersive Equipment Displays</a>. You can open the menu with <code>Left Shift+Backspace</code> to customize what you want to show and what you don't want to show. You can also use IED to determine weapon positioning (if you want weapons to be sheathed on back for example).</p>
+                
+                <h4>Q: When do dragons start spawning?</h4>
+                <p><strong>A:</strong> By default, dragons are set to begin spawning once the player reaches level 10. Dragons do however have set spawns in certain parts of the map, along with dragon burials. Venture carefully.</p>
+                
+                <h4>Q: What is the Pilgrim skill / How do I access the Pilgrim skill tree?</h4>
+                <p><strong>A:</strong> The Pilgrim skill is added by <a href="https://www.nexusmods.com/skyrimspecialedition/mods/93913" target="_blank">Pilgrim - Custom Skills Framework Addon</a> and acts as the way to progress the religion mechanic in the list. You can access the skill tree by using the Pray power while sneaking.</p>
+                
+                <h4>Q: How do I set up the quick wheel?</h4>
+                <p><strong>A:</strong> There is extensive documentation on the mod page <a href="https://www.nexusmods.com/skyrimspecialedition/mods/97345" target="_blank">here</a>.</p>
+                
+                <h3>Character Creation & Appearance</h3>
+                
+                <h4>Q: Why do I have two sets of ears?</h4>
+                <p><strong>A:</strong> Go to the <code>Hair</code> tab in racemenu, <code>facial hairs</code>, then change the slider to <code>6</code>.</p>
+                
+                <h3>Camera & UI Settings</h3>
+                
+                <h4>Q: I don't like the 3rd person camera stuff, how can I change it?</h4>
+                <p><strong>A:</strong> Open up the MCM look for <code>smoothcam</code> and either play around with the settings on the currently selected preset, or try swapping to one of the other presets included.</p>
+                
+                <h4>Q: How can I change the first person camera settings?</h4>
+                <p><strong>A:</strong> Open the console and type <code>ic menu</code>. Alternatively, you can simply disable <code>Improved Camera</code> in mo2.</p>
+                
+                <h4>Q: What mod unpauses the menus?</h4>
+                <p><strong>A:</strong> <code>Skyrim Souls RE Updated</code>, you can tweak its settings in <code>C:\Twisted Skyrim\mods\Skyrim Souls RE - Updated\SKSE\Plugins\SkyrimSoulsRE.ini</code>. From here you can modify which menus stay paused or unpaused.</p>
+                
+                <h4>Q: Why do I have a box in the top right of my screen, or why is my UI not at the edge of my screen?</h4>
+                <p><strong>A:</strong> I only own 16:9 monitors and I don't care to support ultrawide, especially when there aren't patches for all the UI mods that I use.</p>
+                
+                <h3>Quest Mods</h3>
+                
+                <h4>Q: I can't find Altano in the Windpeak Inn. / How do I start VIGILANT?</h4>
+                <p><strong>A:</strong> VIGILANT requires the player be level 25 or higher, completion of The House of Horrors, Kindred Judgement (End of dawnguard DLC), and Censored Fate (DAC0da).</p>
+                
+                <h4>Q: How do I start dAc0da?</h4>
+                <p><strong>A:</strong> dAc0da requires the player to be level 25 or higher, completion of The Horn of Jurgen Windcaller, The Eye of Magnus, and Arniel's Endeavour.</p>
+                
+                <h3>Profiles & Installation</h3>
+                
+                <h4>Q: How do I swap to the NSFW profile, or vice-versa?</h4>
+                <p><strong>A:</strong> Open Mod Organizer. Somewhere along the top will show what profile you have selected, by default it should be <code>Twisted Skyrim SFW</code>. Just swap the drop-down and select the profile you want. It is not recommended to swap to the sfw profile, from the nsfw profile mid save. Swapping from the sfw to nsfw profile should work just fine; however, in both of these instances you are on your own for any issues that may arise. I'd recommend viewing the <a href="https://github.com/Oghma-Infinium/Twisted-Skyrim/blob/main/README.md#loading-your-saves-and-saving" target="_blank">safe-save guide</a>.</p>
+                
+                <h3>Installation Issues</h3>
+                
+                <h4>Q: Install failed cause of google drive saying too many requests (or something similar)</h4>
+                <p><strong>A:</strong> <a href="https://www.reddit.com/r/google/comments/nfsgal/google_drive_download_quota_limit_exceeded_bypass/" target="_blank">Try this.</a></p>
+                
+                <h4>Q: Install failed because "Could not find a part of the path"</h4>
+                <p><strong>A:</strong> Delete the file mentioned in the log. Close and reopen Wabbajack, then rerun the installer with the same paths set. Make sure you have at least 80 gbs on your C drive, and plenty of space on your installation drive. If it keeps failing delete the entire <code>Temp_BSA_FILES</code> folder, close and reopen wabbajack, then rerun the installer again. If it continues to fail, restart your PC.</p>
+                
+                <h3>Known Issues</h3>
+                
+                <h4>[Insert Male NPC] looks like he has tits / has a really big chest and arms!</h4>
+                <p><strong>Solution:</strong> Change their OBody preset, do not report this as an issue to me, OBody has no way to filter for males and disable the "push up" effect.</p>
+                
+                <div class="warning">
+                    <h3>Still Need Help?</h3>
+                    <p>If your question isn't answered here, please check the <a href="#support">Support section</a> for Discord and GitHub links where you can get additional help.</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="mods" class="content-section">
+            <div class="section-header">
+                <h1>Complete Mod List</h1>
+                <p class="subtitle">Browse the full modlist on Load Order Library</p>
+            </div>
+            
+            <div class="content-text">
+                <h3>Interactive Mod Browser</h3>
+                <p>Here is an exhaustive list of all the mods present in Twisted Skyrim.</p>
+                <p><strong>Direct Link:</strong> <a href="https://loadorderlibrary.com/lists/twisted-skyrim-4" target="_blank">View on Load Order Library</a></p>
+                
+                <div class="loadorder-embed">
+                    <iframe 
+                        src="https://loadorderlibrary.com/lists/twisted-skyrim-4" 
+                        title="Twisted Skyrim Mod List"
+                        width="100%" 
+                        height="800px"
+                        frameborder="0"
+                        style="border: 1px solid #333; border-radius: 8px; background: #000;">
+                        <p>Your browser does not support iframes. <a href="https://loadorderlibrary.com/lists/twisted-skyrim-4" target="_blank">View the mod list directly</a></p>
+                    </iframe>
+                </div>
+            </div>
+        </section>
+
+        <section id="screenshots" class="content-section">
+            <div class="section-header">
+                <h1>Screenshots</h1>
+                <p class="subtitle">See Twisted Skyrim in action</p>
+            </div>
+            
+            <div class="content-text">
+                <p>Screenshot gallery coming soon. Upload your own screenshots to showcase the modlist!</p>
+                
+                <div class="image-embed">
+                    <img src="https://via.placeholder.com/600x300/000000/ffffff?text=Screenshots+Coming+Soon" alt="Screenshots placeholder">
+                    <div class="image-caption">Screenshots will be added here to showcase the visual improvements</div>
+                </div>
+            </div>
+        </section>
+
+        <section id="support" class="content-section">
+            <div class="section-header">
+                <h1>Support & Community</h1>
+                <p class="subtitle">Get help and connect with other players</p>
+            </div>
+            
+            <div class="content-text">
+                <h3>Discord Support</h3>
+                <p>For both installation and gameplay support, please join the discord server.</p>
+                <p><a href="https://discord.gg/wakingdreams" target="_blank">Join Waking Dreams Discord</a></p>
+                <p><small>Ask questions in the <a href="https://discordapp.com/channels/1008047161281347606/1374528223706349679" target="_blank">Twisted Skyrim support channel</a></small></p>
+
+                <h3>Bug Reports</h3>
+                <p>Report bugs and technical issues on our GitHub repository:</p>
+                <p><a href="https://discord.gg/wakingdreams" target="_blank">Report Issues</a></p>
+                <p><small>Please include all relevant information for the bug. A proper bug reporting guide can be found here: <a href="https://discordapp.com/channels/1008047161281347606/1374532148085915741" target="_blank">Bug Reporting Guide</a></small></p>
+                
+                <h3>Support Development</h3>
+                <p>Support the continued development of Twisted Skyrim:</p>
+                <p><a href="https://www.patreon.com/c/TwistedModding" target="_blank">Support on Patreon</a></p>
+                <p><a href="https://ko-fi.com/twistedmodding1" target="_blank">Support on Ko-fi</a></p>
+            </div>
+        </section>
+    </main>
+
+    <!-- Mobile menu toggle -->
+    <div class="mobile-toggle" id="mobile-toggle">
+        <span></span>
+        <span></span>
+        <span></span>
+    </div>
+    </div> <!-- Close container -->
+
+    <script src="script.js"></script>
+</body>
+</html>
