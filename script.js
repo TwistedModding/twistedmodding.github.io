@@ -5,6 +5,231 @@ document.addEventListener('DOMContentLoaded', function() {
     const mobileToggle = document.getElementById('mobile-toggle');
     const sidebar = document.querySelector('.sidebar');
 
+    function initializeTextAnchoring() {
+        addAnchorLinksToHeadings();
+    }
+
+    function addAnchorLinksToHeadings() {
+        const headings = document.querySelectorAll('.content-section h1, .content-section h2, .content-section h3, .content-section h4, .content-section h5, .content-section h6');
+        
+        headings.forEach(heading => {
+            if (heading.closest('.section-header') || heading.querySelector('.anchor-link')) {
+                return;
+            }
+
+            let anchorId = heading.id;
+            if (!anchorId) {
+                anchorId = generateAnchorId(heading.textContent);
+                heading.id = anchorId;
+            }
+
+            const anchorLink = document.createElement('a');
+            anchorLink.href = `#${anchorId}`;
+            anchorLink.className = 'anchor-link';
+            anchorLink.innerHTML = '🔗';
+            anchorLink.title = 'Link to this section';
+            
+            anchorLink.addEventListener('click', function(e) {
+                e.preventDefault();
+                navigateToAnchor(anchorId);
+                
+                copyToClipboard(window.location.origin + window.location.pathname + '#' + anchorId);
+            });
+            
+            heading.appendChild(anchorLink);
+        });
+    }
+
+    function generateAnchorId(text) {
+        let id = text.toLowerCase()
+            .replace(/[^\w\s-]/g, '')
+            .replace(/\s+/g, '-')
+            .replace(/-+/g, '-')
+            .trim();
+        
+        let uniqueId = id;
+        let counter = 1;
+        while (document.getElementById(uniqueId)) {
+            uniqueId = `${id}-${counter}`;
+            counter++;
+        }
+        
+        return uniqueId;
+    }
+
+    function navigateToAnchor(anchorId) {
+        const mainSection = document.getElementById(anchorId);
+        if (mainSection && mainSection.classList.contains('content-section')) {
+            showSection(anchorId);
+            updateURL(anchorId);
+            return;
+        }
+        
+        const anchor = document.getElementById(anchorId);
+        if (!anchor) {
+            return;
+        }
+        
+        const containingSection = anchor.closest('.content-section');
+        if (containingSection) {
+            showSection(containingSection.id);
+
+            setTimeout(() => {
+                scrollToElement(anchor);
+                highlightAnchor(anchor);
+                updateURL(anchorId);
+            }, 100);
+        }
+    }
+
+    function showSection(sectionId) {
+        const sidebarLinks = document.querySelectorAll('.sidebar-link');
+        const contentSections = document.querySelectorAll('.content-section');
+        
+        sidebarLinks.forEach(l => l.classList.remove('active'));
+        contentSections.forEach(s => s.classList.remove('active'));
+        
+        const targetLink = document.querySelector(`[data-section="${sectionId}"]`);
+        const targetSection = document.getElementById(sectionId);
+        
+        if (targetLink && targetSection) {
+            targetLink.classList.add('active');
+            targetSection.classList.add('active');
+        }
+    }
+
+    function scrollToElement(element) {
+        const mainContent = document.querySelector('.main-content');
+        const elementTop = element.offsetTop;
+        const offset = 20;
+        
+        mainContent.scrollTo({
+            top: elementTop - offset,
+            behavior: 'smooth'
+        });
+    }
+
+    function highlightAnchor(element) {
+        const existingHighlights = document.querySelectorAll('.anchor-highlight');
+        existingHighlights.forEach(highlight => highlight.classList.remove('anchor-highlight'));
+        
+        element.classList.add('anchor-highlight');
+        
+        if (!document.getElementById('anchor-highlight-styles')) {
+            const style = document.createElement('style');
+            style.id = 'anchor-highlight-styles';
+            style.textContent = `
+                .anchor-highlight {
+                    background-color: rgba(255, 255, 255, 0.1) !important;
+                    border-left: 4px solid #ffffff !important;
+                    padding-left: 16px !important;
+                    border-radius: 6px !important;
+                    box-shadow: 0 0 20px rgba(255, 255, 255, 0.2) !important;
+                    transition: all 0.3s ease !important;
+                    animation: anchorPulse 2s ease-in-out !important;
+                }
+                
+                @keyframes anchorPulse {
+                    0% { 
+                        background-color: rgba(255, 255, 255, 0.2);
+                        box-shadow: 0 0 30px rgba(255, 255, 255, 0.4);
+                    }
+                    50% { 
+                        background-color: rgba(255, 255, 255, 0.15);
+                        box-shadow: 0 0 25px rgba(255, 255, 255, 0.3);
+                    }
+                    100% { 
+                        background-color: rgba(255, 255, 255, 0.1);
+                        box-shadow: 0 0 20px rgba(255, 255, 255, 0.2);
+                    }
+                }
+            `;
+            document.head.appendChild(style);
+        }
+        
+        setTimeout(() => {
+            element.classList.remove('anchor-highlight');
+        }, 3000);
+    }
+
+    function updateURL(anchor) {
+        const newURL = window.location.pathname + '#' + anchor;
+        window.history.pushState(null, null, newURL);
+    }
+
+    function copyToClipboard(text) {
+        if (navigator.clipboard && window.isSecureContext) {
+            navigator.clipboard.writeText(text).then(() => {
+                showCopyNotification('Link copied to clipboard!');
+            }).catch(() => {
+                fallbackCopyToClipboard(text);
+            });
+        } else {
+            fallbackCopyToClipboard(text);
+        }
+    }
+
+    function fallbackCopyToClipboard(text) {
+        const textArea = document.createElement('textarea');
+        textArea.value = text;
+        textArea.style.position = 'fixed';
+        textArea.style.opacity = '0';
+        document.body.appendChild(textArea);
+        textArea.focus();
+        textArea.select();
+        
+        try {
+            document.execCommand('copy');
+            showCopyNotification('Link copied to clipboard!');
+        } catch (err) {
+            showCopyNotification('Could not copy link');
+        }
+        
+        document.body.removeChild(textArea);
+    }
+
+    function showCopyNotification(message) {
+        const notification = document.createElement('div');
+        notification.className = 'copy-notification';
+        notification.textContent = message;
+        notification.style.cssText = `
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background-color: #333333;
+            color: #ffffff;
+            padding: 12px 20px;
+            border-radius: 6px;
+            border-left: 4px solid #ffffff;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+            z-index: 10000;
+            font-size: 0.9rem;
+            font-weight: 500;
+            opacity: 0;
+            transform: translateX(100%);
+            transition: all 0.3s ease;
+        `;
+        
+        document.body.appendChild(notification);
+        
+        setTimeout(() => {
+            notification.style.opacity = '1';
+            notification.style.transform = 'translateX(0)';
+        }, 100);
+        
+        setTimeout(() => {
+            notification.style.opacity = '0';
+            notification.style.transform = 'translateX(100%)';
+            setTimeout(() => {
+                if (notification.parentNode) {
+                    notification.remove();
+                }
+            }, 300);
+        }, 2000);
+    }
+
+    initializeTextAnchoring();
+
     const searchInput = document.getElementById('search-input');
     const searchButton = document.querySelector('.search-button');
     
@@ -45,6 +270,13 @@ document.addEventListener('DOMContentLoaded', function() {
         }
         
         function showSection(sectionId) {
+            showSectionWithoutAnimation(sectionId);
+        }
+
+        function showSectionWithoutAnimation(sectionId) {
+            const sidebarLinks = document.querySelectorAll('.sidebar-link');
+            const contentSections = document.querySelectorAll('.content-section');
+            
             sidebarLinks.forEach(l => l.classList.remove('active'));
             contentSections.forEach(s => s.classList.remove('active'));
             
@@ -54,6 +286,8 @@ document.addEventListener('DOMContentLoaded', function() {
             if (targetLink && targetSection) {
                 targetLink.classList.add('active');
                 targetSection.classList.add('active');
+                
+                updateURL(sectionId);
                 
                 document.querySelector('.main-content').scrollTop = 0;
             }
@@ -158,6 +392,8 @@ document.addEventListener('DOMContentLoaded', function() {
             const targetElement = document.getElementById(targetSection);
             if (targetElement) {
                 targetElement.classList.add('active');
+                
+                updateURL(targetSection);
             }
             
             if (window.innerWidth <= 768) {
@@ -192,23 +428,32 @@ document.addEventListener('DOMContentLoaded', function() {
         if (!anchor.classList.contains('sidebar-link')) {
             anchor.addEventListener('click', function (e) {
                 e.preventDefault();
-                const target = document.querySelector(this.getAttribute('href'));
-                if (target) {
-                    target.scrollIntoView({
-                        behavior: 'smooth',
-                        block: 'start'
-                    });
-                }
+                const targetId = this.getAttribute('href').substring(1);
+                navigateToAnchor(targetId);
             });
         }
     });
 
-    const firstLink = document.querySelector('.sidebar-link[data-section="overview"]');
-    const firstSection = document.getElementById('overview');
-    if (firstLink && firstSection) {
-        firstLink.classList.add('active');
-        firstSection.classList.add('active');
+    const urlHash = window.location.hash.substring(1);
+    if (urlHash) {
+        navigateToAnchor(urlHash);
+    } else {
+        const firstLink = document.querySelector('.sidebar-link[data-section="overview"]');
+        const firstSection = document.getElementById('overview');
+        if (firstLink && firstSection) {
+            firstLink.classList.add('active');
+            firstSection.classList.add('active');
+        }
     }
+
+    window.addEventListener('hashchange', function() {
+        const hash = window.location.hash.substring(1);
+        if (hash) {
+            navigateToAnchor(hash);
+        }
+    });
+
+    console.log('Twisted Skyrim website loaded successfully! ⚔️');
 });
 
 const observerOptions = {
@@ -320,5 +565,3 @@ document.addEventListener('DOMContentLoaded', function() {
         observer.observe(overviewSection);
     }
 });
-
-console.log('Twisted Skyrim website loaded successfully! �⚔️');

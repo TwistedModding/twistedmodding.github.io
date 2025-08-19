@@ -511,16 +511,14 @@ code {
     transform-origin: left center;
 }
 
-/* Search functionality styles */
 .search-highlight {
-    background-color: #ffff00;
+    background-color: #ffff0088;
     color: #000000;
     padding: 2px 4px;
     border-radius: 3px;
     font-weight: 600;
 }
 
-/* Search notification */
 .search-notification {
     position: fixed;
     top: 20px;
@@ -544,8 +542,41 @@ code {
     transform: translateX(0);
 }
 
+.anchor-link {
+    opacity: 0;
+    margin-left: 10px;
+    text-decoration: none;
+    font-size: 0.8em;
+    color: #888888;
+    transition: opacity 0.2s ease, color 0.2s ease;
+    vertical-align: middle;
+}
 
-/* Emergency text visibility override for Performance Guide */
+.anchor-link:hover {
+    color: #ffffff;
+    text-decoration: none;
+}
+
+h3:hover .anchor-link,
+h4:hover .anchor-link,
+h5:hover .anchor-link,
+h6:hover .anchor-link,
+h1:hover .anchor-link,
+h2:hover .anchor-link {
+    opacity: 1;
+}
+
+.content-section h1,
+.content-section h2,
+.content-section h3,
+.content-section h4,
+.content-section h5,
+.content-section h6 {
+    position: relative;
+    scroll-margin-top: 20px;
+}
+
+
 #performance,
 #performance *,
 .content-section#performance,
@@ -563,7 +594,6 @@ code {
     color: #ffffff !important;
 }
 
-/* Ensure all text elements are visible */
 section#performance h1,
 section#performance h2,
 section#performance h3,
@@ -580,7 +610,6 @@ section#performance a {
     visibility: visible !important;
 }
 
-/* Mobile responsiveness */
 @media screen and (max-width: 768px) {
     body {
         flex-direction: column;
