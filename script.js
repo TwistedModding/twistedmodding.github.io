@@ -1,16 +1,14 @@
-// Sidebar navigation functionality
+
 document.addEventListener('DOMContentLoaded', function() {
     const sidebarLinks = document.querySelectorAll('.sidebar-link');
     const contentSections = document.querySelectorAll('.content-section');
     const mobileToggle = document.getElementById('mobile-toggle');
     const sidebar = document.querySelector('.sidebar');
 
-    // Search functionality
     const searchInput = document.getElementById('search-input');
     const searchButton = document.querySelector('.search-button');
     
     if (searchInput && searchButton) {
-        // Search function
         function performSearch(query) {
             if (!query.trim()) {
                 clearSearchHighlights();
@@ -19,8 +17,7 @@ document.addEventListener('DOMContentLoaded', function() {
             
             const searchTerm = query.toLowerCase();
             let foundResults = [];
-            
-            // Search through all content sections
+
             contentSections.forEach(section => {
                 const sectionId = section.id;
                 const sectionContent = section.textContent.toLowerCase();
@@ -33,31 +30,24 @@ document.addEventListener('DOMContentLoaded', function() {
                 }
             });
             
-            // Clear previous highlights
             clearSearchHighlights();
             
             if (foundResults.length > 0) {
-                // Show first result
                 const firstResult = foundResults[0];
                 showSection(firstResult.section);
                 
-                // Highlight search terms
                 highlightSearchTerms(searchTerm);
                 
-                // Show notification
                 showSearchNotification(`Found ${foundResults.length} result${foundResults.length > 1 ? 's' : ''} for "${query}"`);
             } else {
                 showSearchNotification(`No results found for "${query}"`);
             }
         }
         
-        // Function to show a specific section
         function showSection(sectionId) {
-            // Remove active class from all links and sections
             sidebarLinks.forEach(l => l.classList.remove('active'));
             contentSections.forEach(s => s.classList.remove('active'));
             
-            // Find and activate the corresponding link
             const targetLink = document.querySelector(`[data-section="${sectionId}"]`);
             const targetSection = document.getElementById(sectionId);
             
@@ -65,12 +55,10 @@ document.addEventListener('DOMContentLoaded', function() {
                 targetLink.classList.add('active');
                 targetSection.classList.add('active');
                 
-                // Scroll to top of main content
                 document.querySelector('.main-content').scrollTop = 0;
             }
         }
         
-        // Function to highlight search terms
         function highlightSearchTerms(searchTerm) {
             const activeSection = document.querySelector('.content-section.active');
             if (!activeSection) return;
@@ -105,7 +93,6 @@ document.addEventListener('DOMContentLoaded', function() {
             });
         }
         
-        // Function to clear search highlights
         function clearSearchHighlights() {
             const highlights = document.querySelectorAll('.search-highlight');
             highlights.forEach(highlight => {
@@ -114,29 +101,23 @@ document.addEventListener('DOMContentLoaded', function() {
                 parent.normalize();
             });
         }
-        
-        // Function to show search notification
+
         function showSearchNotification(message) {
-            // Remove existing notification
             const existingNotification = document.querySelector('.search-notification');
             if (existingNotification) {
                 existingNotification.remove();
             }
             
-            // Create new notification
             const notification = document.createElement('div');
             notification.className = 'search-notification';
             notification.textContent = message;
             
-            // Add to page
             document.body.appendChild(notification);
-            
-            // Show notification
+
             setTimeout(() => {
                 notification.classList.add('show');
             }, 100);
             
-            // Hide notification after 3 seconds
             setTimeout(() => {
                 notification.classList.remove('show');
                 setTimeout(() => {
@@ -147,7 +128,6 @@ document.addEventListener('DOMContentLoaded', function() {
             }, 3000);
         }
         
-        // Search event listeners
         searchButton.addEventListener('click', function() {
             performSearch(searchInput.value);
         });
@@ -158,7 +138,6 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
         
-        // Clear highlights when input is cleared
         searchInput.addEventListener('input', function() {
             if (!this.value.trim()) {
                 clearSearchHighlights();
@@ -166,43 +145,35 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
-    // Handle sidebar navigation
     sidebarLinks.forEach(link => {
         link.addEventListener('click', function(e) {
             e.preventDefault();
             
-            // Remove active class from all links and sections
             sidebarLinks.forEach(l => l.classList.remove('active'));
             contentSections.forEach(s => s.classList.remove('active'));
             
-            // Add active class to clicked link
             this.classList.add('active');
             
-            // Show corresponding content section
             const targetSection = this.getAttribute('data-section');
             const targetElement = document.getElementById(targetSection);
             if (targetElement) {
                 targetElement.classList.add('active');
             }
             
-            // Close mobile sidebar if open
             if (window.innerWidth <= 768) {
                 sidebar.classList.remove('active');
             }
             
-            // Scroll to top of main content
             document.querySelector('.main-content').scrollTop = 0;
         });
     });
 
-    // Mobile menu toggle
     if (mobileToggle) {
         mobileToggle.addEventListener('click', function() {
             sidebar.classList.toggle('active');
         });
     }
 
-    // Close sidebar when clicking outside on mobile
     document.addEventListener('click', function(e) {
         if (window.innerWidth <= 768) {
             if (!sidebar.contains(e.target) && !mobileToggle.contains(e.target)) {
@@ -211,14 +182,12 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 
-    // Handle window resize
     window.addEventListener('resize', function() {
         if (window.innerWidth > 768) {
             sidebar.classList.remove('active');
         }
     });
 
-    // Smooth scrolling for any remaining anchor links
     document.querySelectorAll('a[href^="#"]').forEach(anchor => {
         if (!anchor.classList.contains('sidebar-link')) {
             anchor.addEventListener('click', function (e) {
@@ -234,7 +203,6 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 
-    // Initialize first section as active
     const firstLink = document.querySelector('.sidebar-link[data-section="overview"]');
     const firstSection = document.getElementById('overview');
     if (firstLink && firstSection) {
@@ -243,7 +211,6 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 });
 
-// Intersection Observer for section detection (optional enhancement)
 const observerOptions = {
     threshold: 0.3,
     rootMargin: '0px 0px -50px 0px'
@@ -252,14 +219,12 @@ const observerOptions = {
 const sectionObserver = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
         if (entry.isIntersecting) {
-            // Add subtle animation when sections come into view
             entry.target.style.opacity = '1';
             entry.target.style.transform = 'translateY(0)';
         }
     });
 }, observerOptions);
 
-// Observe all content sections for animations
 document.addEventListener('DOMContentLoaded', () => {
     const sections = document.querySelectorAll('.content-section');
     sections.forEach(section => {
@@ -270,7 +235,6 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 });
 
-// Enhanced button interactions
 document.addEventListener('DOMContentLoaded', function() {
     const buttons = document.querySelectorAll('.btn');
     
@@ -293,7 +257,6 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 });
 
-// Smooth page loading
 window.addEventListener('load', () => {
     document.body.style.opacity = '0';
     document.body.style.transition = 'opacity 0.5s ease';
@@ -303,7 +266,6 @@ window.addEventListener('load', () => {
     }, 100);
 });
 
-// Feature card hover effects
 document.addEventListener('DOMContentLoaded', function() {
     const featureCards = document.querySelectorAll('.feature-card, .gameplay-card, .support-card');
     
@@ -320,7 +282,6 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 });
 
-// Add some dynamic stats animation (example)
 document.addEventListener('DOMContentLoaded', function() {
     const statNumbers = document.querySelectorAll('.stat-number');
     
@@ -328,7 +289,6 @@ document.addEventListener('DOMContentLoaded', function() {
         statNumbers.forEach(stat => {
             const finalText = stat.textContent;
             if (finalText.includes('+')) {
-                // Animate numbers
                 const number = parseInt(finalText);
                 if (!isNaN(number)) {
                     let current = 0;
@@ -347,7 +307,6 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     };
     
-    // Trigger animation when overview section is visible
     const overviewSection = document.getElementById('overview');
     if (overviewSection) {
         const observer = new IntersectionObserver((entries) => {
