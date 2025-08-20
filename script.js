@@ -454,7 +454,304 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
     console.log('Twisted Skyrim website loaded successfully! ⚔️');
+    
+    // Load changelog when changelog section is shown
+    loadChangelogWhenVisible();
 });
+
+// Changelog loading functionality
+function loadChangelogWhenVisible() {
+    const changelogSection = document.getElementById('changelog');
+    const changelogLink = document.querySelector('[data-section="changelog"]');
+    
+    if (!changelogSection || !changelogLink) return;
+    
+    let changelogLoaded = false;
+    
+    changelogLink.addEventListener('click', function() {
+        if (!changelogLoaded) {
+            loadChangelog();
+            changelogLoaded = true;
+        }
+    });
+    
+    // Also load if changelog is in the URL hash
+    if (window.location.hash === '#changelog') {
+        loadChangelog();
+        changelogLoaded = true;
+    }
+}
+
+async function loadChangelog() {
+    const changelogContainer = document.getElementById('changelog-content');
+    if (!changelogContainer) return;
+    
+    try {
+        // Show loading state
+        changelogContainer.innerHTML = `
+            <div class="loading-spinner">
+                <div class="spinner"></div>
+                <p>Loading changelog from GitHub...</p>
+            </div>
+        `;
+        
+        // Fetch raw markdown content from GitHub
+        const response = await fetch('https://raw.githubusercontent.com/Oghma-Infinium/Twisted-Skyrim/main/CHANGELOG.md');
+        
+        if (!response.ok) {
+            throw new Error('Failed to fetch changelog');
+        }
+        
+        const markdownText = await response.text();
+        
+        // Convert markdown to HTML
+        const htmlContent = convertMarkdownToHTML(markdownText);
+        
+        // Display the content
+        changelogContainer.innerHTML = `
+            <div class="changelog-content">
+                ${htmlContent}
+            </div>
+        `;
+        
+        // Add styling to the changelog content
+        addChangelogStyling();
+        
+    } catch (error) {
+        console.error('Error loading changelog:', error);
+        changelogContainer.innerHTML = `
+            <div class="changelog-error">
+                <h3>Unable to load changelog</h3>
+                <p>There was an error loading the changelog from GitHub. Please try again later or visit the changelog directly.</p>
+                <p><a href="https://github.com/Oghma-Infinium/Twisted-Skyrim/blob/main/CHANGELOG.md" target="_blank" class="btn btn-nexus">View on GitHub</a></p>
+            </div>
+        `;
+    }
+}
+
+function convertMarkdownToHTML(markdown) {
+    let html = markdown;
+
+    html = html.replace(/^.*?Nexus\s*\|\s*Installation\s*\|\s*Modlist\s*\|\s*FAQ\s*\|\s*Changelog\s*\|\s*Performance Guide\s*\|\s*Gameplay Guide.*?\n.*?---.*?\n/s, '');
+    html = html.replace(/^\s*\|.*?Nexus.*?\|.*?Installation.*?\|.*?\n/gm, '');
+    html = html.replace(/^\s*\|.*?---.*?\|.*?---.*?\|.*?\n/gm, '');
+    html = html.replace(/<p align="center">[\s\S]*?<\/p>/g, '');
+    html = html.replace(/^!\[.*?\]\(.*?\)\s*\n/gm, '');
+    html = html.replace(/^### (.*$)/gm, '<h3>$1</h3>');
+    html = html.replace(/^## (.*$)/gm, '<h2>$1</h2>');
+    html = html.replace(/^# (.*$)/gm, '<h1>$1</h1>');
+    html = html.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+    html = html.replace(/\*(.*?)\*/g, '<em>$1</em>');
+    html = html.replace(/```(.*?)```/gs, '<pre><code>$1</code></pre>');
+    html = html.replace(/`([^`]+)`/g, '<code>$1</code>');
+    html = html.replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2" target="_blank">$1</a>');
+    html = html.replace(/^[\-\*] (.+)$/gm, '<li>$1</li>');
+    html = html.replace(/\n/g, '\n');
+
+    const lines = html.split('\n');
+    let inList = false;
+    let processedLines = [];
+    
+    for (let i = 0; i < lines.length; i++) {
+        const line = lines[i].trim();
+        
+        if (line.startsWith('<li>') && line.endsWith('</li>')) {
+            if (!inList) {
+                processedLines.push('<ul>');
+                inList = true;
+            }
+            processedLines.push(line);
+        } else {
+            if (inList) {
+                processedLines.push('</ul>');
+                inList = false;
+            }
+            if (line) {
+                processedLines.push(line);
+            }
+        }
+    }
+    
+    if (inList) {
+        processedLines.push('</ul>');
+    }
+    
+    html = processedLines.join('\n');
+    
+    html = html.replace(/^\d+\. (.+)$/gm, '<li>$1</li>');
+    
+    const paragraphs = html.split('\n\n').map(paragraph => {
+        paragraph = paragraph.trim();
+        if (paragraph && !paragraph.startsWith('<')) {
+            return `<p>${paragraph}</p>`;
+        }
+        return paragraph;
+    }).filter(p => p);
+    
+    return paragraphs.join('\n');
+}
+
+function addChangelogStyling() {
+    if (document.getElementById('changelog-styles')) return;
+    
+    const style = document.createElement('style');
+    style.id = 'changelog-styles';
+    style.textContent = `
+        .loading-spinner {
+            text-align: center;
+            padding: 40px;
+        }
+        
+        .spinner {
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top: 3px solid #ffffff;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .changelog-container {
+            border: 1px solid #333;
+            border-radius: 8px;
+            background: rgba(0, 0, 0, 0.3);
+            padding: 20px;
+            max-height: 800px;
+            overflow-y: auto;
+        }
+        
+        .changelog-content h1 {
+            color: #ffffff;
+            border-bottom: 2px solid #ffffff;
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+        }
+        
+        .changelog-content h2 {
+            color: #cccccc;
+            margin-top: 30px;
+            margin-bottom: 15px;
+            border-left: 4px solid #ffffff;
+            padding-left: 15px;
+        }
+        
+        .changelog-content h3 {
+            color: #aaaaaa;
+            margin-top: 20px;
+            margin-bottom: 10px;
+        }
+        
+        .changelog-content p {
+            line-height: 1.6;
+            margin-bottom: 15px;
+        }
+        
+        .changelog-content ul {
+            margin: 15px 0 15px 20px;
+            padding: 0;
+            list-style-type: disc;
+            display: block !important;
+            width: 100%;
+        }
+        
+        .changelog-content ol {
+            margin: 15px 0 15px 20px;
+            padding: 0;
+            list-style-type: decimal;
+            display: block !important;
+            width: 100%;
+        }
+        
+        .changelog-content li {
+            display: list-item !important;
+            margin: 8px 0;
+            line-height: 1.6;
+            padding-left: 5px;
+            white-space: normal;
+            word-wrap: break-word;
+            width: 100%;
+            clear: both;
+        }
+        
+        .changelog-content ul li {
+            list-style-type: disc !important;
+            margin-left: 0;
+            float: none !important;
+            display: list-item !important;
+        }
+        
+        .changelog-content ol li {
+            list-style-type: decimal !important;
+            margin-left: 0;
+            float: none !important;
+            display: list-item !important;
+        }
+        
+        .changelog-content code {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-family: 'Courier New', monospace;
+        }
+        
+        .changelog-content pre {
+            background: rgba(0, 0, 0, 0.5);
+            padding: 15px;
+            border-radius: 6px;
+            overflow-x: auto;
+            margin: 15px 0;
+        }
+        
+        .changelog-content a {
+            color: #ffffff;
+            text-decoration: underline;
+        }
+        
+        .changelog-content a:hover {
+            color: #cccccc;
+        }
+        
+        .changelog-error {
+            text-align: center;
+            padding: 40px;
+        }
+        
+        .changelog-error h3 {
+            color: #ff6b6b;
+            margin-bottom: 15px;
+        }
+        
+        .changelog-error p {
+            margin-bottom: 15px;
+        }
+        
+        /* Scrollbar styling */
+        .changelog-container::-webkit-scrollbar {
+            width: 8px;
+        }
+        
+        .changelog-container::-webkit-scrollbar-track {
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 4px;
+        }
+        
+        .changelog-container::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 4px;
+        }
+        
+        .changelog-container::-webkit-scrollbar-thumb:hover {
+            background: rgba(255, 255, 255, 0.5);
+        }
+    `;
+    document.head.appendChild(style);
+}
 
 const observerOptions = {
     threshold: 0.3,
