@@ -453,9 +453,6 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 
-    console.log('Twisted Skyrim website loaded successfully! ⚔️');
-    
-    // Load changelog when changelog section is shown
     loadChangelogWhenVisible();
 });
 
@@ -484,10 +481,11 @@ function loadChangelogWhenVisible() {
 
 async function loadChangelog() {
     const changelogContainer = document.getElementById('changelog-content');
-    if (!changelogContainer) return;
+    if (!changelogContainer) {
+        return;
+    }
     
     try {
-        // Show loading state
         changelogContainer.innerHTML = `
             <div class="loading-spinner">
                 <div class="spinner"></div>
@@ -495,35 +493,90 @@ async function loadChangelog() {
             </div>
         `;
         
-        // Fetch raw markdown content from GitHub
-        const response = await fetch('https://raw.githubusercontent.com/Oghma-Infinium/Twisted-Skyrim/main/CHANGELOG.md');
+        const urls = [
+            'https://raw.githubusercontent.com/Oghma-Infinium/Twisted-Skyrim/main/CHANGELOG.md',
+            'https://api.github.com/repos/Oghma-Infinium/Twisted-Skyrim/contents/CHANGELOG.md'
+        ];
         
-        if (!response.ok) {
-            throw new Error('Failed to fetch changelog');
+        let response;
+        let markdownText;
+        
+        for (let i = 0; i < urls.length; i++) {
+            try {
+                const controller = new AbortController();
+                const timeoutId = setTimeout(() => controller.abort(), 15000);
+                
+                response = await fetch(urls[i], {
+                    signal: controller.signal,
+                    method: 'GET',
+                    headers: {
+                        'Accept': i === 0 ? 'text/plain' : 'application/vnd.github.v3+json',
+                    }
+                });
+                
+                clearTimeout(timeoutId);
+                
+                if (response.ok) {
+                    if (i === 0) {
+                        markdownText = await response.text();
+                    } else {
+                        const data = await response.json();
+                        markdownText = atob(data.content);
+                    }
+                    break;
+                }
+            } catch (urlError) {
+                if (i === urls.length - 1) {
+                    throw urlError;
+                }
+                continue;
+            }
         }
         
-        const markdownText = await response.text();
+        if (!markdownText) {
+            throw new Error('All fetch attempts failed');
+        }
         
-        // Convert markdown to HTML
         const htmlContent = convertMarkdownToHTML(markdownText);
         
-        // Display the content
         changelogContainer.innerHTML = `
             <div class="changelog-content">
                 ${htmlContent}
             </div>
         `;
         
-        // Add styling to the changelog content
         addChangelogStyling();
         
     } catch (error) {
-        console.error('Error loading changelog:', error);
+        let errorMessage = 'There was an error loading the changelog from GitHub.';
+        let showFallback = false;
+        
+        if (error.name === 'AbortError') {
+            errorMessage = 'The request timed out. Please check your internet connection and try again.';
+            showFallback = true;
+        } else if (error.message.includes('Failed to fetch') || error.message.includes('All fetch attempts failed')) {
+            errorMessage = 'Unable to connect to GitHub. Please check your internet connection or try again later.';
+            showFallback = true;
+        }
+        
         changelogContainer.innerHTML = `
             <div class="changelog-error">
                 <h3>Unable to load changelog</h3>
-                <p>There was an error loading the changelog from GitHub. Please try again later or visit the changelog directly.</p>
+                <p>${errorMessage}</p>
+                <p>Error details: ${error.message}</p>
                 <p><a href="https://github.com/Oghma-Infinium/Twisted-Skyrim/blob/main/CHANGELOG.md" target="_blank" class="btn btn-nexus">View on GitHub</a></p>
+                ${showFallback ? `
+                <div style="margin-top: 20px; padding: 15px; background: rgba(255,255,255,0.1); border-radius: 6px;">
+                    <h4>Latest Updates</h4>
+                    <p>For the most current changelog information, please visit the GitHub page above. The changelog includes:</p>
+                    <ul>
+                        <li>Bug fixes and stability improvements</li>
+                        <li>New mod additions and updates</li>
+                        <li>Performance optimizations</li>
+                        <li>Balance changes and tweaks</li>
+                    </ul>
+                </div>
+                ` : ''}
             </div>
         `;
     }
