@@ -644,3 +644,21 @@ section#performance a {
 .mobile-toggle {
     display: none;
 }
+
+.content-section {
+    opacity: 1 !important;
+    transform: translateY(0) !important;
+}
+
+body {
+    opacity: 1 !important;
+}
+
+.content-section:first-of-type {
+    display: block !important;
+}
+
+noscript .content-section {
+    display: block !important;
+    opacity: 1 !important;
+}

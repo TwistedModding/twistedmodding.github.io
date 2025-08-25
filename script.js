@@ -1,12 +1,66 @@
 
+// Website JavaScript - Twisted Skyrim
+console.log('Loading Twisted Skyrim website script...');
+
 document.addEventListener('DOMContentLoaded', function() {
+    // Add error handling wrapper
+    try {
+        initializeWebsite();
+        console.log('Website initialized successfully');
+    } catch (error) {
+        console.error('Error initializing website:', error);
+        // Fallback initialization
+        basicInitialization();
+    }
+});
+
+function basicInitialization() {
+    // Basic fallback functionality
+    const sidebarLinks = document.querySelectorAll('.sidebar-link');
+    const contentSections = document.querySelectorAll('.content-section');
+    
+    // Simple navigation without advanced features
+    sidebarLinks.forEach(link => {
+        link.addEventListener('click', function(e) {
+            e.preventDefault();
+            
+            sidebarLinks.forEach(l => l.classList.remove('active'));
+            contentSections.forEach(s => s.classList.remove('active'));
+            
+            this.classList.add('active');
+            
+            const targetSection = this.getAttribute('data-section');
+            const targetElement = document.getElementById(targetSection);
+            if (targetElement) {
+                targetElement.classList.add('active');
+            }
+        });
+    });
+    
+    // Show first section by default
+    if (sidebarLinks.length > 0 && contentSections.length > 0) {
+        sidebarLinks[0].classList.add('active');
+        contentSections[0].classList.add('active');
+    }
+}
+
+function initializeWebsite() {
     const sidebarLinks = document.querySelectorAll('.sidebar-link');
     const contentSections = document.querySelectorAll('.content-section');
     const mobileToggle = document.getElementById('mobile-toggle');
     const sidebar = document.querySelector('.sidebar');
 
+    // Verify essential elements exist
+    if (!sidebarLinks.length || !contentSections.length) {
+        throw new Error('Essential page elements not found');
+    }
+
     function initializeTextAnchoring() {
-        addAnchorLinksToHeadings();
+        try {
+            addAnchorLinksToHeadings();
+        } catch (error) {
+            console.error('Error in text anchoring:', error);
+        }
     }
 
     function addAnchorLinksToHeadings() {
@@ -454,7 +508,9 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
     loadChangelogWhenVisible();
-});
+    
+    // End of initializeWebsite function
+}
 
 // Changelog loading functionality
 function loadChangelogWhenVisible() {
@@ -811,107 +867,178 @@ const observerOptions = {
     rootMargin: '0px 0px -50px 0px'
 };
 
-const sectionObserver = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-        if (entry.isIntersecting) {
-            entry.target.style.opacity = '1';
-            entry.target.style.transform = 'translateY(0)';
-        }
-    });
-}, observerOptions);
+// Add error handling for Intersection Observer
+let sectionObserver;
+try {
+    if ('IntersectionObserver' in window) {
+        sectionObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                try {
+                    if (entry.isIntersecting) {
+                        entry.target.style.opacity = '1';
+                        entry.target.style.transform = 'translateY(0)';
+                    }
+                } catch (error) {
+                    console.error('Error in section observer:', error);
+                }
+            });
+        }, observerOptions);
+    }
+} catch (error) {
+    console.error('Error creating IntersectionObserver:', error);
+    sectionObserver = null;
+}
 
 document.addEventListener('DOMContentLoaded', () => {
-    const sections = document.querySelectorAll('.content-section');
-    sections.forEach(section => {
-        section.style.opacity = '0';
-        section.style.transform = 'translateY(20px)';
-        section.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
-        sectionObserver.observe(section);
-    });
-});
-
-document.addEventListener('DOMContentLoaded', function() {
-    const buttons = document.querySelectorAll('.btn');
-    
-    buttons.forEach(button => {
-        button.addEventListener('mouseenter', function() {
-            this.style.transform = 'translateY(-2px) scale(1.02)';
-        });
-        
-        button.addEventListener('mouseleave', function() {
-            this.style.transform = 'translateY(0) scale(1)';
-        });
-        
-        button.addEventListener('mousedown', function() {
-            this.style.transform = 'translateY(0) scale(0.98)';
-        });
-        
-        button.addEventListener('mouseup', function() {
-            this.style.transform = 'translateY(-2px) scale(1.02)';
-        });
-    });
-});
-
-window.addEventListener('load', () => {
-    document.body.style.opacity = '0';
-    document.body.style.transition = 'opacity 0.5s ease';
-    
-    setTimeout(() => {
-        document.body.style.opacity = '1';
-    }, 100);
-});
-
-document.addEventListener('DOMContentLoaded', function() {
-    const featureCards = document.querySelectorAll('.feature-card, .gameplay-card, .support-card');
-    
-    featureCards.forEach(card => {
-        card.addEventListener('mouseenter', function() {
-            this.style.transform = 'translateY(-8px) scale(1.02)';
-            this.style.boxShadow = '0 15px 40px rgba(0, 0, 0, 0.15)';
-        });
-        
-        card.addEventListener('mouseleave', function() {
-            this.style.transform = 'translateY(0) scale(1)';
-            this.style.boxShadow = '0 4px 20px rgba(0, 0, 0, 0.08)';
-        });
-    });
-});
-
-document.addEventListener('DOMContentLoaded', function() {
-    const statNumbers = document.querySelectorAll('.stat-number');
-    
-    const animateStats = () => {
-        statNumbers.forEach(stat => {
-            const finalText = stat.textContent;
-            if (finalText.includes('+')) {
-                const number = parseInt(finalText);
-                if (!isNaN(number)) {
-                    let current = 0;
-                    const increment = number / 30;
-                    const timer = setInterval(() => {
-                        current += increment;
-                        if (current >= number) {
-                            stat.textContent = finalText;
-                            clearInterval(timer);
-                        } else {
-                            stat.textContent = Math.floor(current) + '+';
-                        }
-                    }, 50);
+    try {
+        const sections = document.querySelectorAll('.content-section');
+        sections.forEach(section => {
+            if (section) {
+                section.style.opacity = '0';
+                section.style.transform = 'translateY(20px)';
+                section.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+                
+                if (sectionObserver) {
+                    sectionObserver.observe(section);
+                } else {
+                    // Fallback if IntersectionObserver is not available
+                    setTimeout(() => {
+                        section.style.opacity = '1';
+                        section.style.transform = 'translateY(0)';
+                    }, 100);
                 }
             }
         });
-    };
-    
-    const overviewSection = document.getElementById('overview');
-    if (overviewSection) {
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    setTimeout(animateStats, 500);
-                    observer.unobserve(entry.target);
-                }
-            });
+    } catch (error) {
+        console.error('Error in section initialization:', error);
+        // Fallback: just show all sections
+        const sections = document.querySelectorAll('.content-section');
+        sections.forEach(section => {
+            if (section) {
+                section.style.opacity = '1';
+                section.style.transform = 'translateY(0)';
+            }
         });
-        observer.observe(overviewSection);
+    }
+});
+
+document.addEventListener('DOMContentLoaded', function() {
+    try {
+        const buttons = document.querySelectorAll('.btn');
+        
+        buttons.forEach(button => {
+            if (button) {
+                button.addEventListener('mouseenter', function() {
+                    this.style.transform = 'translateY(-2px) scale(1.02)';
+                });
+                
+                button.addEventListener('mouseleave', function() {
+                    this.style.transform = 'translateY(0) scale(1)';
+                });
+                
+                button.addEventListener('mousedown', function() {
+                    this.style.transform = 'translateY(0) scale(0.98)';
+                });
+                
+                button.addEventListener('mouseup', function() {
+                    this.style.transform = 'translateY(-2px) scale(1.02)';
+                });
+            }
+        });
+    } catch (error) {
+        console.error('Error in button initialization:', error);
+    }
+});
+
+window.addEventListener('load', () => {
+    try {
+        if (document.body) {
+            document.body.style.opacity = '0';
+            document.body.style.transition = 'opacity 0.5s ease';
+            
+            setTimeout(() => {
+                document.body.style.opacity = '1';
+            }, 100);
+        }
+    } catch (error) {
+        console.error('Error in page load animation:', error);
+        if (document.body) {
+            document.body.style.opacity = '1';
+        }
+    }
+});
+
+document.addEventListener('DOMContentLoaded', function() {
+    try {
+        const featureCards = document.querySelectorAll('.feature-card, .gameplay-card, .support-card');
+        
+        featureCards.forEach(card => {
+            if (card) {
+                card.addEventListener('mouseenter', function() {
+                    this.style.transform = 'translateY(-8px) scale(1.02)';
+                    this.style.boxShadow = '0 15px 40px rgba(0, 0, 0, 0.15)';
+                });
+                
+                card.addEventListener('mouseleave', function() {
+                    this.style.transform = 'translateY(0) scale(1)';
+                    this.style.boxShadow = '0 4px 20px rgba(0, 0, 0, 0.08)';
+                });
+            }
+        });
+    } catch (error) {
+        console.error('Error in feature card initialization:', error);
+    }
+});
+
+document.addEventListener('DOMContentLoaded', function() {
+    try {
+        const statNumbers = document.querySelectorAll('.stat-number');
+        
+        const animateStats = () => {
+            try {
+                statNumbers.forEach(stat => {
+                    if (stat) {
+                        const finalText = stat.textContent;
+                        if (finalText && finalText.includes('+')) {
+                            const number = parseInt(finalText);
+                            if (!isNaN(number)) {
+                                let current = 0;
+                                const increment = number / 30;
+                                const timer = setInterval(() => {
+                                    current += increment;
+                                    if (current >= number) {
+                                        stat.textContent = finalText;
+                                        clearInterval(timer);
+                                    } else {
+                                        stat.textContent = Math.floor(current) + '+';
+                                    }
+                                }, 50);
+                            }
+                        }
+                    }
+                });
+            } catch (error) {
+                console.error('Error in stats animation:', error);
+            }
+        };
+        
+        const overviewSection = document.getElementById('overview');
+        if (overviewSection) {
+            if ('IntersectionObserver' in window) {
+                const observer = new IntersectionObserver((entries) => {
+                    entries.forEach(entry => {
+                        if (entry.isIntersecting) {
+                            setTimeout(animateStats, 500);
+                            observer.unobserve(entry.target);
+                        }
+                    });
+                });
+                observer.observe(overviewSection);
+            } else {
+                setTimeout(animateStats, 1000);
+            }
+        }
+    } catch (error) {
+        console.error('Error in stats initialization:', error);
     }
 });
