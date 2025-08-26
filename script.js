@@ -1,25 +1,20 @@
 
-// Website JavaScript - Twisted Skyrim
 console.log('Loading Twisted Skyrim website script...');
 
 document.addEventListener('DOMContentLoaded', function() {
-    // Add error handling wrapper
     try {
         initializeWebsite();
         console.log('Website initialized successfully');
     } catch (error) {
         console.error('Error initializing website:', error);
-        // Fallback initialization
         basicInitialization();
     }
 });
 
 function basicInitialization() {
-    // Basic fallback functionality
     const sidebarLinks = document.querySelectorAll('.sidebar-link');
     const contentSections = document.querySelectorAll('.content-section');
     
-    // Simple navigation without advanced features
     sidebarLinks.forEach(link => {
         link.addEventListener('click', function(e) {
             e.preventDefault();
@@ -37,7 +32,6 @@ function basicInitialization() {
         });
     });
     
-    // Show first section by default
     if (sidebarLinks.length > 0 && contentSections.length > 0) {
         sidebarLinks[0].classList.add('active');
         contentSections[0].classList.add('active');
@@ -50,7 +44,6 @@ function initializeWebsite() {
     const mobileToggle = document.getElementById('mobile-toggle');
     const sidebar = document.querySelector('.sidebar');
 
-    // Verify essential elements exist
     if (!sidebarLinks.length || !contentSections.length) {
         throw new Error('Essential page elements not found');
     }
@@ -509,10 +502,8 @@ function initializeWebsite() {
 
     loadChangelogWhenVisible();
     
-    // End of initializeWebsite function
 }
 
-// Changelog loading functionality
 function loadChangelogWhenVisible() {
     const changelogSection = document.getElementById('changelog');
     const changelogLink = document.querySelector('[data-section="changelog"]');
@@ -528,7 +519,6 @@ function loadChangelogWhenVisible() {
         }
     });
     
-    // Also load if changelog is in the URL hash
     if (window.location.hash === '#changelog') {
         loadChangelog();
         changelogLoaded = true;
@@ -867,7 +857,6 @@ const observerOptions = {
     rootMargin: '0px 0px -50px 0px'
 };
 
-// Add error handling for Intersection Observer
 let sectionObserver;
 try {
     if ('IntersectionObserver' in window) {
@@ -901,7 +890,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (sectionObserver) {
                     sectionObserver.observe(section);
                 } else {
-                    // Fallback if IntersectionObserver is not available
                     setTimeout(() => {
                         section.style.opacity = '1';
                         section.style.transform = 'translateY(0)';
@@ -911,7 +899,6 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     } catch (error) {
         console.error('Error in section initialization:', error);
-        // Fallback: just show all sections
         const sections = document.querySelectorAll('.content-section');
         sections.forEach(section => {
             if (section) {
