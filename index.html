@@ -4,11 +4,18 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Twisted Skyrim - Wabbajack Modlist</title>
+    <meta name="description" content="Twisted Skyrim is a complete graphics-first modlist for TES V: Special Edition featuring over 4000 mods, ENB, and modern combat systems.">
+    <meta name="keywords" content="Skyrim, Skyrim SE, Wabbajack, Modlist, ENB, BFCO, Legacy of the Dragonborn">
+    <meta name="author" content="TwistedModding">
+    
     <link rel="icon" type="image/x-icon" href="https://raw.githubusercontent.com/Oghma-Infinium/Twisted-Skyrim/refs/heads/main/favicon.ico">
-    <link rel="stylesheet" href="styles.css">
+    
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
     <noscript>
@@ -20,95 +27,144 @@
             <strong>Note:</strong> This website works best with JavaScript enabled. Some features may not work properly.
         </div>
     </noscript>
-    <div class="container">
-        <nav class="sidebar">
-        <div class="sidebar-header">
-            <div class="search-container">
-                <input type="text" id="search-input" class="search-input" placeholder="Search content...">
-                <button type="button" class="search-button"></button>
-            </div>
-        </div>
-        <ul class="sidebar-menu">
-            <li><a href="#overview" class="sidebar-link active" data-section="overview">Overview</a></li>
-            <li><a href="#features" class="sidebar-link" data-section="features">Features</a></li>
-            <li><a href="#requirements" class="sidebar-link" data-section="requirements">Requirements</a></li>
-            <li><a href="#installation" class="sidebar-link" data-section="installation">Installation</a></li>
-            <li><a href="#gameplay" class="sidebar-link" data-section="gameplay">Gameplay Guide</a></li>
-            <li><a href="#performance" class="sidebar-link" data-section="performance">Performance Guide</a></li>
-            <li><a href="#faq" class="sidebar-link" data-section="faq">FAQ</a></li>
-            <li><a href="#mods" class="sidebar-link" data-section="mods">Mod List</a></li>
-            <li><a href="#screenshots" class="sidebar-link" data-section="screenshots">Screenshots</a></li>
-            <li><a href="#changelog" class="sidebar-link" data-section="changelog">Changelog</a></li>
-            <li><a href="#support" class="sidebar-link" data-section="support">Support</a></li>
-        </ul>
-        <div class="sidebar-footer">
-            <a href="https://www.nexusmods.com/skyrimspecialedition/mods/132034" target="_blank" class="btn btn-nexus">Nexus Page</a>
-            <a href="https://discord.gg/wakingdreams" target="_blank" class="btn btn-discord">Discord</a>
-            <a href="https://www.patreon.com/c/TwistedModding" target="_blank" class="btn btn-patreon">Patreon</a>
-            <a href="https://ko-fi.com/twistedmodding1" target="_blank" class="btn btn-kofi">Ko-fi</a>
-        </div>
-    </nav>
-
-    <main class="main-content">
-        <section id="overview" class="content-section active">
-            <div class="section-header">
-                <h1>Twisted Skyrim</h1>
-                <p class="subtitle">A Complete Skyrim Overhaul</p>
-            </div>
+    <div class="app-container">
+        <aside class="sidebar" role="navigation" aria-label="Main navigation">
+            <header class="sidebar-header">
+                <div class="search-container">
+                    <label for="search-input" class="sr-only">Search content</label>
+                    <input 
+                        type="text" 
+                        id="search-input" 
+                        class="search-input" 
+                        placeholder="Search content..."
+                        aria-label="Search content"
+                        autocomplete="off"
+                    >
+                    <button 
+                        type="button" 
+                        class="search-button" 
+                        aria-label="Search"
+                        title="Search content"
+                    ></button>
+                </div>
+            </header>
             
-            <div class="image-embed">
-                <img src="https://raw.githubusercontent.com/Oghma-Infinium/Twisted-Skyrim/refs/heads/main/Twisted%20Skyrim%20Logo%20(1).webp" alt="Twisted Skyrim Logo">
-                <div class="image-caption">A Wabbajack Modlist</div>
-            </div>
-            
-            <div class="content-text">
-                <p>
-                    Twisted Skyrim is modlist for TES V: Special Edition. Its been made easy to install thanks to Wabbajack. Twisted Skyrim presents you with an entirely hand-crafted suite of visuals, a total combat system overhaul, new & expanded locations, worlds, quests, and achievements.
-                </p>
-                
-                <h3>Design Philosophy</h3>
-                <p>
-                    Twisted Skyrim was designed as a graphics-first modlist. What that means is that I've spared no expense in terms of visual fidelity, and I strive to make everything as visually consistent as possible. With that said, Twisted Skyrim is not just about visuals, it also offers a complete overhaul of pretty much every corner of the game. I noticed most lists don't cater to a graphics-first approach leaving users with high-end hardware feeling like they are leaving something on the table.
-                </p>
-                
-                <p><strong>Featuring:</strong></p>
-                <ul>
-                    <li>4000+ mods</li>
-                    <li>ENB</li>
-                    <li>Legacy of the Dragonborn</li>
-                    <li>BFCO</li>
-                    <li>Unique Locations</li>
+            <nav class="sidebar-nav">
+                <ul class="sidebar-menu" role="menu">
+                    <li role="none"><a href="#overview" class="sidebar-link active" data-section="overview" role="menuitem">Overview</a></li>
+                    <li role="none"><a href="#features" class="sidebar-link" data-section="features" role="menuitem">Features</a></li>
+                    <li role="none"><a href="#requirements" class="sidebar-link" data-section="requirements" role="menuitem">Requirements</a></li>
+                    <li role="none"><a href="#installation" class="sidebar-link" data-section="installation" role="menuitem">Installation</a></li>
+                    <li role="none"><a href="#gameplay" class="sidebar-link" data-section="gameplay" role="menuitem">Gameplay Guide</a></li>
+                    <li role="none"><a href="#performance" class="sidebar-link" data-section="performance" role="menuitem">Performance Guide</a></li>
+                    <li role="none"><a href="#faq" class="sidebar-link" data-section="faq" role="menuitem">FAQ</a></li>
+                    <li role="none"><a href="#mods" class="sidebar-link" data-section="mods" role="menuitem">Mod List</a></li>
+                    <li role="none"><a href="#screenshots" class="sidebar-link" data-section="screenshots" role="menuitem">Screenshots</a></li>
+                    <li role="none"><a href="#changelog" class="sidebar-link" data-section="changelog" role="menuitem">Changelog</a></li>
+                    <li role="none"><a href="#support" class="sidebar-link" data-section="support" role="menuitem">Support</a></li>
                 </ul>
-            </div>
-        </section>
-
-        <section id="features" class="content-section">
-            <div class="section-header">
-                <h1>Key Features</h1>
-                <p class="subtitle">What makes Twisted Skyrim unique</p>
-            </div>
+            </nav>
             
-            <div class="content-text">
-                <h3>Modern Combat</h3>
-                <p>Melee combat has been modernized with the help of BFCO, a modern MCO replacement for all intents and purposes. For those unfamiliar, it allows for jump attacks, swimming attacks, and attack speed buffs on movesets.</p>
+            <footer class="sidebar-footer">
+                <div class="social-links">
+                    <a href="https://www.nexusmods.com/skyrimspecialedition/mods/132034" target="_blank" rel="noopener" class="btn btn-nexus">
+                        <span class="btn-icon btn-icon--nexus"></span>
+                        Nexus Page
+                    </a>
+                    <a href="https://discord.gg/wakingdreams" target="_blank" rel="noopener" class="btn btn-discord">
+                        <span class="btn-icon btn-icon--discord"></span>
+                        Discord
+                    </a>
+                    <a href="https://www.patreon.com/c/TwistedModding" target="_blank" rel="noopener" class="btn btn-patreon">
+                        <span class="btn-icon btn-icon--patreon"></span>
+                        Patreon
+                    </a>
+                    <a href="https://ko-fi.com/twistedmodding1" target="_blank" rel="noopener" class="btn btn-kofi">
+                        <span class="btn-icon btn-icon--kofi"></span>
+                        Ko-fi
+                    </a>
+                </div>
+            </footer>
+        </aside>
+
+        <main class="main-content" role="main">
+            <section id="overview" class="content-section active" aria-labelledby="overview-title">
+                <header class="section-header">
+                    <h1 id="overview-title">Twisted Skyrim</h1>
+                    <p class="subtitle">A Complete Skyrim Overhaul</p>
+                </header>
                 
-                <h3>World Overhaul</h3>
-                <p>Expanded cities, new dungeons, and unique mashups for several locations.</p>
-
-                <h3>New Quests and Lands</h3>
-                <p>Completely new questlines, characters, locations, and lands to explore.</p>
-
-                <h3>Survival Elements</h3>
-                <p>Temperature, hunger, and fatigue systems remain true to vanilla, and fast travel requires travel packs.
-                </p>
+                <figure class="hero-image">
+                    <img 
+                        src="https://raw.githubusercontent.com/Oghma-Infinium/Twisted-Skyrim/refs/heads/main/Twisted%20Skyrim%20Logo%20(1).webp" 
+                        alt="Twisted Skyrim Logo - A Wabbajack Modlist"
+                        loading="lazy"
+                        width="800"
+                        height="400"
+                    >
+                    <figcaption>A Wabbajack Modlist</figcaption>
+                </figure>
                 
-                <h3>Visual Overhaul</h3>
-                <p>The ENB preset used is based on Rudy ENB, but has many custom changes to both the weather and ENB itself for a completely unique experience. Textures have been hand selected from hundreds of different mods, making sure everything is as consistent as possible.</p>
+                <div class="content-text">
+                    <p>
+                        Twisted Skyrim is modlist for TES V: Special Edition. Its been made easy to install thanks to Wabbajack. Twisted Skyrim presents you with an entirely hand-crafted suite of visuals, a total combat system overhaul, new & expanded locations, worlds, quests, and achievements.
+                    </p>
+                    
+                    <h3>Design Philosophy</h3>
+                    <p>
+                        Twisted Skyrim was designed as a graphics-first modlist. What that means is that I've spared no expense in terms of visual fidelity, and I strive to make everything as visually consistent as possible. With that said, Twisted Skyrim is not just about visuals, it also offers a complete overhaul of pretty much every corner of the game. I noticed most lists don't cater to a graphics-first approach leaving users with high-end hardware feeling like they are leaving something on the table.
+                    </p>
+                    
+                    <h4>Featuring:</h4>
+                    <ul class="feature-list">
+                        <li><strong>4000+</strong> mods</li>
+                        <li><strong>ENB</strong> visual enhancement</li>
+                        <li><strong>Legacy of the Dragonborn</strong> museum</li>
+                        <li><strong>BFCO</strong> modern combat framework</li>
+                        <li><strong>Unique Locations</strong> to explore</li>
+                    </ul>
+                </div>
+            </section>
 
-                <h3>Lore-focused</h3>
-                <p>Most, if not all, content that has been added is well within the bounds of the established lore.</p>
-            </div>
-        </section>
+            <!-- Features Section -->
+            <section id="features" class="content-section" aria-labelledby="features-title">
+                <header class="section-header">
+                    <h1 id="features-title">Key Features</h1>
+                    <p class="subtitle">What makes Twisted Skyrim unique</p>
+                </header>
+                
+                <div class="content-text">
+                    <article class="feature-card">
+                        <h3>Modern Combat</h3>
+                        <p>Melee combat has been modernized with the help of BFCO, a modern MCO replacement for all intents and purposes. For those unfamiliar, it allows for jump attacks, swimming attacks, and attack speed buffs on movesets.</p>
+                    </article>
+                    
+                    <article class="feature-card">
+                        <h3>World Overhaul</h3>
+                        <p>Expanded cities, new dungeons, and unique mashups for several locations.</p>
+                    </article>
+
+                    <article class="feature-card">
+                        <h3>New Quests and Lands</h3>
+                        <p>Completely new questlines, characters, locations, and lands to explore.</p>
+                    </article>
+
+                    <article class="feature-card">
+                        <h3>Survival Elements</h3>
+                        <p>Temperature, hunger, and fatigue systems remain true to vanilla, and fast travel requires travel packs.</p>
+                    </article>
+                    
+                    <article class="feature-card">
+                        <h3>Visual Overhaul</h3>
+                        <p>The ENB preset used is based on Rudy ENB, but has many custom changes to both the weather and ENB itself for a completely unique experience. Textures have been hand selected from hundreds of different mods, making sure everything is as consistent as possible.</p>
+                    </article>
+
+                    <article class="feature-card">
+                        <h3>Lore-focused</h3>
+                        <p>Most, if not all, content that has been added is well within the bounds of the established lore.</p>
+                    </article>
+                </div>
+            </section>
 
         <section id="requirements" class="content-section">
             <div class="section-header">
@@ -789,12 +845,10 @@
 
         <section id="changelog" class="content-section">
             <div class="section-header">
-                <h1>Changelog</h1>
+                <h1>Version History</h1>
             </div>
             
-            <div class="content-text">
-                <h3>Version History</h3>
-                
+            <div class="content-text">              
                 <div id="changelog-content" class="changelog-container">
                     <div class="loading-spinner">
                         <p>Loading changelog...</p>
@@ -826,12 +880,13 @@
                 <p><a href="https://ko-fi.com/twistedmodding1" target="_blank">Support on Ko-fi</a></p>
             </div>
         </section>
-    </main>
-
-    <div class="mobile-toggle" id="mobile-toggle">
-        <span></span>
-        <span></span>
-        <span></span>
+        </main>
+        
+        <button class="mobile-toggle" id="mobile-toggle" aria-label="Toggle navigation menu" aria-expanded="false">
+            <span class="hamburger-line"></span>
+            <span class="hamburger-line"></span>
+            <span class="hamburger-line"></span>
+        </button>
     </div>
 
     <script src="script.js"></script>

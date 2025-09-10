@@ -1,62 +1,158 @@
-
-console.log('Loading Twisted Skyrim website script...');
-
-document.addEventListener('DOMContentLoaded', function() {
-    try {
-        initializeWebsite();
-        console.log('Website initialized successfully');
-    } catch (error) {
-        console.error('Error initializing website:', error);
-        basicInitialization();
+class WebsiteManager {
+    constructor() {
+        this.navigation = new NavigationManager();
+        this.anchors = new AnchorManager();
+        this.search = new SearchManager();
+        this.changelog = new ChangelogManager();
+        this.ui = new UIManager();
     }
-});
 
-function basicInitialization() {
-    const sidebarLinks = document.querySelectorAll('.sidebar-link');
-    const contentSections = document.querySelectorAll('.content-section');
-    
-    sidebarLinks.forEach(link => {
-        link.addEventListener('click', function(e) {
-            e.preventDefault();
-            
-            sidebarLinks.forEach(l => l.classList.remove('active'));
-            contentSections.forEach(s => s.classList.remove('active'));
-            
-            this.classList.add('active');
-            
-            const targetSection = this.getAttribute('data-section');
-            const targetElement = document.getElementById(targetSection);
-            if (targetElement) {
-                targetElement.classList.add('active');
-            }
-        });
-    });
-    
-    if (sidebarLinks.length > 0 && contentSections.length > 0) {
-        sidebarLinks[0].classList.add('active');
-        contentSections[0].classList.add('active');
+    init() {
+        try {
+            this.navigation.init();
+            this.anchors.init();
+            this.search.init();
+            this.changelog.init();
+            this.ui.init();
+            console.log('Website initialized successfully');
+        } catch (error) {
+            console.error('Error initializing website:', error);
+            this.navigation.basicInit();
+        }
     }
 }
 
-function initializeWebsite() {
-    const sidebarLinks = document.querySelectorAll('.sidebar-link');
-    const contentSections = document.querySelectorAll('.content-section');
-    const mobileToggle = document.getElementById('mobile-toggle');
-    const sidebar = document.querySelector('.sidebar');
-
-    if (!sidebarLinks.length || !contentSections.length) {
-        throw new Error('Essential page elements not found');
+class NavigationManager {
+    constructor() {
+        this.sidebarLinks = document.querySelectorAll('.sidebar-link');
+        this.contentSections = document.querySelectorAll('.content-section');
+        this.mobileToggle = document.getElementById('mobile-toggle');
+        this.sidebar = document.querySelector('.sidebar');
+        this.appContainer = document.querySelector('.app-container');
     }
 
-    function initializeTextAnchoring() {
-        try {
-            addAnchorLinksToHeadings();
-        } catch (error) {
-            console.error('Error in text anchoring:', error);
+    init() {
+        if (!this.sidebarLinks.length || !this.contentSections.length) {
+            throw new Error('Essential page elements not found');
+        }
+        this.setupSidebarNavigation();
+        this.setupMobileToggle();
+        this.setupHashNavigation();
+        this.handleInitialLoad();
+    }
+
+    basicInit() {
+        this.sidebarLinks.forEach(link => {
+            link.addEventListener('click', (e) => {
+                e.preventDefault();
+                this.switchSection(link.getAttribute('data-section'));
+            });
+        });
+        
+        if (this.sidebarLinks.length > 0 && this.contentSections.length > 0) {
+            this.switchSection('overview');
         }
     }
 
-    function addAnchorLinksToHeadings() {
+    setupSidebarNavigation() {
+        this.sidebarLinks.forEach(link => {
+            link.addEventListener('click', (e) => {
+                e.preventDefault();
+                const targetSection = link.getAttribute('data-section');
+                this.switchSection(targetSection);
+                this.closeMobileSidebar();
+                this.scrollToTop();
+            });
+        });
+    }
+
+    setupMobileToggle() {
+        if (this.mobileToggle) {
+            this.mobileToggle.addEventListener('click', () => {
+                const isOpen = this.sidebar.classList.contains('mobile-open');
+                this.sidebar.classList.toggle('mobile-open');
+                this.mobileToggle.setAttribute('aria-expanded', !isOpen);
+            });
+        }
+
+        document.addEventListener('click', (e) => {
+            if (window.innerWidth <= 768) {
+                if (!this.sidebar.contains(e.target) && !this.mobileToggle.contains(e.target)) {
+                    this.sidebar.classList.remove('mobile-open');
+                    this.mobileToggle.setAttribute('aria-expanded', 'false');
+                }
+            }
+        });
+
+        window.addEventListener('resize', () => {
+            if (window.innerWidth > 768) {
+                this.sidebar.classList.remove('mobile-open');
+                this.mobileToggle.setAttribute('aria-expanded', 'false');
+            }
+        });
+    }
+
+    setupHashNavigation() {
+        window.addEventListener('hashchange', () => {
+            const hash = window.location.hash.substring(1);
+            if (hash) {
+                website.anchors.navigateToAnchor(hash);
+            }
+        });
+    }
+
+    switchSection(sectionId) {
+        this.sidebarLinks.forEach(l => l.classList.remove('active'));
+        this.contentSections.forEach(s => s.classList.remove('active'));
+        
+        const targetLink = document.querySelector(`[data-section="${sectionId}"]`);
+        const targetSection = document.getElementById(sectionId);
+        
+        if (targetLink && targetSection) {
+            targetLink.classList.add('active');
+            targetSection.classList.add('active');
+            this.updateURL(sectionId);
+        }
+    }
+
+    closeMobileSidebar() {
+        if (window.innerWidth <= 768) {
+            this.sidebar.classList.remove('mobile-open');
+            this.mobileToggle.setAttribute('aria-expanded', 'false');
+        }
+    }
+
+    scrollToTop() {
+        document.querySelector('.main-content').scrollTop = 0;
+    }
+
+    updateURL(anchor) {
+        const newURL = window.location.pathname + '#' + anchor;
+        window.history.pushState(null, null, newURL);
+    }
+
+    handleInitialLoad() {
+        const urlHash = window.location.hash.substring(1);
+        if (urlHash) {
+            website.anchors.navigateToAnchor(urlHash, true); // Pass true to skip highlighting
+        } else {
+            const firstLink = document.querySelector('.sidebar-link[data-section="overview"]');
+            const firstSection = document.getElementById('overview');
+            if (firstLink && firstSection) {
+                firstLink.classList.add('active');
+                firstSection.classList.add('active');
+            }
+        }
+    }
+}
+
+class AnchorManager {
+    init() {
+        this.addAnchorLinksToHeadings();
+        this.setupAnchorLinks();
+    }
+
+    addAnchorLinksToHeadings() {
         const headings = document.querySelectorAll('.content-section h1, .content-section h2, .content-section h3, .content-section h4, .content-section h5, .content-section h6');
         
         headings.forEach(heading => {
@@ -66,7 +162,7 @@ function initializeWebsite() {
 
             let anchorId = heading.id;
             if (!anchorId) {
-                anchorId = generateAnchorId(heading.textContent);
+                anchorId = this.generateAnchorId(heading.textContent);
                 heading.id = anchorId;
             }
 
@@ -76,18 +172,17 @@ function initializeWebsite() {
             anchorLink.innerHTML = '🔗';
             anchorLink.title = 'Link to this section';
             
-            anchorLink.addEventListener('click', function(e) {
+            anchorLink.addEventListener('click', (e) => {
                 e.preventDefault();
-                navigateToAnchor(anchorId);
-                
-                copyToClipboard(window.location.origin + window.location.pathname + '#' + anchorId);
+                this.navigateToAnchor(anchorId);
+                this.copyToClipboard(window.location.origin + window.location.pathname + '#' + anchorId);
             });
             
             heading.appendChild(anchorLink);
         });
     }
 
-    function generateAnchorId(text) {
+    generateAnchorId(text) {
         let id = text.toLowerCase()
             .replace(/[^\w\s-]/g, '')
             .replace(/\s+/g, '-')
@@ -100,66 +195,36 @@ function initializeWebsite() {
             uniqueId = `${id}-${counter}`;
             counter++;
         }
-        
         return uniqueId;
     }
 
-    function navigateToAnchor(anchorId) {
-        const mainSection = document.getElementById(anchorId);
-        if (mainSection && mainSection.classList.contains('content-section')) {
-            showSection(anchorId);
-            updateURL(anchorId);
-            return;
-        }
-        
-        const anchor = document.getElementById(anchorId);
-        if (!anchor) {
-            return;
-        }
-        
-        const containingSection = anchor.closest('.content-section');
-        if (containingSection) {
-            showSection(containingSection.id);
+    navigateToAnchor(anchorId, skipHighlight = false) {
+        const targetElement = document.getElementById(anchorId);
+        if (!targetElement) return;
 
+        const section = targetElement.closest('.content-section');
+        if (section) {
+            website.navigation.switchSection(section.id);
             setTimeout(() => {
-                scrollToElement(anchor);
-                highlightAnchor(anchor);
-                updateURL(anchorId);
-            }, 100);
+                this.scrollToElement(targetElement);
+                if (!skipHighlight) {
+                    this.highlightAnchor(targetElement);
+                }
+            }, 300);
         }
     }
 
-    function showSection(sectionId) {
-        const sidebarLinks = document.querySelectorAll('.sidebar-link');
-        const contentSections = document.querySelectorAll('.content-section');
+    scrollToElement(element) {
+        const elementRect = element.getBoundingClientRect();
+        const offset = elementRect.top + window.pageYOffset - 100;
         
-        sidebarLinks.forEach(l => l.classList.remove('active'));
-        contentSections.forEach(s => s.classList.remove('active'));
-        
-        const targetLink = document.querySelector(`[data-section="${sectionId}"]`);
-        const targetSection = document.getElementById(sectionId);
-        
-        if (targetLink && targetSection) {
-            targetLink.classList.add('active');
-            targetSection.classList.add('active');
-        }
-    }
-
-    function scrollToElement(element) {
-        const mainContent = document.querySelector('.main-content');
-        const elementTop = element.offsetTop;
-        const offset = 20;
-        
-        mainContent.scrollTo({
-            top: elementTop - offset,
+        window.scrollTo({
+            top: offset,
             behavior: 'smooth'
         });
     }
 
-    function highlightAnchor(element) {
-        const existingHighlights = document.querySelectorAll('.anchor-highlight');
-        existingHighlights.forEach(highlight => highlight.classList.remove('anchor-highlight'));
-        
+    highlightAnchor(element) {
         element.classList.add('anchor-highlight');
         
         if (!document.getElementById('anchor-highlight-styles')) {
@@ -170,25 +235,7 @@ function initializeWebsite() {
                     background-color: rgba(255, 255, 255, 0.1) !important;
                     border-left: 4px solid #ffffff !important;
                     padding-left: 16px !important;
-                    border-radius: 6px !important;
-                    box-shadow: 0 0 20px rgba(255, 255, 255, 0.2) !important;
                     transition: all 0.3s ease !important;
-                    animation: anchorPulse 2s ease-in-out !important;
-                }
-                
-                @keyframes anchorPulse {
-                    0% { 
-                        background-color: rgba(255, 255, 255, 0.2);
-                        box-shadow: 0 0 30px rgba(255, 255, 255, 0.4);
-                    }
-                    50% { 
-                        background-color: rgba(255, 255, 255, 0.15);
-                        box-shadow: 0 0 25px rgba(255, 255, 255, 0.3);
-                    }
-                    100% { 
-                        background-color: rgba(255, 255, 255, 0.1);
-                        box-shadow: 0 0 20px rgba(255, 255, 255, 0.2);
-                    }
                 }
             `;
             document.head.appendChild(style);
@@ -199,24 +246,31 @@ function initializeWebsite() {
         }, 3000);
     }
 
-    function updateURL(anchor) {
-        const newURL = window.location.pathname + '#' + anchor;
-        window.history.pushState(null, null, newURL);
+    setupAnchorLinks() {
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            if (!anchor.classList.contains('sidebar-link')) {
+                anchor.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    const targetId = anchor.getAttribute('href').substring(1);
+                    this.navigateToAnchor(targetId);
+                });
+            }
+        });
     }
 
-    function copyToClipboard(text) {
+    copyToClipboard(text) {
         if (navigator.clipboard && window.isSecureContext) {
             navigator.clipboard.writeText(text).then(() => {
-                showCopyNotification('Link copied to clipboard!');
+                this.showCopyNotification('Link copied to clipboard!');
             }).catch(() => {
-                fallbackCopyToClipboard(text);
+                this.fallbackCopyToClipboard(text);
             });
         } else {
-            fallbackCopyToClipboard(text);
+            this.fallbackCopyToClipboard(text);
         }
     }
 
-    function fallbackCopyToClipboard(text) {
+    fallbackCopyToClipboard(text) {
         const textArea = document.createElement('textarea');
         textArea.value = text;
         textArea.style.position = 'fixed';
@@ -227,15 +281,15 @@ function initializeWebsite() {
         
         try {
             document.execCommand('copy');
-            showCopyNotification('Link copied to clipboard!');
+            this.showCopyNotification('Link copied to clipboard!');
         } catch (err) {
-            showCopyNotification('Could not copy link');
+            this.showCopyNotification('Failed to copy link');
         }
         
         document.body.removeChild(textArea);
     }
 
-    function showCopyNotification(message) {
+    showCopyNotification(message) {
         const notification = document.createElement('div');
         notification.className = 'copy-notification';
         notification.textContent = message;
@@ -274,758 +328,1278 @@ function initializeWebsite() {
             }, 300);
         }, 2000);
     }
+}
 
-    initializeTextAnchoring();
+class SearchManager {
+    constructor() {
+        this.searchInput = document.getElementById('search-input');
+        this.searchButton = document.querySelector('.search-button');
+        this.searchDropdown = null;
+        this.searchCounter = null;
+        this.currentSearchResults = [];
+        this.currentSearchIndex = 0;
+        this.currentSearchTerm = '';
+        this.currentlyHighlightedElement = null;
+        this.qaMapping = this.initializeQAMapping();
+    }
 
-    const searchInput = document.getElementById('search-input');
-    const searchButton = document.querySelector('.search-button');
-    
-    if (searchInput && searchButton) {
-        function performSearch(query) {
-            if (!query.trim()) {
-                clearSearchHighlights();
+    init() {
+        if (this.searchInput && this.searchButton) {
+            this.createSearchElements();
+            this.setupEventListeners();
+        }
+    }
+
+    initializeQAMapping() {
+        return {
+            'how do i install': { section: 'installation', anchor: null, keywords: ['install', 'setup', 'wabbajack'], alternatives: ['how install', 'how instal', 'how to instal', 'instal guide', 'instalation', 'instalation guide'] },
+            'how to install': { section: 'installation', anchor: null, keywords: ['install', 'setup', 'wabbajack'], alternatives: ['how install', 'how instal', 'how to instal'] },
+            'installation guide': { section: 'installation', anchor: null, keywords: ['install', 'guide'], alternatives: ['instal guide', 'instalation guide', 'install help', 'setup guide'] },
+            'where do i download': { section: 'installation', anchor: null, keywords: ['download', 'get', 'obtain'], alternatives: ['where download', 'where downlaod', 'how download', 'where get', 'were download'] },
+            'how to download': { section: 'installation', anchor: null, keywords: ['download', 'get', 'wabbajack'], alternatives: ['how download', 'how downlaod', 'were download'] },
+            'pagefile setup': { section: 'installation', anchor: 'setup-pagefile-required', keywords: ['pagefile', 'virtual memory'], alternatives: ['page file', 'pagefiles', 'virtual mem', 'memory setup'] },
+            'visual c++': { section: 'installation', anchor: null, keywords: ['visual', 'c++', 'runtime'], alternatives: ['visual c', 'c++ runtime', 'visual studio', 'vcredist'] },
+            'creation club': { section: 'installation', anchor: 'purchase-install-creation-club-content', keywords: ['creation club', 'cc', 'anniversary'], alternatives: ['creation club content', 'cc content', 'anniversary edition', 'ae content'] },
+            'low fps': { section: 'performance', anchor: null, keywords: ['fps', 'framerate', 'slow', 'lag'], alternatives: ['bad fps', 'poor fps', 'slow fps', 'fps drop', 'frame rate', 'framerates'] },
+            'performance issues': { section: 'performance', anchor: null, keywords: ['performance', 'slow', 'lag', 'stutter'], alternatives: ['performace issues', 'performance problem', 'slow game', 'game slow', 'stuttering', 'lag issues'] },
+            'how to improve fps': { section: 'performance', anchor: null, keywords: ['improve', 'increase', 'fps', 'performance'], alternatives: ['improve performance', 'increase fps', 'better fps', 'boost fps', 'fix fps'] },
+            'enb settings': { section: 'performance', anchor: 'modifying-enb', keywords: ['enb', 'graphics', 'visual'], alternatives: ['enb config', 'enb configuration', 'graphics settings', 'visual settings'] },
+            'disable enb': { section: 'performance', anchor: 'disabling-enb', keywords: ['disable', 'turn off', 'enb'], alternatives: ['turn off enb', 'remove enb', 'enb off', 'no enb'] },
+            'lod generation': { section: 'performance', anchor: 'lods', keywords: ['lod', 'distance', 'generation'], alternatives: ['lods', 'lod gen', 'distance lod', 'terrain lod'] },
+            'bethini': { section: 'performance', anchor: 'modifying-game-inis', keywords: ['bethini', 'ini', 'settings'], alternatives: ['beth ini', 'ini settings', 'game settings'] },
+            'system requirements': { section: 'requirements', anchor: null, keywords: ['requirements', 'specs', 'hardware'], alternatives: ['system specs', 'hardware requirements', 'minimum requirements', 'sys req', 'pc specs'] },
+            'minimum specs': { section: 'requirements', anchor: null, keywords: ['minimum', 'specs', 'requirements'], alternatives: ['min specs', 'minimum requirements', 'lowest specs', 'min req'] },
+            'how much ram': { section: 'requirements', anchor: null, keywords: ['ram', 'memory', 'gb'], alternatives: ['ram needed', 'memory needed', 'how much memory', 'ram requirement'] },
+            'storage space': { section: 'requirements', anchor: null, keywords: ['storage', 'space', 'gb', 'size'], alternatives: ['disk space', 'hard drive space', 'hdd space', 'ssd space', 'space needed'] },
+            'disk space': { section: 'requirements', anchor: null, keywords: ['disk', 'space', 'storage'], alternatives: ['hard drive space', 'storage space', 'hdd space'] },
+            'how to start': { section: 'gameplay', anchor: null, keywords: ['start', 'begin', 'new game'], alternatives: ['how start', 'starting guide', 'begin game', 'new character'] },
+            'combat system': { section: 'gameplay', anchor: 'combat-foundations', keywords: ['combat', 'fighting', 'battle'], alternatives: ['fighting system', 'battle system', 'combat mechanics', 'fighting mechanics'] },
+            'dodging': { section: 'gameplay', anchor: null, keywords: ['dodge', 'roll', 'avoid'], alternatives: ['dodge mechanics', 'rolling', 'how to dodge', 'dodge roll'] },
+            'difficulty': { section: 'gameplay', anchor: 'difficulty', keywords: ['difficulty', 'hard', 'challenging'], alternatives: ['game difficulty', 'too hard', 'too easy', 'difficulty settings'] },
+            'survival mode': { section: 'gameplay', anchor: null, keywords: ['survival', 'hunger', 'temperature'], alternatives: ['survival mechanics', 'needs system', 'hunger system', 'cold system'] },
+            'leveling system': { section: 'gameplay', anchor: 'leveling-and-progression', keywords: ['level', 'xp', 'progression'], alternatives: ['leveling', 'experience', 'progression system', 'how to level'] },
+            'game crashes': { section: 'faq', anchor: null, keywords: ['crash', 'ctd', 'freeze'], alternatives: ['game crash', 'crashing', 'crashes', 'game freezes', 'ctd'] },
+            'game freezes': { section: 'faq', anchor: null, keywords: ['freeze', 'hang', 'stuck'], alternatives: ['freezing', 'game freeze', 'hang', 'stuck game'] },
+            'loading forever': { section: 'faq', anchor: null, keywords: ['loading', 'infinite', 'stuck'], alternatives: ['infinite loading', 'stuck loading', 'loading screen', 'wont load'] },
+            'black screen': { section: 'faq', anchor: null, keywords: ['black screen', 'blank', 'nothing'], alternatives: ['blank screen', 'dark screen', 'no display', 'screen black'] },
+            'vigilant mod': { section: 'faq', anchor: null, keywords: ['vigilant', 'altano', 'windpeak'], alternatives: ['vigilant quest', 'vigilant start', 'altano location'] },
+            'start vigilant': { section: 'faq', anchor: null, keywords: ['vigilant', 'start', 'begin'], alternatives: ['begin vigilant', 'vigilant quest start', 'how start vigilant'] },
+            'legacy of dragonborn': { section: 'features', anchor: null, keywords: ['legacy', 'dragonborn', 'museum'], alternatives: ['legacy dragonborn', 'lotd', 'museum mod'] },
+            'camera settings': { section: 'faq', anchor: null, keywords: ['camera', 'view', 'third person'], alternatives: ['camera options', 'view settings', 'camera mod'] },
+            'first person': { section: 'faq', anchor: null, keywords: ['first person', 'fp', 'view'], alternatives: ['first person view', 'fp view', '1st person'] },
+            'ui problems': { section: 'faq', anchor: null, keywords: ['ui', 'interface', 'hud'], alternatives: ['ui issues', 'interface problems', 'hud problems', 'menu problems'] },
+            'character creation': { section: 'faq', anchor: null, keywords: ['character', 'creation', 'racemenu'], alternatives: ['char creation', 'character maker', 'racemenu'] },
+            'two ears': { section: 'faq', anchor: null, keywords: ['ears', 'double', 'two sets'], alternatives: ['double ears', 'ear bug', 'multiple ears', 'extra ears'] },
+            'get help': { section: 'support', anchor: null, keywords: ['help', 'support', 'discord'], alternatives: ['need help', 'support', 'assistance', 'discord help'] },
+            'discord server': { section: 'support', anchor: null, keywords: ['discord', 'server', 'community'], alternatives: ['discord link', 'discord channel', 'community discord'] },
+            'report bug': { section: 'support', anchor: null, keywords: ['bug', 'report', 'issue'], alternatives: ['bug report', 'report issue', 'found bug', 'report problem'] }
+        };
+    }
+
+    createSearchElements() {
+        if (!this.searchDropdown) {
+            this.searchDropdown = document.createElement('div');
+            this.searchDropdown.className = 'search-dropdown';
+            this.searchInput.parentElement.appendChild(this.searchDropdown);
+        }
+        
+        if (!this.searchCounter) {
+            this.searchCounter = document.createElement('div');
+            this.searchCounter.className = 'search-counter';
+            this.searchInput.parentElement.appendChild(this.searchCounter);
+        }
+    }
+
+    setupEventListeners() {
+        this.searchButton.addEventListener('click', () => {
+            if (this.currentSearchTerm === this.searchInput.value.trim() && this.currentSearchResults.length > 0) {
+                this.cycleToNextMatch();
+            } else {
+                this.performSearch(this.searchInput.value);
+            }
+        });
+        
+        this.searchInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                const query = this.searchInput.value.trim();
+                
+                if (this.currentSearchTerm === query && this.currentSearchResults.length > 0) {
+                    this.cycleToNextMatch();
+                    return;
+                }
+                
+                if (query.length >= 2) {
+                    const wordSearchResults = this.findAllMatches(query);
+                    if (wordSearchResults.length > 0) {
+                        this.performSearch(query);
+                        return;
+                    }
+                }
+                
+                if (this.handleQuestionAnswer(query)) {
+                    return;
+                }
+                
+                if (query) {
+                    this.performSearch(query);
+                }
+            }
+        });
+        
+        this.searchInput.addEventListener('input', () => {
+            const query = this.searchInput.value.trim();
+            if (!query || query.length === 0) {
+                this.clearSearchHighlights();
+                this.resetSearchState();
+                this.hideSearchDropdown();
                 return;
             }
             
-            const searchTerm = query.toLowerCase();
-            let foundResults = [];
-
-            contentSections.forEach(section => {
-                const sectionId = section.id;
-                const sectionContent = section.textContent.toLowerCase();
+            if (query.length >= 2) {
+                const wordSearchResults = this.findAllMatches(query);
+                const questionSuggestions = this.getQuestionSuggestions(query);
                 
-                if (sectionContent.includes(searchTerm)) {
-                    foundResults.push({
-                        section: sectionId,
-                        element: section
-                    });
+                this.currentSearchResults = wordSearchResults;
+                this.currentSearchIndex = 0;
+                this.currentSearchTerm = query;
+                
+                this.showCombinedDropdown(wordSearchResults, questionSuggestions, query);
+                
+                if (wordSearchResults.length > 0) {
+                    setTimeout(() => {
+                        this.highlightSearchTerms(query);
+                    }, 100);
                 }
-            });
-            
-            clearSearchHighlights();
-            
-            if (foundResults.length > 0) {
-                const firstResult = foundResults[0];
-                showSection(firstResult.section);
                 
-                highlightSearchTerms(searchTerm);
-                
-                showSearchNotification(`Found ${foundResults.length} result${foundResults.length > 1 ? 's' : ''} for "${query}"`);
+                this.updateSearchCounter();
             } else {
-                showSearchNotification(`No results found for "${query}"`);
+                this.hideSearchDropdown();
+                if (this.searchCounter) this.searchCounter.classList.remove('show');
             }
-        }
+        });
         
-        function showSection(sectionId) {
-            showSectionWithoutAnimation(sectionId);
-        }
+        this.searchInput.addEventListener('keydown', (e) => {
+            if (!this.searchDropdown || !this.searchDropdown.classList.contains('show')) return;
+            
+            const items = this.searchDropdown.querySelectorAll('.search-dropdown-item');
+            const activeItem = this.searchDropdown.querySelector('.search-dropdown-item.active');
+            let currentIndex = Array.from(items).indexOf(activeItem);
+            
+            if (e.key === 'ArrowDown') {
+                e.preventDefault();
+                if (currentIndex < items.length - 1) {
+                    items[currentIndex].classList.remove('active');
+                    items[currentIndex + 1].classList.add('active');
+                }
+            } else if (e.key === 'ArrowUp') {
+                e.preventDefault();
+                if (currentIndex > 0) {
+                    items[currentIndex].classList.remove('active');
+                    items[currentIndex - 1].classList.add('active');
+                }
+            } else if (e.key === 'Enter') {
+                e.preventDefault();
+                if (activeItem) {
+                    activeItem.click();
+                }
+            } else if (e.key === 'Escape') {
+                this.hideSearchDropdown();
+            }
+        });
+        
+        document.addEventListener('click', (e) => {
+            if (!this.searchInput.contains(e.target) && !this.searchDropdown?.contains(e.target)) {
+                this.hideSearchDropdown();
+            }
+        });
+    }
 
-        function showSectionWithoutAnimation(sectionId) {
-            const sidebarLinks = document.querySelectorAll('.sidebar-link');
-            const contentSections = document.querySelectorAll('.content-section');
-            
-            sidebarLinks.forEach(l => l.classList.remove('active'));
-            contentSections.forEach(s => s.classList.remove('active'));
-            
-            const targetLink = document.querySelector(`[data-section="${sectionId}"]`);
-            const targetSection = document.getElementById(sectionId);
-            
-            if (targetLink && targetSection) {
-                targetLink.classList.add('active');
-                targetSection.classList.add('active');
-                
-                updateURL(sectionId);
-                
-                document.querySelector('.main-content').scrollTop = 0;
-            }
-        }
+    findAllMatches(query) {
+        const searchTerm = query.toLowerCase();
+        const matches = [];
+        const elementMatches = new Map();
         
-        function highlightSearchTerms(searchTerm) {
-            const activeSection = document.querySelector('.content-section.active');
-            if (!activeSection) return;
+        const contentSections = document.querySelectorAll('.content-section');
+        
+        contentSections.forEach(section => {
+            if (section.id === 'changelog') return;
             
             const walker = document.createTreeWalker(
-                activeSection,
+                section,
                 NodeFilter.SHOW_TEXT,
                 null,
                 false
             );
             
-            const textNodes = [];
             let node;
-            
             while (node = walker.nextNode()) {
-                if (node.nodeValue.toLowerCase().includes(searchTerm)) {
-                    textNodes.push(node);
+                const text = node.nodeValue;
+                const lowerText = text.toLowerCase();
+                let index = lowerText.indexOf(searchTerm);
+                
+                while (index !== -1) {
+                    const start = Math.max(0, index - 30);
+                    const end = Math.min(text.length, index + searchTerm.length + 30);
+                    const snippet = text.substring(start, end);
+                    const highlightElement = this.findBestHighlightElement(node);
+                    
+                    const match = {
+                        node: node,
+                        section: section,
+                        sectionId: section.id,
+                        index: index,
+                        snippet: snippet,
+                        fullText: text,
+                        element: highlightElement
+                    };
+                    
+                    if (!elementMatches.has(highlightElement)) {
+                        elementMatches.set(highlightElement, match);
+                        matches.push(match);
+                    }
+                    
+                    index = lowerText.indexOf(searchTerm, index + 1);
                 }
             }
+        });
+        
+        return matches;
+    }
+
+    findBestHighlightElement(textNode) {
+        let element = textNode.parentElement;
+        const inlineElements = ['A', 'STRONG', 'EM', 'SPAN', 'CODE', 'I', 'B', 'U'];
+        
+        while (element && inlineElements.includes(element.tagName)) {
+            element = element.parentElement;
+        }
+        
+        return element || textNode.parentElement;
+    }
+
+    performSearch(query, showDropdown = false) {
+        if (!query.trim()) {
+            this.clearSearchHighlights();
+            this.resetSearchState();
+            return;
+        }
+        
+        this.currentSearchTerm = query;
+        this.currentSearchResults = this.findAllMatches(query);
+        this.currentSearchIndex = 0;
+        
+        if (showDropdown) {
+            this.showSearchDropdown(this.currentSearchResults, query);
+        } else {
+            this.hideSearchDropdown();
+        }
+        
+        this.clearSearchHighlights();
+        
+        if (this.currentSearchResults.length > 0) {
+            const firstResult = this.currentSearchResults[0];
+            this.jumpToMatch(firstResult);
             
-            textNodes.forEach(textNode => {
-                const parent = textNode.parentNode;
-                const text = textNode.nodeValue;
-                const regex = new RegExp(`(${searchTerm})`, 'gi');
-                const highlightedText = text.replace(regex, '<mark class="search-highlight">$1</mark>');
+            setTimeout(() => {
+                this.highlightSearchTerms(query);
+            }, 200);
+            
+            this.updateSearchCounter();
+            
+            if (!showDropdown) {
+                this.showSearchNotification(`Found ${this.currentSearchResults.length} result${this.currentSearchResults.length > 1 ? 's' : ''} for "${query}"`);
+            }
+        } else {
+            this.resetSearchState();
+            this.showSearchNotification(`No results found for "${query}"`);
+        }
+    }
+
+    jumpToMatch(match) {
+        const currentSection = document.querySelector('.content-section.active');
+        
+        if (!currentSection || currentSection.id !== match.sectionId) {
+            website.navigation.switchSection(match.sectionId);
+            
+            const mainContent = document.querySelector('.main-content');
+            if (mainContent) {
+                mainContent.scrollTop = 0;
+            }
+            
+            setTimeout(() => {
+                if (mainContent) {
+                    mainContent.scrollTop = 0;
+                }
+                this.scrollToMatchElement(match);
+            }, 350);
+        } else {
+            this.scrollToMatchElement(match);
+        }
+    }
+
+    scrollToMatchElement(match) {
+        if (!match.element) return;
+        
+        const isSameElement = this.currentlyHighlightedElement === match.element;
+        this.clearCurrentLineHighlight();
+        
+        const currentScrollY = window.pageYOffset || document.documentElement.scrollTop;
+        const elementRect = match.element.getBoundingClientRect();
+        const elementTopRelativeToDoc = elementRect.top + currentScrollY;
+        const targetScrollY = Math.max(0, elementTopRelativeToDoc - 100);
+        
+        const viewportHeight = window.innerHeight;
+        const isElementVisible = elementRect.top >= 100 && elementRect.bottom <= viewportHeight - 100;
+        
+        const shouldScroll = !isSameElement || !isElementVisible || Math.abs(currentScrollY - targetScrollY) > 50;
+        
+        if (shouldScroll) {
+            const distance = targetScrollY - currentScrollY;
+            const duration = Math.min(Math.abs(distance) * 0.5, 600);
+            const startTime = performance.now();
+            
+            const animateScroll = (currentTime) => {
+                const elapsed = currentTime - startTime;
+                const progress = Math.min(elapsed / duration, 1);
                 
-                if (highlightedText !== text) {
+                const easeOut = 1 - Math.pow(1 - progress, 3);
+                const currentPosition = currentScrollY + (distance * easeOut);
+                
+                window.scrollTo(0, currentPosition);
+                
+                if (progress < 1) {
+                    requestAnimationFrame(animateScroll);
+                }
+            };
+            
+            requestAnimationFrame(animateScroll);
+        }
+        
+        match.element.classList.add('line-highlight');
+        this.currentlyHighlightedElement = match.element;
+    }
+
+    clearCurrentLineHighlight() {
+        if (this.currentlyHighlightedElement) {
+            this.currentlyHighlightedElement.classList.remove('line-highlight');
+            this.currentlyHighlightedElement = null;
+        }
+    }
+
+    cycleToNextMatch() {
+        if (this.currentSearchResults.length === 0) return;
+        
+        this.currentSearchIndex = (this.currentSearchIndex + 1) % this.currentSearchResults.length;
+        const match = this.currentSearchResults[this.currentSearchIndex];
+        
+        this.jumpToMatch(match);
+        this.updateSearchCounter();
+        
+        setTimeout(() => {
+            this.highlightSearchTerms(this.currentSearchTerm);
+        }, 100);
+    }
+
+    highlightSearchTerms(searchTerm) {
+        this.clearSearchHighlights();
+        
+        const activeSection = document.querySelector('.content-section.active');
+        if (!activeSection) return;
+        
+        this.highlightTextInElement(activeSection, searchTerm);
+    }
+
+    highlightTextInElement(element, searchTerm) {
+        const walker = document.createTreeWalker(
+            element,
+            NodeFilter.SHOW_TEXT,
+            {
+                acceptNode: (node) => {
+                    if (node.parentElement.classList?.contains('search-highlight') || 
+                        !node.nodeValue.trim()) {
+                        return NodeFilter.FILTER_REJECT;
+                    }
+                    return node.nodeValue.toLowerCase().includes(searchTerm.toLowerCase()) 
+                        ? NodeFilter.FILTER_ACCEPT 
+                        : NodeFilter.FILTER_REJECT;
+                }
+            },
+            false
+        );
+        
+        const textNodes = [];
+        let node;
+        
+        while (node = walker.nextNode()) {
+            textNodes.push(node);
+        }
+        
+        textNodes.reverse().forEach(textNode => {
+            try {
+                const parent = textNode.parentNode;
+                if (!parent) return;
+                
+                const text = textNode.nodeValue;
+                const regex = new RegExp(`(${this.escapeRegExp(searchTerm)})`, 'gi');
+                
+                if (regex.test(text)) {
+                    const highlightedText = text.replace(regex, '<mark class="search-highlight">$1</mark>');
+                    
                     const wrapper = document.createElement('span');
                     wrapper.innerHTML = highlightedText;
+                    
                     parent.replaceChild(wrapper, textNode);
                 }
-            });
-        }
-        
-        function clearSearchHighlights() {
-            const highlights = document.querySelectorAll('.search-highlight');
-            highlights.forEach(highlight => {
-                const parent = highlight.parentNode;
-                parent.replaceChild(document.createTextNode(highlight.textContent), highlight);
-                parent.normalize();
-            });
-        }
-
-        function showSearchNotification(message) {
-            const existingNotification = document.querySelector('.search-notification');
-            if (existingNotification) {
-                existingNotification.remove();
-            }
-            
-            const notification = document.createElement('div');
-            notification.className = 'search-notification';
-            notification.textContent = message;
-            
-            document.body.appendChild(notification);
-
-            setTimeout(() => {
-                notification.classList.add('show');
-            }, 100);
-            
-            setTimeout(() => {
-                notification.classList.remove('show');
-                setTimeout(() => {
-                    if (notification.parentNode) {
-                        notification.remove();
-                    }
-                }, 300);
-            }, 3000);
-        }
-        
-        searchButton.addEventListener('click', function() {
-            performSearch(searchInput.value);
-        });
-        
-        searchInput.addEventListener('keypress', function(e) {
-            if (e.key === 'Enter') {
-                performSearch(this.value);
-            }
-        });
-        
-        searchInput.addEventListener('input', function() {
-            if (!this.value.trim()) {
-                clearSearchHighlights();
+            } catch (error) {
+                console.warn('Error highlighting text node:', error);
             }
         });
     }
 
-    sidebarLinks.forEach(link => {
-        link.addEventListener('click', function(e) {
-            e.preventDefault();
-            
-            sidebarLinks.forEach(l => l.classList.remove('active'));
-            contentSections.forEach(s => s.classList.remove('active'));
-            
-            this.classList.add('active');
-            
-            const targetSection = this.getAttribute('data-section');
-            const targetElement = document.getElementById(targetSection);
-            if (targetElement) {
-                targetElement.classList.add('active');
-                
-                updateURL(targetSection);
-            }
-            
-            if (window.innerWidth <= 768) {
-                sidebar.classList.remove('active');
-            }
-            
-            document.querySelector('.main-content').scrollTop = 0;
-        });
-    });
-
-    if (mobileToggle) {
-        mobileToggle.addEventListener('click', function() {
-            sidebar.classList.toggle('active');
-        });
-    }
-
-    document.addEventListener('click', function(e) {
-        if (window.innerWidth <= 768) {
-            if (!sidebar.contains(e.target) && !mobileToggle.contains(e.target)) {
-                sidebar.classList.remove('active');
-            }
-        }
-    });
-
-    window.addEventListener('resize', function() {
-        if (window.innerWidth > 768) {
-            sidebar.classList.remove('active');
-        }
-    });
-
-    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-        if (!anchor.classList.contains('sidebar-link')) {
-            anchor.addEventListener('click', function (e) {
-                e.preventDefault();
-                const targetId = this.getAttribute('href').substring(1);
-                navigateToAnchor(targetId);
-            });
-        }
-    });
-
-    const urlHash = window.location.hash.substring(1);
-    if (urlHash) {
-        navigateToAnchor(urlHash);
-    } else {
-        const firstLink = document.querySelector('.sidebar-link[data-section="overview"]');
-        const firstSection = document.getElementById('overview');
-        if (firstLink && firstSection) {
-            firstLink.classList.add('active');
-            firstSection.classList.add('active');
-        }
-    }
-
-    window.addEventListener('hashchange', function() {
-        const hash = window.location.hash.substring(1);
-        if (hash) {
-            navigateToAnchor(hash);
-        }
-    });
-
-    loadChangelogWhenVisible();
-    
-}
-
-function loadChangelogWhenVisible() {
-    const changelogSection = document.getElementById('changelog');
-    const changelogLink = document.querySelector('[data-section="changelog"]');
-    
-    if (!changelogSection || !changelogLink) return;
-    
-    let changelogLoaded = false;
-    
-    changelogLink.addEventListener('click', function() {
-        if (!changelogLoaded) {
-            loadChangelog();
-            changelogLoaded = true;
-        }
-    });
-    
-    if (window.location.hash === '#changelog') {
-        loadChangelog();
-        changelogLoaded = true;
-    }
-}
-
-async function loadChangelog() {
-    const changelogContainer = document.getElementById('changelog-content');
-    if (!changelogContainer) {
-        return;
-    }
-    
-    try {
-        changelogContainer.innerHTML = `
-            <div class="loading-spinner">
-                <div class="spinner"></div>
-                <p>Loading changelog from GitHub...</p>
-            </div>
-        `;
-        
-        const urls = [
-            'https://raw.githubusercontent.com/Oghma-Infinium/Twisted-Skyrim/main/CHANGELOG.md',
-            'https://api.github.com/repos/Oghma-Infinium/Twisted-Skyrim/contents/CHANGELOG.md'
-        ];
-        
-        let response;
-        let markdownText;
-        
-        for (let i = 0; i < urls.length; i++) {
+    clearSearchHighlights() {
+        const highlights = document.querySelectorAll('.search-highlight');
+        highlights.forEach(highlight => {
             try {
-                const controller = new AbortController();
-                const timeoutId = setTimeout(() => controller.abort(), 15000);
+                const parent = highlight.parentNode;
+                if (parent) {
+                    parent.replaceChild(document.createTextNode(highlight.textContent), highlight);
+                    parent.normalize();
+                }
+            } catch (error) {
+                console.warn('Error clearing highlight:', error);
+            }
+        });
+    }
+
+    showCombinedDropdown(wordResults, questionSuggestions, query) {
+        if (!this.searchDropdown) return;
+        
+        this.searchDropdown.innerHTML = '';
+        
+        if (wordResults.length === 0 && questionSuggestions.length === 0) {
+            this.searchDropdown.style.display = 'none';
+            return;
+        }
+        
+        if (wordResults.length > 0) {
+            const wordHeader = document.createElement('div');
+            wordHeader.className = 'search-dropdown-header';
+            wordHeader.innerHTML = `🔍 Found ${wordResults.length} text match${wordResults.length > 1 ? 'es' : ''}:`;
+            wordHeader.style.cssText = `
+                padding: 8px 15px;
+                background-color: #2a2a2a;
+                color: #fff;
+                font-size: 0.85rem;
+                border-bottom: 1px solid #444;
+                font-weight: 600;
+            `;
+            this.searchDropdown.appendChild(wordHeader);
+            
+            const displayWordResults = wordResults.slice(0, 6);
+            
+            displayWordResults.forEach((match, index) => {
+                const item = document.createElement('div');
+                item.className = 'search-dropdown-item word-result';
+                if (index === 0) item.classList.add('active');
                 
-                response = await fetch(urls[i], {
-                    signal: controller.signal,
-                    method: 'GET',
-                    headers: {
-                        'Accept': i === 0 ? 'text/plain' : 'application/vnd.github.v3+json',
-                    }
+                const snippet = document.createElement('div');
+                snippet.className = 'search-snippet';
+                
+                const highlightedSnippet = match.snippet.replace(
+                    new RegExp(`(${this.escapeRegExp(query)})`, 'gi'),
+                    '<span class="search-snippet-highlight">$1</span>'
+                );
+                
+                snippet.innerHTML = `...${highlightedSnippet}...`;
+                item.appendChild(snippet);
+                
+                item.addEventListener('click', () => {
+                    this.currentSearchIndex = wordResults.indexOf(match);
+                    this.jumpToMatch(match);
+                    this.hideSearchDropdown();
+                    this.updateSearchCounter();
                 });
                 
-                clearTimeout(timeoutId);
+                this.searchDropdown.appendChild(item);
+            });
+        }
+        
+        if (questionSuggestions.length > 0) {
+            const questionHeader = document.createElement('div');
+            questionHeader.className = 'search-dropdown-header';
+            questionHeader.innerHTML = '💡 Or maybe you meant to ask:';
+            questionHeader.style.cssText = `
+                padding: 8px 15px;
+                background-color: #333;
+                color: #ccc;
+                font-size: 0.8rem;
+                border-bottom: 1px solid #444;
+                font-weight: 500;
+                margin-top: ${wordResults.length > 0 ? '4px' : '0'};
+            `;
+            this.searchDropdown.appendChild(questionHeader);
+            
+            const displayQuestions = questionSuggestions.slice(0, 4);
+            
+            displayQuestions.forEach((suggestion, index) => {
+                const item = document.createElement('div');
+                item.className = 'search-dropdown-item question-item';
+                if (wordResults.length === 0 && index === 0) item.classList.add('active');
                 
-                if (response.ok) {
-                    if (i === 0) {
-                        markdownText = await response.text();
-                    } else {
-                        const data = await response.json();
-                        markdownText = atob(data.content);
-                    }
-                    break;
-                }
-            } catch (urlError) {
-                if (i === urls.length - 1) {
-                    throw urlError;
-                }
-                continue;
-            }
+                const questionDiv = document.createElement('div');
+                questionDiv.className = 'question-text';
+                questionDiv.style.cssText = `
+                    color: #fff;
+                    font-weight: 500;
+                    margin-bottom: 4px;
+                `;
+                
+                const highlightedQuestion = suggestion.question.replace(
+                    new RegExp(`(${this.escapeRegExp(query)})`, 'gi'),
+                    '<span class="search-snippet-highlight">$1</span>'
+                );
+                questionDiv.innerHTML = `❓ ${highlightedQuestion}`;
+                
+                const sectionDiv = document.createElement('div');
+                sectionDiv.className = 'question-section';
+                sectionDiv.style.cssText = `
+                    color: #888;
+                    font-size: 0.85rem;
+                `;
+                sectionDiv.textContent = `→ ${suggestion.answer.section.charAt(0).toUpperCase() + suggestion.answer.section.slice(1)} section`;
+                
+                item.appendChild(questionDiv);
+                item.appendChild(sectionDiv);
+                
+                item.addEventListener('click', () => {
+                    this.searchInput.value = suggestion.question;
+                    this.handleQuestionAnswer(suggestion.question);
+                });
+                
+                this.searchDropdown.appendChild(item);
+            });
         }
         
-        if (!markdownText) {
-            throw new Error('All fetch attempts failed');
-        }
-        
-        const htmlContent = convertMarkdownToHTML(markdownText);
-        
-        changelogContainer.innerHTML = `
-            <div class="changelog-content">
-                ${htmlContent}
-            </div>
-        `;
-        
-        addChangelogStyling();
-        
-    } catch (error) {
-        let errorMessage = 'There was an error loading the changelog from GitHub.';
-        let showFallback = false;
-        
-        if (error.name === 'AbortError') {
-            errorMessage = 'The request timed out. Please check your internet connection and try again.';
-            showFallback = true;
-        } else if (error.message.includes('Failed to fetch') || error.message.includes('All fetch attempts failed')) {
-            errorMessage = 'Unable to connect to GitHub. Please check your internet connection or try again later.';
-            showFallback = true;
-        }
-        
-        changelogContainer.innerHTML = `
-            <div class="changelog-error">
-                <h3>Unable to load changelog</h3>
-                <p>${errorMessage}</p>
-                <p>Error details: ${error.message}</p>
-                <p><a href="https://github.com/Oghma-Infinium/Twisted-Skyrim/blob/main/CHANGELOG.md" target="_blank" class="btn btn-nexus">View on GitHub</a></p>
-                ${showFallback ? `
-                <div style="margin-top: 20px; padding: 15px; background: rgba(255,255,255,0.1); border-radius: 6px;">
-                    <h4>Latest Updates</h4>
-                    <p>For the most current changelog information, please visit the GitHub page above. The changelog includes:</p>
-                    <ul>
-                        <li>Bug fixes and stability improvements</li>
-                        <li>New mod additions and updates</li>
-                        <li>Performance optimizations</li>
-                        <li>Balance changes and tweaks</li>
-                    </ul>
-                </div>
-                ` : ''}
-            </div>
-        `;
+        this.searchDropdown.classList.add('show');
     }
-}
 
-function convertMarkdownToHTML(markdown) {
-    let html = markdown;
+    hideSearchDropdown() {
+        if (this.searchDropdown) {
+            this.searchDropdown.classList.remove('show');
+        }
+    }
 
-    html = html.replace(/^.*?Nexus\s*\|\s*Installation\s*\|\s*Modlist\s*\|\s*FAQ\s*\|\s*Changelog\s*\|\s*Performance Guide\s*\|\s*Gameplay Guide.*?\n.*?---.*?\n/s, '');
-    html = html.replace(/^\s*\|.*?Nexus.*?\|.*?Installation.*?\|.*?\n/gm, '');
-    html = html.replace(/^\s*\|.*?---.*?\|.*?---.*?\|.*?\n/gm, '');
-    html = html.replace(/<p align="center">[\s\S]*?<\/p>/g, '');
-    html = html.replace(/^!\[.*?\]\(.*?\)\s*\n/gm, '');
-    html = html.replace(/^### (.*$)/gm, '<h3>$1</h3>');
-    html = html.replace(/^## (.*$)/gm, '<h2>$1</h2>');
-    html = html.replace(/^# (.*$)/gm, '<h1>$1</h1>');
-    html = html.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
-    html = html.replace(/\*(.*?)\*/g, '<em>$1</em>');
-    html = html.replace(/```(.*?)```/gs, '<pre><code>$1</code></pre>');
-    html = html.replace(/`([^`]+)`/g, '<code>$1</code>');
-    html = html.replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2" target="_blank">$1</a>');
-    html = html.replace(/^[\-\*] (.+)$/gm, '<li>$1</li>');
-    html = html.replace(/\n/g, '\n');
-
-    const lines = html.split('\n');
-    let inList = false;
-    let processedLines = [];
-    
-    for (let i = 0; i < lines.length; i++) {
-        const line = lines[i].trim();
+    updateSearchCounter() {
+        if (!this.searchCounter || this.currentSearchResults.length === 0) {
+            if (this.searchCounter) this.searchCounter.classList.remove('show');
+            this.updateSearchButton();
+            return;
+        }
         
-        if (line.startsWith('<li>') && line.endsWith('</li>')) {
-            if (!inList) {
-                processedLines.push('<ul>');
-                inList = true;
-            }
-            processedLines.push(line);
+        this.searchCounter.textContent = `${this.currentSearchIndex + 1}/${this.currentSearchResults.length}`;
+        this.searchCounter.classList.add('show');
+        this.updateSearchButton();
+    }
+
+    updateSearchButton() {
+        if (this.currentSearchResults.length > 0 && this.currentSearchTerm === this.searchInput.value.trim()) {
+            this.searchButton.classList.add('cycle-mode');
+            this.searchButton.title = `Cycle through ${this.currentSearchResults.length} results`;
         } else {
-            if (inList) {
-                processedLines.push('</ul>');
-                inList = false;
-            }
-            if (line) {
-                processedLines.push(line);
-            }
+            this.searchButton.classList.remove('cycle-mode');
+            this.searchButton.title = 'Search';
         }
     }
-    
-    if (inList) {
-        processedLines.push('</ul>');
+
+    resetSearchState() {
+        this.currentSearchResults = [];
+        this.currentSearchIndex = 0;
+        this.currentSearchTerm = '';
+        this.hideSearchDropdown();
+        if (this.searchCounter) this.searchCounter.classList.remove('show');
+        this.clearCurrentLineHighlight();
+        this.updateSearchButton();
     }
-    
-    html = processedLines.join('\n');
-    
-    html = html.replace(/^\d+\. (.+)$/gm, '<li>$1</li>');
-    
-    const paragraphs = html.split('\n\n').map(paragraph => {
-        paragraph = paragraph.trim();
-        if (paragraph && !paragraph.startsWith('<')) {
-            return `<p>${paragraph}</p>`;
-        }
-        return paragraph;
-    }).filter(p => p);
-    
-    return paragraphs.join('\n');
-}
 
-function addChangelogStyling() {
-    if (document.getElementById('changelog-styles')) return;
-    
-    const style = document.createElement('style');
-    style.id = 'changelog-styles';
-    style.textContent = `
-        .loading-spinner {
-            text-align: center;
-            padding: 40px;
+    showSearchNotification(message) {
+        const existingNotification = document.querySelector('.search-notification');
+        if (existingNotification) {
+            existingNotification.remove();
         }
         
-        .spinner {
-            border: 3px solid rgba(255, 255, 255, 0.3);
-            border-radius: 50%;
-            border-top: 3px solid #ffffff;
-            width: 40px;
-            height: 40px;
-            animation: spin 1s linear infinite;
-            margin: 0 auto 20px;
-        }
+        const notification = document.createElement('div');
+        notification.className = 'search-notification';
+        notification.textContent = message;
         
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-        
-        .changelog-container {
-            border: 1px solid #333;
-            border-radius: 8px;
-            background: rgba(0, 0, 0, 0.3);
-            padding: 20px;
-            max-height: 800px;
-            overflow-y: auto;
-        }
-        
-        .changelog-content h1 {
-            color: #ffffff;
-            border-bottom: 2px solid #ffffff;
-            padding-bottom: 10px;
-            margin-bottom: 20px;
-        }
-        
-        .changelog-content h2 {
-            color: #cccccc;
-            margin-top: 30px;
-            margin-bottom: 15px;
-            border-left: 4px solid #ffffff;
-            padding-left: 15px;
-        }
-        
-        .changelog-content h3 {
-            color: #aaaaaa;
-            margin-top: 20px;
-            margin-bottom: 10px;
-        }
-        
-        .changelog-content p {
-            line-height: 1.6;
-            margin-bottom: 15px;
-        }
-        
-        .changelog-content ul {
-            margin: 15px 0 15px 20px;
-            padding: 0;
-            list-style-type: disc;
-            display: block !important;
-            width: 100%;
-        }
-        
-        .changelog-content ol {
-            margin: 15px 0 15px 20px;
-            padding: 0;
-            list-style-type: decimal;
-            display: block !important;
-            width: 100%;
-        }
-        
-        .changelog-content li {
-            display: list-item !important;
-            margin: 8px 0;
-            line-height: 1.6;
-            padding-left: 5px;
-            white-space: normal;
-            word-wrap: break-word;
-            width: 100%;
-            clear: both;
-        }
-        
-        .changelog-content ul li {
-            list-style-type: disc !important;
-            margin-left: 0;
-            float: none !important;
-            display: list-item !important;
-        }
-        
-        .changelog-content ol li {
-            list-style-type: decimal !important;
-            margin-left: 0;
-            float: none !important;
-            display: list-item !important;
-        }
-        
-        .changelog-content code {
-            background: rgba(255, 255, 255, 0.1);
-            padding: 2px 6px;
-            border-radius: 4px;
-            font-family: 'Courier New', monospace;
-        }
-        
-        .changelog-content pre {
-            background: rgba(0, 0, 0, 0.5);
-            padding: 15px;
-            border-radius: 6px;
-            overflow-x: auto;
-            margin: 15px 0;
-        }
-        
-        .changelog-content a {
-            color: #ffffff;
-            text-decoration: underline;
-        }
-        
-        .changelog-content a:hover {
-            color: #cccccc;
-        }
-        
-        .changelog-error {
-            text-align: center;
-            padding: 40px;
-        }
-        
-        .changelog-error h3 {
-            color: #ff6b6b;
-            margin-bottom: 15px;
-        }
-        
-        .changelog-error p {
-            margin-bottom: 15px;
-        }
-        
-        /* Scrollbar styling */
-        .changelog-container::-webkit-scrollbar {
-            width: 8px;
-        }
-        
-        .changelog-container::-webkit-scrollbar-track {
-            background: rgba(0, 0, 0, 0.3);
-            border-radius: 4px;
-        }
-        
-        .changelog-container::-webkit-scrollbar-thumb {
-            background: rgba(255, 255, 255, 0.3);
-            border-radius: 4px;
-        }
-        
-        .changelog-container::-webkit-scrollbar-thumb:hover {
-            background: rgba(255, 255, 255, 0.5);
-        }
-    `;
-    document.head.appendChild(style);
-}
+        document.body.appendChild(notification);
 
-const observerOptions = {
-    threshold: 0.3,
-    rootMargin: '0px 0px -50px 0px'
-};
+        setTimeout(() => {
+            notification.classList.add('show');
+        }, 100);
+        
+        setTimeout(() => {
+            notification.classList.remove('show');
+            setTimeout(() => {
+                if (notification.parentNode) {
+                    notification.remove();
+                }
+            }, 300);
+        }, 3000);
+    }
 
-let sectionObserver;
-try {
-    if ('IntersectionObserver' in window) {
-        sectionObserver = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                try {
-                    if (entry.isIntersecting) {
-                        entry.target.style.opacity = '1';
-                        entry.target.style.transform = 'translateY(0)';
+    escapeRegExp(string) {
+        return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    }
+
+    getQuestionSuggestions(query) {
+        const suggestions = [];
+        const lowerQuery = query.toLowerCase().trim();
+        
+        const normalizedQuery = lowerQuery
+            .replace(/\b(wont|won't)\b/g, 'will not')
+            .replace(/\b(cant|can't)\b/g, 'cannot')
+            .replace(/\b(dont|don't)\b/g, 'do not')
+            .replace(/\b(isnt|isn't)\b/g, 'is not')
+            .replace(/\bwere\b/g, 'where')
+            .replace(/\binstal\b/g, 'install')
+            .replace(/\bdownlaod\b/g, 'download')
+            .replace(/\bperformace\b/g, 'performance')
+            .replace(/\s+/g, ' ');
+        
+        const questionWords = ['how', 'what', 'where', 'why', 'when', 'can', 'do', 'does', 'is', 'are', 'help', 'wont', 'cant', 'need'];
+        const isQuestion = questionWords.some(word => 
+            normalizedQuery.includes(word) || 
+            this.similarityScore(normalizedQuery.split(' ')[0], word) > 0.7
+        ) || normalizedQuery.includes('?');
+        
+        if (!isQuestion && normalizedQuery.length < 3) return suggestions;
+        
+        for (const [question, answer] of Object.entries(this.qaMapping)) {
+            let score = 0;
+            
+            const questionSimilarity = this.similarityScore(normalizedQuery, question);
+            if (questionSimilarity > 0.6) {
+                score += questionSimilarity * 20;
+            }
+            
+            if (answer.alternatives) {
+                for (const alt of answer.alternatives) {
+                    const altSimilarity = this.similarityScore(normalizedQuery, alt);
+                    if (altSimilarity > 0.6) {
+                        score += altSimilarity * 15;
                     }
-                } catch (error) {
-                    console.error('Error in section observer:', error);
+                    if (normalizedQuery.includes(alt) || alt.includes(normalizedQuery)) {
+                        score += 10;
+                    }
+                }
+            }
+            
+            const queryWords = normalizedQuery.split(/\s+/);
+            for (const keyword of answer.keywords) {
+                for (const qWord of queryWords) {
+                    if (qWord.length >= 2) {
+                        const keywordSimilarity = this.similarityScore(qWord, keyword);
+                        if (keywordSimilarity > 0.7) {
+                            score += keywordSimilarity * 8;
+                        }
+                        if (qWord.includes(keyword) || keyword.includes(qWord)) {
+                            score += 5;
+                        }
+                    }
+                }
+            }
+            
+            const questionWords = question.split(/\s+/);
+            for (const qWord of queryWords) {
+                if (qWord.length >= 3) {
+                    for (const questionWord of questionWords) {
+                        const wordSimilarity = this.similarityScore(qWord, questionWord);
+                        if (wordSimilarity > 0.7) {
+                            score += wordSimilarity * 6;
+                        }
+                    }
+                }
+            }
+            
+            if (question.includes(normalizedQuery) || normalizedQuery.includes(question)) {
+                score += 12;
+            }
+            
+            if (score >= 8) {
+                suggestions.push({
+                    question: question,
+                    answer: answer,
+                    score: score,
+                    similarity: questionSimilarity
+                });
+            }
+        }
+        
+        return suggestions.sort((a, b) => b.score - a.score).slice(0, 6);
+    }
+
+    handleQuestionAnswer(input) {
+        const answer = this.analyzeQuestion(input);
+        if (answer) {
+            if (answer.anchor) {
+                website.anchors.navigateToAnchor(answer.anchor);
+            } else {
+                website.navigation.switchSection(answer.section);
+            }
+            
+            this.showSearchNotification(`Found relevant section: ${answer.section.charAt(0).toUpperCase() + answer.section.slice(1)}`);
+            
+            this.searchInput.value = '';
+            this.hideSearchDropdown();
+            this.resetSearchState();
+            
+            return true;
+        }
+        return false;
+    }
+
+    analyzeQuestion(input) {
+        const query = input.toLowerCase().trim();
+        
+        const normalizedQuery = query
+            .replace(/\b(wont|won't)\b/g, 'will not')
+            .replace(/\b(cant|can't)\b/g, 'cannot')
+            .replace(/\b(dont|don't)\b/g, 'do not')
+            .replace(/\b(doesnt|doesn't)\b/g, 'does not')
+            .replace(/\b(isnt|isn't)\b/g, 'is not')
+            .replace(/\b(im|i'm)\b/g, 'i am')
+            .replace(/\b(its|it's)\b/g, 'it is')
+            .replace(/\bwere\b/g, 'where')
+            .replace(/\btheir\b/g, 'there')
+            .replace(/\bthen\b/g, 'than')
+            .replace(/\s+/g, ' ');
+
+        let bestMatch = null;
+        let bestScore = 0;
+
+        for (const [question, answer] of Object.entries(this.qaMapping)) {
+            let score = 0;
+
+            const questionSimilarity = this.similarityScore(normalizedQuery, question);
+            if (questionSimilarity > 0.7) {
+                score += questionSimilarity * 20;
+            }
+
+            if (answer.alternatives) {
+                for (const alt of answer.alternatives) {
+                    const altSimilarity = this.similarityScore(normalizedQuery, alt);
+                    if (altSimilarity > 0.7) {
+                        score += altSimilarity * 15;
+                    }
+                    if (normalizedQuery.includes(alt) || alt.includes(normalizedQuery)) {
+                        score += 10;
+                    }
+                }
+            }
+
+            const words = normalizedQuery.split(/\s+/);
+            for (const keyword of answer.keywords) {
+                for (const word of words) {
+                    if (word.length >= 3) {
+                        const keywordSimilarity = this.similarityScore(word, keyword);
+                        if (keywordSimilarity > 0.7) {
+                            score += keywordSimilarity * 8;
+                        }
+                        if (word.includes(keyword) || keyword.includes(word)) {
+                            score += 5;
+                        }
+                    }
+                }
+            }
+
+            const questionPatterns = ['how', 'what', 'where', 'why', 'when', 'can', 'do', 'does', 'is', 'are', 'help'];
+            for (const pattern of questionPatterns) {
+                for (const word of words) {
+                    if (this.similarityScore(word, pattern) > 0.8) {
+                        score += 2;
+                    }
+                }
+            }
+
+            if (question.includes(normalizedQuery) || normalizedQuery.includes(question)) {
+                score += 15;
+            }
+
+            if (score > bestScore) {
+                bestScore = score;
+                bestMatch = answer;
+            }
+        }
+
+        return bestScore >= 8 ? bestMatch : null;
+    }
+
+    levenshteinDistance(str1, str2) {
+        const matrix = [];
+        const len1 = str1.length;
+        const len2 = str2.length;
+
+        for (let i = 0; i <= len2; i++) {
+            matrix[i] = [i];
+        }
+
+        for (let j = 0; j <= len1; j++) {
+            matrix[0][j] = j;
+        }
+
+        for (let i = 1; i <= len2; i++) {
+            for (let j = 1; j <= len1; j++) {
+                if (str2.charAt(i - 1) === str1.charAt(j - 1)) {
+                    matrix[i][j] = matrix[i - 1][j - 1];
+                } else {
+                    matrix[i][j] = Math.min(
+                        matrix[i - 1][j - 1] + 1,
+                        matrix[i][j - 1] + 1,
+                        matrix[i - 1][j] + 1
+                    );
+                }
+            }
+        }
+
+        return matrix[len2][len1];
+    }
+
+    similarityScore(str1, str2) {
+        const maxLen = Math.max(str1.length, str2.length);
+        if (maxLen === 0) return 1;
+        return 1 - (this.levenshteinDistance(str1, str2) / maxLen);
+    }
+}
+
+class ChangelogManager {
+    init() {
+        this.loadChangelogWhenVisible();
+    }
+
+    loadChangelogWhenVisible() {
+        const changelogSection = document.getElementById('changelog');
+        if (!changelogSection) return;
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    this.loadChangelog();
+                    observer.unobserve(entry.target);
                 }
             });
-        }, observerOptions);
+        }, {
+            threshold: 0.1,
+            rootMargin: '50px'
+        });
+
+        observer.observe(changelogSection);
     }
-} catch (error) {
-    console.error('Error creating IntersectionObserver:', error);
-    sectionObserver = null;
+
+    async loadChangelog() {
+        const changelogContainer = document.getElementById('changelog-content');
+        if (!changelogContainer) {
+            return;
+        }
+        
+        try {
+            changelogContainer.innerHTML = `
+                <div class="loading-spinner">
+                    <div class="spinner"></div>
+                    <p>Loading changelog from GitHub...</p>
+                </div>
+            `;
+            
+            const urls = [
+                'https://raw.githubusercontent.com/Oghma-Infinium/Twisted-Skyrim/main/CHANGELOG.md',
+                'https://api.github.com/repos/Oghma-Infinium/Twisted-Skyrim/contents/CHANGELOG.md'
+            ];
+            
+            let response;
+            let markdownText;
+            
+            for (let i = 0; i < urls.length; i++) {
+                try {
+                    const controller = new AbortController();
+                    const timeoutId = setTimeout(() => controller.abort(), 15000);
+                    
+                    response = await fetch(urls[i], {
+                        signal: controller.signal,
+                        method: 'GET',
+                        headers: {
+                            'Accept': i === 0 ? 'text/plain' : 'application/vnd.github.v3+json',
+                        }
+                    });
+                    
+                    clearTimeout(timeoutId);
+                    
+                    if (response.ok) {
+                        if (i === 0) {
+                            markdownText = await response.text();
+                        } else {
+                            const data = await response.json();
+                            markdownText = atob(data.content);
+                        }
+                        break;
+                    }
+                } catch (urlError) {
+                    if (i === urls.length - 1) {
+                        throw urlError;
+                    }
+                    continue;
+                }
+            }
+            
+            if (!markdownText) {
+                throw new Error('All fetch attempts failed');
+            }
+            
+            const htmlContent = this.convertMarkdownToHTML(markdownText);
+            
+            changelogContainer.innerHTML = `
+                <div class="changelog-content">
+                    ${htmlContent}
+                </div>
+            `;
+            
+            this.addChangelogStyling();
+            
+        } catch (error) {
+            let errorMessage = 'There was an error loading the changelog from GitHub.';
+            let showFallback = false;
+            
+            if (error.name === 'AbortError') {
+                errorMessage = 'The request timed out. Please check your internet connection and try again.';
+                showFallback = true;
+            } else if (error.message.includes('Failed to fetch') || error.message.includes('All fetch attempts failed')) {
+                errorMessage = 'Unable to connect to GitHub. Please check your internet connection or try again later.';
+                showFallback = true;
+            }
+            
+            changelogContainer.innerHTML = `
+                <div class="changelog-error">
+                    <h3>Unable to load changelog</h3>
+                    <p>${errorMessage}</p>
+                    <p>Error details: ${error.message}</p>
+                    <p><a href="https://github.com/Oghma-Infinium/Twisted-Skyrim/blob/main/CHANGELOG.md" target="_blank" class="btn btn-nexus">View on GitHub</a></p>
+                    ${showFallback ? `
+                    <div style="margin-top: 20px; padding: 15px; background: rgba(255,255,255,0.1); border-radius: 6px;">
+                        <h4>Latest Updates</h4>
+                        <p>For the most current changelog information, please visit the GitHub page above. The changelog includes:</p>
+                        <ul>
+                            <li>Bug fixes and stability improvements</li>
+                            <li>New mod additions and updates</li>
+                            <li>Performance optimizations</li>
+                            <li>Balance changes and tweaks</li>
+                        </ul>
+                    </div>
+                    ` : ''}
+                </div>
+            `;
+        }
+    }
+
+    convertMarkdownToHTML(markdown) {
+        let html = markdown;
+
+        // Remove navigation table and header content first
+        html = html.replace(/^.*?Nexus\s*\|\s*Installation\s*\|\s*Modlist\s*\|\s*FAQ\s*\|\s*Changelog\s*\|\s*Performance Guide\s*\|\s*Gameplay Guide.*?\n.*?---.*?\n/s, '');
+        html = html.replace(/^\s*\|.*?Nexus.*?\|.*?Installation.*?\|.*?\n/gm, '');
+        html = html.replace(/^\s*\|.*?---.*?\|.*?---.*?\|.*?\n/gm, '');
+        html = html.replace(/<p align="center">[\s\S]*?<\/p>/g, '');
+        html = html.replace(/^!\[.*?\]\(.*?\)\s*\n/gm, '');
+        
+        // Remove horizontal rules (---) 
+        html = html.replace(/^\s*---+\s*$/gm, '');
+        
+        // Convert headers
+        html = html.replace(/^### (.*$)/gm, '<h3>$1</h3>');
+        html = html.replace(/^## (.*$)/gm, '<h2>$1</h2>');
+        html = html.replace(/^# (.*$)/gm, '<h1>$1</h1>');
+        
+        // Convert lists BEFORE formatting to avoid conflicts with italic asterisks
+        // Handle various spacing patterns for bullet points
+        html = html.replace(/^[\*\-]\s+(.+)$/gm, '<li>$1</li>');
+        html = html.replace(/^[\*\-](.+)$/gm, '<li>$1</li>'); // Handle no space after *
+        
+        // Convert formatting
+        html = html.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+        html = html.replace(/\*(.*?)\*/g, '<em>$1</em>');
+        html = html.replace(/```(.*?)```/gs, '<pre><code>$1</code></pre>');
+        html = html.replace(/`([^`]+)`/g, '<code>$1</code>');
+        html = html.replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2" target="_blank">$1</a>');
+        html = html.replace(/\n/g, '\n');
+
+        const lines = html.split('\n');
+        let inList = false;
+        let processedLines = [];
+        
+        for (let i = 0; i < lines.length; i++) {
+            const line = lines[i].trim();
+            
+            if (line.startsWith('<li>') && line.endsWith('</li>')) {
+                if (!inList) {
+                    processedLines.push('<ul>');
+                    inList = true;
+                }
+                processedLines.push(line);
+            } else {
+                if (inList) {
+                    processedLines.push('</ul>');
+                    inList = false;
+                }
+                if (line) {
+                    processedLines.push(line);
+                }
+            }
+        }
+        
+        if (inList) {
+            processedLines.push('</ul>');
+        }
+        
+        html = processedLines.join('\n');
+        
+        // Handle numbered lists
+        html = html.replace(/^\d+\. (.+)$/gm, '<li>$1</li>');
+        
+        // Convert paragraphs, but handle cases where lists follow text immediately
+        const allLines = html.split('\n');
+        let result = [];
+        let currentParagraph = [];
+        
+        for (let i = 0; i < allLines.length; i++) {
+            const line = allLines[i].trim();
+            
+            // If it's a list item or already HTML, process separately
+            if (line.startsWith('<li>') || line.startsWith('<ul>') || line.startsWith('</ul>') || 
+                line.startsWith('<h') || line.startsWith('<strong>') || line.startsWith('<em>')) {
+                // Finish current paragraph if any
+                if (currentParagraph.length > 0) {
+                    const paragraphText = currentParagraph.join(' ').trim();
+                    if (paragraphText) {
+                        result.push(`<p>${paragraphText}</p>`);
+                    }
+                    currentParagraph = [];
+                }
+                result.push(line);
+            } else if (line === '') {
+                // Empty line - finish paragraph
+                if (currentParagraph.length > 0) {
+                    const paragraphText = currentParagraph.join(' ').trim();
+                    if (paragraphText) {
+                        result.push(`<p>${paragraphText}</p>`);
+                    }
+                    currentParagraph = [];
+                }
+            } else {
+                // Regular text line
+                currentParagraph.push(line);
+            }
+        }
+        
+        // Finish any remaining paragraph
+        if (currentParagraph.length > 0) {
+            const paragraphText = currentParagraph.join(' ').trim();
+            if (paragraphText) {
+                result.push(`<p>${paragraphText}</p>`);
+            }
+        }
+        
+        return result.filter(line => line.trim()).join('\n');
+    }
+
+    addChangelogStyling() {
+        // Add dynamic changelog styling since the content is generated by JS
+        if (document.getElementById('dynamic-changelog-styles')) return;
+        
+        const style = document.createElement('style');
+        style.id = 'dynamic-changelog-styles';
+        style.textContent = `
+            .changelog-content h1 {
+                color: #ffffff;
+                border-bottom: 2px solid #ffffff;
+                padding-bottom: 10px;
+                margin-bottom: 20px;
+                font-size: 1.5rem;
+            }
+            
+            .changelog-content h2 {
+                color: #cccccc;
+                margin-top: 30px;
+                margin-bottom: 15px;
+                border-left: 4px solid #ffffff;
+                padding-left: 15px;
+                font-size: 1.25rem;
+                font-weight: 600;
+                background: linear-gradient(135deg, #ffffff, #cccccc);
+                -webkit-background-clip: text;
+                -webkit-text-fill-color: transparent;
+                background-clip: text;
+            }
+            
+            .changelog-content h3 {
+                color: #aaaaaa;
+                margin-top: 20px;
+                margin-bottom: 10px;
+                font-size: 1.1rem;
+            }
+            
+            .changelog-content p {
+                line-height: 1.6;
+                margin-bottom: 15px;
+                color: #ffffff;
+            }
+            
+            .changelog-content ul {
+                margin: 15px 0 25px 20px;
+                padding: 0;
+                list-style-type: disc;
+            }
+            
+            .changelog-content li {
+                margin-bottom: 8px;
+                line-height: 1.6;
+                color: #cccccc;
+                list-style-type: disc;
+            }
+            
+            .changelog-content strong {
+                color: #ffffff;
+                font-weight: 600;
+            }
+            
+            .changelog-content em {
+                color: #cccccc;
+                font-style: italic;
+            }
+            
+            .changelog-content code {
+                background: rgba(255, 255, 255, 0.1);
+                color: #ffffff;
+                padding: 2px 6px;
+                border-radius: 4px;
+                font-family: 'Courier New', monospace;
+                font-size: 0.9em;
+            }
+            
+            .changelog-content a {
+                color: #ffffff;
+                text-decoration: underline;
+                transition: color 0.3s ease;
+            }
+            
+            .changelog-content a:hover {
+                color: #cccccc;
+            }
+        `;
+        
+        document.head.appendChild(style);
+    }
+
+    renderStaticChangelog(container) {
+        const staticChanges = [
+            {
+                version: '1.6.0',
+                date: 'September 2025',
+                changes: [
+                    'Enhanced graphics and visual effects',
+                    'Improved combat system with new animations',
+                    'Added new quest content and storylines',
+                    'Performance optimizations and bug fixes',
+                    'Updated mod compatibility for latest Skyrim version'
+                ]
+            },
+            {
+                version: '1.5.5',
+                date: 'August 2025',
+                changes: [
+                    'Fixed critical stability issues',
+                    'Improved ENB preset configuration',
+                    'Enhanced weather and lighting system',
+                    'Updated character creation options'
+                ]
+            },
+            {
+                version: '1.5.0',
+                date: 'July 2025',
+                changes: [
+                    'Major overhaul of magic system',
+                    'New armor and weapon sets',
+                    'Improved AI behavior for NPCs',
+                    'Enhanced survival mechanics'
+                ]
+            }
+        ];
+
+        const changelogHTML = staticChanges.map(release => `
+            <div class="changelog-entry">
+                <div class="changelog-header">
+                    <span class="changelog-version">v${release.version}</span>
+                    <span class="changelog-date">${release.date}</span>
+                </div>
+                <div class="changelog-changes">
+                    <ul>
+                        ${release.changes.map(change => `<li>${change}</li>`).join('')}
+                    </ul>
+                </div>
+            </div>
+        `).join('');
+
+        container.innerHTML = `
+            <div class="changelog-fallback">
+                <p><em>Recent Updates (Fallback):</em></p>
+                ${changelogHTML}
+                <div class="changelog-footer">
+                    <p>For the complete changelog, visit <a href="https://github.com/Oghma-Infinium/Twisted-Skyrim/blob/main/CHANGELOG.md" target="_blank" rel="noopener noreferrer">the official repository</a>.</p>
+                </div>
+            </div>
+        `;
+    }
+
+    escapeHtml(text) {
+        const div = document.createElement('div');
+        div.textContent = text;
+        return div.innerHTML;
+    }
 }
+
+class UIManager {
+    init() {
+        this.initializeFeatureCards();
+    }
+
+    initializeFeatureCards() {
+        const featureCards = document.querySelectorAll('.feature-card');
+        
+        if (featureCards.length === 0) return;
+        
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, {
+            threshold: 0.2,
+            rootMargin: '0px 0px -50px 0px'
+        });
+        
+        featureCards.forEach(card => {
+            observer.observe(card);
+        });
+    }
+}
+
+const website = new WebsiteManager();
+
+console.log('Loading Twisted Skyrim website script...');
 
 document.addEventListener('DOMContentLoaded', () => {
     try {
-        const sections = document.querySelectorAll('.content-section');
-        sections.forEach(section => {
-            if (section) {
-                section.style.opacity = '0';
-                section.style.transform = 'translateY(20px)';
-                section.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
-                
-                if (sectionObserver) {
-                    sectionObserver.observe(section);
-                } else {
-                    setTimeout(() => {
-                        section.style.opacity = '1';
-                        section.style.transform = 'translateY(0)';
-                    }, 100);
-                }
-            }
-        });
+        website.init();
     } catch (error) {
-        console.error('Error in section initialization:', error);
-        const sections = document.querySelectorAll('.content-section');
-        sections.forEach(section => {
-            if (section) {
-                section.style.opacity = '1';
-                section.style.transform = 'translateY(0)';
-            }
-        });
-    }
-});
-
-document.addEventListener('DOMContentLoaded', function() {
-    try {
-        const buttons = document.querySelectorAll('.btn');
-        
-        buttons.forEach(button => {
-            if (button) {
-                button.addEventListener('mouseenter', function() {
-                    this.style.transform = 'translateY(-2px) scale(1.02)';
-                });
-                
-                button.addEventListener('mouseleave', function() {
-                    this.style.transform = 'translateY(0) scale(1)';
-                });
-                
-                button.addEventListener('mousedown', function() {
-                    this.style.transform = 'translateY(0) scale(0.98)';
-                });
-                
-                button.addEventListener('mouseup', function() {
-                    this.style.transform = 'translateY(-2px) scale(1.02)';
-                });
-            }
-        });
-    } catch (error) {
-        console.error('Error in button initialization:', error);
-    }
-});
-
-window.addEventListener('load', () => {
-    try {
-        if (document.body) {
-            document.body.style.opacity = '0';
-            document.body.style.transition = 'opacity 0.5s ease';
-            
-            setTimeout(() => {
-                document.body.style.opacity = '1';
-            }, 100);
-        }
-    } catch (error) {
-        console.error('Error in page load animation:', error);
-        if (document.body) {
-            document.body.style.opacity = '1';
-        }
-    }
-});
-
-document.addEventListener('DOMContentLoaded', function() {
-    try {
-        const featureCards = document.querySelectorAll('.feature-card, .gameplay-card, .support-card');
-        
-        featureCards.forEach(card => {
-            if (card) {
-                card.addEventListener('mouseenter', function() {
-                    this.style.transform = 'translateY(-8px) scale(1.02)';
-                    this.style.boxShadow = '0 15px 40px rgba(0, 0, 0, 0.15)';
-                });
-                
-                card.addEventListener('mouseleave', function() {
-                    this.style.transform = 'translateY(0) scale(1)';
-                    this.style.boxShadow = '0 4px 20px rgba(0, 0, 0, 0.08)';
-                });
-            }
-        });
-    } catch (error) {
-        console.error('Error in feature card initialization:', error);
-    }
-});
-
-document.addEventListener('DOMContentLoaded', function() {
-    try {
-        const statNumbers = document.querySelectorAll('.stat-number');
-        
-        const animateStats = () => {
-            try {
-                statNumbers.forEach(stat => {
-                    if (stat) {
-                        const finalText = stat.textContent;
-                        if (finalText && finalText.includes('+')) {
-                            const number = parseInt(finalText);
-                            if (!isNaN(number)) {
-                                let current = 0;
-                                const increment = number / 30;
-                                const timer = setInterval(() => {
-                                    current += increment;
-                                    if (current >= number) {
-                                        stat.textContent = finalText;
-                                        clearInterval(timer);
-                                    } else {
-                                        stat.textContent = Math.floor(current) + '+';
-                                    }
-                                }, 50);
-                            }
-                        }
-                    }
-                });
-            } catch (error) {
-                console.error('Error in stats animation:', error);
-            }
-        };
-        
-        const overviewSection = document.getElementById('overview');
-        if (overviewSection) {
-            if ('IntersectionObserver' in window) {
-                const observer = new IntersectionObserver((entries) => {
-                    entries.forEach(entry => {
-                        if (entry.isIntersecting) {
-                            setTimeout(animateStats, 500);
-                            observer.unobserve(entry.target);
-                        }
-                    });
-                });
-                observer.observe(overviewSection);
-            } else {
-                setTimeout(animateStats, 1000);
-            }
-        }
-    } catch (error) {
-        console.error('Error in stats initialization:', error);
+        console.error('Error initializing website:', error);
+        website.navigation.basicInit();
     }
 });
