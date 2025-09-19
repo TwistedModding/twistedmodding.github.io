@@ -1603,3 +1603,140 @@ document.addEventListener('DOMContentLoaded', () => {
         website.navigation.basicInit();
     }
 });
+
+/* ==========================================================================
+   Screenshot Gallery
+   ========================================================================== */
+
+class ScreenshotGallery {
+    constructor() {
+        this.gallery = document.getElementById('screenshot-gallery');
+        this.modal = null;
+        this.screenshots = [];
+        this.init();
+    }
+
+    init() {
+        this.createModal();
+        this.loadScreenshots();
+    }
+
+    createModal() {
+        this.modal = document.createElement('div');
+        this.modal.className = 'screenshot-modal';
+        this.modal.innerHTML = `
+            <button class="screenshot-modal-close">&times;</button>
+            <img src="" alt="Screenshot">
+        `;
+        document.body.appendChild(this.modal);
+
+        this.modal.addEventListener('click', (e) => {
+            if (e.target === this.modal || e.target.className === 'screenshot-modal-close') {
+                this.closeModal();
+            }
+        });
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                this.closeModal();
+            }
+        });
+    }
+
+    async loadScreenshots() {
+        try {
+            const response = await fetch('https://api.github.com/repos/TwistedModding/twistedmodding.github.io/contents/screenshots');
+            
+            if (response.ok) {
+                const files = await response.json();
+                this.screenshots = files
+                    .filter(file => file.type === 'file' && /\.(jpg|jpeg|png|webp)$/i.test(file.name))
+                    .map(file => ({
+                        name: file.name,
+                        url: file.download_url,
+                        title: this.formatTitle(file.name),
+                        description: 'Twisted Skyrim Screenshot'
+                    }));
+            } else {
+                this.screenshots = this.getFallbackScreenshots();
+            }
+
+            this.renderGallery();
+        } catch (error) {
+            console.warn('Could not load screenshots from GitHub API:', error);
+            this.screenshots = this.getFallbackScreenshots();
+            this.renderGallery();
+        }
+    }
+
+    getFallbackScreenshots() {
+        return [
+            {
+                name: 'example1.jpg',
+                url: './screenshots/example1.jpg',
+                title: 'Sample Screenshot 1',
+                description: 'Add your screenshots to the screenshots folder'
+            },
+            {
+                name: 'example2.jpg',
+                url: './screenshots/example2.jpg',
+                title: 'Sample Screenshot 2',
+                description: 'Screenshots will appear here automatically'
+            }
+        ];
+    }
+
+    formatTitle(filename) {
+        return filename
+            .replace(/\.(jpg|jpeg|png|webp)$/i, '')
+            .replace(/[-_]/g, ' ')
+            .replace(/\b\w/g, l => l.toUpperCase());
+    }
+
+    renderGallery() {
+        if (this.screenshots.length === 0) {
+            this.gallery.innerHTML = `
+                <div class="loading-message">
+                    <p>No screenshots found. Upload your screenshots to the <a href="https://github.com/TwistedModding/twistedmodding.github.io/tree/main/screenshots" target="_blank">screenshots folder</a> on GitHub!</p>
+                </div>
+            `;
+            return;
+        }
+
+        this.gallery.innerHTML = this.screenshots.map(screenshot => `
+            <div class="screenshot-item" data-src="${screenshot.url}">
+                <img src="${screenshot.url}" alt="${screenshot.title}" loading="lazy">
+                <div class="screenshot-overlay">
+                    <div class="screenshot-title">${screenshot.title}</div>
+                    <div class="screenshot-description">${screenshot.description}</div>
+                </div>
+            </div>
+        `).join('');
+
+        // Add click handlers
+        this.gallery.querySelectorAll('.screenshot-item').forEach(item => {
+            item.addEventListener('click', () => {
+                this.openModal(item.dataset.src);
+            });
+        });
+    }
+
+    openModal(src) {
+        const img = this.modal.querySelector('img');
+        img.src = src;
+        this.modal.classList.add('active');
+        document.body.style.overflow = 'hidden';
+    }
+
+    closeModal() {
+        this.modal.classList.remove('active');
+        document.body.style.overflow = '';
+    }
+}
+
+// Initialize screenshot gallery when page loads
+document.addEventListener('DOMContentLoaded', () => {
+    if (document.getElementById('screenshot-gallery')) {
+        new ScreenshotGallery();
+    }
+});
