@@ -1297,6 +1297,78 @@ h6:hover .anchor-link {
    Screenshot Gallery Styles
    ========================================================================== */
 
+.screenshot-sort-container {
+    margin: var(--spacing-lg) 0;
+}
+
+.screenshot-sort-controls {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-md);
+    flex-wrap: wrap;
+}
+
+.screenshot-sort-controls label {
+    color: var(--color-text-primary);
+    font-weight: 500;
+    font-size: 0.9rem;
+}
+
+.screenshot-sort-dropdown {
+    background-color: var(--color-surface);
+    color: var(--color-text-primary);
+    border: 1px solid var(--color-border);
+    border-radius: var(--border-radius-small);
+    padding: 8px 12px;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: all var(--transition-fast);
+    min-width: 150px;
+}
+
+.screenshot-sort-dropdown:hover {
+    background-color: var(--color-surface-hover);
+    border-color: var(--color-text-secondary);
+}
+
+.screenshot-sort-dropdown:focus {
+    outline: none;
+    border-color: var(--color-text-primary);
+    box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.1);
+}
+
+.screenshot-view-toggle {
+    background-color: var(--color-surface);
+    color: var(--color-text-primary);
+    border: 1px solid var(--color-border);
+    border-radius: var(--border-radius-small);
+    padding: 8px 12px;
+    cursor: pointer;
+    transition: all var(--transition-fast);
+    font-size: 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 40px;
+    height: 36px;
+}
+
+.screenshot-view-toggle:hover {
+    background-color: var(--color-surface-hover);
+    border-color: var(--color-text-secondary);
+}
+
+.screenshot-view-toggle:focus {
+    outline: none;
+    border-color: var(--color-text-primary);
+    box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.1);
+}
+
+.grid-icon {
+    display: block;
+    font-weight: bold;
+}
+
 .screenshot-gallery {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
@@ -1424,8 +1496,59 @@ h6:hover .anchor-link {
     z-index: calc(var(--z-notification) + 1);
 }
 
+/* List View Styles */
+.screenshot-gallery.list-view {
+    grid-template-columns: 1fr;
+    gap: var(--spacing-md);
+}
+
+.screenshot-gallery.list-view .screenshot-item {
+    display: flex;
+    flex-direction: row;
+    height: 120px;
+}
+
+.screenshot-gallery.list-view .screenshot-item img {
+    width: 200px;
+    height: 120px;
+    flex-shrink: 0;
+}
+
+.screenshot-gallery.list-view .screenshot-overlay {
+    position: static;
+    transform: none;
+    background: var(--color-surface);
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: var(--spacing-md);
+}
+
+.screenshot-gallery.list-view .screenshot-item:hover .screenshot-overlay {
+    transform: none;
+}
+
+.screenshot-gallery.list-view .screenshot-item:hover {
+    transform: none;
+}
+
+.screenshot-gallery.list-view .screenshot-item:hover img {
+    transform: none;
+}
+
 /* Mobile responsiveness */
 @media (max-width: 768px) {
+    .screenshot-sort-controls {
+        justify-content: space-between;
+        gap: var(--spacing-sm);
+    }
+    
+    .screenshot-sort-dropdown {
+        min-width: 120px;
+        flex: 1;
+    }
+    
     .screenshot-gallery {
         grid-template-columns: 1fr;
         gap: var(--spacing-md);

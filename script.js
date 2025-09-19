@@ -1613,12 +1613,51 @@ class ScreenshotGallery {
         this.gallery = document.getElementById('screenshot-gallery');
         this.modal = null;
         this.screenshots = [];
+        this.originalScreenshots = [];
+        this.currentSort = 'name-asc';
         this.init();
     }
 
     init() {
         this.createModal();
+        this.createSortingControls();
         this.loadScreenshots();
+    }
+
+    createSortingControls() {
+        const sortContainer = document.createElement('div');
+        sortContainer.className = 'screenshot-sort-container';
+        sortContainer.innerHTML = `
+            <div class="screenshot-sort-controls">
+                <label for="screenshot-sort">Sort by:</label>
+                <select id="screenshot-sort" class="screenshot-sort-dropdown">
+                    <option value="name-asc">Name (A-Z)</option>
+                    <option value="name-desc">Name (Z-A)</option>
+                    <option value="date-newest">Date (Newest First)</option>
+                    <option value="date-oldest">Date (Oldest First)</option>
+                    <option value="location">Location</option>
+                    <option value="random">Random</option>
+                </select>
+                <button class="screenshot-view-toggle" id="screenshot-view-toggle" title="Toggle grid/list view">
+                    <span class="grid-icon">⊞</span>
+                </button>
+            </div>
+        `;
+
+        this.gallery.parentNode.insertBefore(sortContainer, this.gallery);
+
+        const sortDropdown = document.getElementById('screenshot-sort');
+        sortDropdown.addEventListener('change', (e) => {
+            this.currentSort = e.target.value;
+            this.sortScreenshots();
+        });
+
+        const viewToggle = document.getElementById('screenshot-view-toggle');
+        viewToggle.addEventListener('click', () => {
+            this.gallery.classList.toggle('list-view');
+            const icon = viewToggle.querySelector('.grid-icon');
+            icon.textContent = this.gallery.classList.contains('list-view') ? '☰' : '⊞';
+        });
     }
 
     createModal() {
@@ -1645,66 +1684,37 @@ class ScreenshotGallery {
 
     async loadScreenshots() {
         try {
-            // Try multiple approaches to load screenshots
-            await this.tryLoadFromAPI() || this.loadFallbackScreenshots();
-        } catch (error) {
-            console.warn('Error loading screenshots:', error);
-            this.loadFallbackScreenshots();
-        }
-    }
-
-    async tryLoadFromAPI() {
-        try {
-            const response = await fetch('https://api.github.com/repos/TwistedModding/twistedmodding.github.io/contents/screenshots', {
-                headers: {
-                    'Accept': 'application/vnd.github.v3+json'
-                }
-            });
+            const response = await fetch('https://api.github.com/repos/TwistedModding/twistedmodding.github.io/contents/screenshots');
             
             if (response.ok) {
                 const files = await response.json();
-                console.log('GitHub API response:', files); // Debug log
-                
-                this.screenshots = files
-                    .filter(file => {
-                        const isFile = file.type === 'file';
-                        const isImage = /\.(jpg|jpeg|png|webp)$/i.test(file.name);
-                        const isNotReadme = !file.name.toLowerCase().includes('readme');
-                        console.log(`File: ${file.name}, isFile: ${isFile}, isImage: ${isImage}, isNotReadme: ${isNotReadme}`); // Debug log
-                        return isFile && isImage && isNotReadme;
-                    })
+                this.originalScreenshots = files
+                    .filter(file => file.type === 'file' && /\.(jpg|jpeg|png|webp)$/i.test(file.name))
                     .map(file => ({
                         name: file.name,
                         url: file.download_url,
                         title: this.formatTitle(file.name),
-                        description: 'Twisted Skyrim Screenshot'
+                        description: 'Twisted Skyrim Screenshot',
+                        location: this.extractLocation(file.name),
+                        dateInfo: this.extractDateInfo(file.name),
+                        uploadDate: new Date(file.created_at || Date.now())
                     }));
-                
-                console.log('Filtered screenshots:', this.screenshots); // Debug log
-                
-                if (this.screenshots.length > 0) {
-                    this.renderGallery();
-                    return true;
-                }
             } else {
-                console.warn('GitHub API response not ok:', response.status, response.statusText);
+                this.originalScreenshots = this.getFallbackScreenshots();
             }
-        } catch (error) {
-            console.warn('GitHub API call failed:', error);
-        }
-        
-        return false;
-    }
 
-    loadFallbackScreenshots() {
-        console.log('Loading fallback screenshots');
-        this.screenshots = this.getFallbackScreenshots();
-        this.renderGallery();
+            this.screenshots = [...this.originalScreenshots];
+            this.sortScreenshots();
+        } catch (error) {
+            console.warn('Could not load screenshots from GitHub API:', error);
+            this.originalScreenshots = this.getFallbackScreenshots();
+            this.screenshots = [...this.originalScreenshots];
+            this.sortScreenshots();
+        }
     }
 
     getFallbackScreenshots() {
-        // If the API fails, try to load screenshots directly from the known files
-        const knownScreenshots = [
+        const fallbackFiles = [
             'Falkreath - Sundas, 2꞉09 PM, 17th of Last Seed, 4E 201.png',
             'Hall of Attainment - Sundas, 1꞉49 PM, 17th of Last Seed, 4E 201.png',
             'Hod and Gerdur\'s House - Morndas, 11꞉34 AM, 18th of Last Seed, 4E 201.png',
@@ -1717,12 +1727,72 @@ class ScreenshotGallery {
             'The Blue Palace - Sundas, 4꞉06 PM, 17th of Last Seed, 4E 201.png'
         ];
 
-        return knownScreenshots.map(filename => ({
+        return fallbackFiles.map(filename => ({
             name: filename,
             url: `./screenshots/${encodeURIComponent(filename)}`,
             title: this.formatTitle(filename),
-            description: 'Twisted Skyrim Screenshot'
+            description: 'Twisted Skyrim Screenshot',
+            location: this.extractLocation(filename),
+            dateInfo: this.extractDateInfo(filename),
+            uploadDate: new Date()
         }));
+    }
+
+    extractLocation(filename) {
+        const match = filename.match(/^([^-]+)/);
+        return match ? match[1].trim() : 'Unknown';
+    }
+
+    extractDateInfo(filename) {
+        const match = filename.match(/(\w+,\s*\d+꞉\d+\s*[AP]M,\s*\d+\w*\s*of\s*\w+\s*\w+,\s*\d+E\s*\d+)/);
+        return match ? match[1] : null;
+    }
+
+    sortScreenshots() {
+        const sortedScreenshots = [...this.screenshots];
+        
+        switch (this.currentSort) {
+            case 'name-asc':
+                sortedScreenshots.sort((a, b) => a.name.localeCompare(b.name));
+                break;
+            case 'name-desc':
+                sortedScreenshots.sort((a, b) => b.name.localeCompare(a.name));
+                break;
+            case 'date-newest':
+                sortedScreenshots.sort((a, b) => {
+                    if (a.dateInfo && b.dateInfo) {
+                        return b.dateInfo.localeCompare(a.dateInfo);
+                    }
+                    return b.uploadDate - a.uploadDate;
+                });
+                break;
+            case 'date-oldest':
+                sortedScreenshots.sort((a, b) => {
+                    if (a.dateInfo && b.dateInfo) {
+                        return a.dateInfo.localeCompare(b.dateInfo);
+                    }
+                    return a.uploadDate - b.uploadDate;
+                });
+                break;
+            case 'location':
+                sortedScreenshots.sort((a, b) => {
+                    const locationCompare = a.location.localeCompare(b.location);
+                    if (locationCompare === 0) {
+                        return a.name.localeCompare(b.name);
+                    }
+                    return locationCompare;
+                });
+                break;
+            case 'random':
+                for (let i = sortedScreenshots.length - 1; i > 0; i--) {
+                    const j = Math.floor(Math.random() * (i + 1));
+                    [sortedScreenshots[i], sortedScreenshots[j]] = [sortedScreenshots[j], sortedScreenshots[i]];
+                }
+                break;
+        }
+        
+        this.screenshots = sortedScreenshots;
+        this.renderGallery();
     }
 
     formatTitle(filename) {
@@ -1752,7 +1822,6 @@ class ScreenshotGallery {
             </div>
         `).join('');
 
-        // Add click handlers
         this.gallery.querySelectorAll('.screenshot-item').forEach(item => {
             item.addEventListener('click', () => {
                 this.openModal(item.dataset.src);
@@ -1773,7 +1842,6 @@ class ScreenshotGallery {
     }
 }
 
-// Initialize screenshot gallery when page loads
 document.addEventListener('DOMContentLoaded', () => {
     if (document.getElementById('screenshot-gallery')) {
         new ScreenshotGallery();
