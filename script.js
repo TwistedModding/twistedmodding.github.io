@@ -1645,45 +1645,84 @@ class ScreenshotGallery {
 
     async loadScreenshots() {
         try {
-            const response = await fetch('https://api.github.com/repos/TwistedModding/twistedmodding.github.io/contents/screenshots');
+            // Try multiple approaches to load screenshots
+            await this.tryLoadFromAPI() || this.loadFallbackScreenshots();
+        } catch (error) {
+            console.warn('Error loading screenshots:', error);
+            this.loadFallbackScreenshots();
+        }
+    }
+
+    async tryLoadFromAPI() {
+        try {
+            const response = await fetch('https://api.github.com/repos/TwistedModding/twistedmodding.github.io/contents/screenshots', {
+                headers: {
+                    'Accept': 'application/vnd.github.v3+json'
+                }
+            });
             
             if (response.ok) {
                 const files = await response.json();
+                console.log('GitHub API response:', files); // Debug log
+                
                 this.screenshots = files
-                    .filter(file => file.type === 'file' && /\.(jpg|jpeg|png|webp)$/i.test(file.name))
+                    .filter(file => {
+                        const isFile = file.type === 'file';
+                        const isImage = /\.(jpg|jpeg|png|webp)$/i.test(file.name);
+                        const isNotReadme = !file.name.toLowerCase().includes('readme');
+                        console.log(`File: ${file.name}, isFile: ${isFile}, isImage: ${isImage}, isNotReadme: ${isNotReadme}`); // Debug log
+                        return isFile && isImage && isNotReadme;
+                    })
                     .map(file => ({
                         name: file.name,
                         url: file.download_url,
                         title: this.formatTitle(file.name),
                         description: 'Twisted Skyrim Screenshot'
                     }));
+                
+                console.log('Filtered screenshots:', this.screenshots); // Debug log
+                
+                if (this.screenshots.length > 0) {
+                    this.renderGallery();
+                    return true;
+                }
             } else {
-                this.screenshots = this.getFallbackScreenshots();
+                console.warn('GitHub API response not ok:', response.status, response.statusText);
             }
-
-            this.renderGallery();
         } catch (error) {
-            console.warn('Could not load screenshots from GitHub API:', error);
-            this.screenshots = this.getFallbackScreenshots();
-            this.renderGallery();
+            console.warn('GitHub API call failed:', error);
         }
+        
+        return false;
+    }
+
+    loadFallbackScreenshots() {
+        console.log('Loading fallback screenshots');
+        this.screenshots = this.getFallbackScreenshots();
+        this.renderGallery();
     }
 
     getFallbackScreenshots() {
-        return [
-            {
-                name: 'example1.jpg',
-                url: './screenshots/example1.jpg',
-                title: 'Sample Screenshot 1',
-                description: 'Add your screenshots to the screenshots folder'
-            },
-            {
-                name: 'example2.jpg',
-                url: './screenshots/example2.jpg',
-                title: 'Sample Screenshot 2',
-                description: 'Screenshots will appear here automatically'
-            }
+        // If the API fails, try to load screenshots directly from the known files
+        const knownScreenshots = [
+            'Falkreath - Sundas, 2꞉09 PM, 17th of Last Seed, 4E 201.png',
+            'Hall of Attainment - Sundas, 1꞉49 PM, 17th of Last Seed, 4E 201.png',
+            'Hod and Gerdur\'s House - Morndas, 11꞉34 AM, 18th of Last Seed, 4E 201.png',
+            'Hod and Gerdur\'s House - Morndas, 11꞉39 AM, 18th of Last Seed, 4E 201.png',
+            'Hod and Gerdur\'s House - Morndas, 11꞉46 AM, 18th of Last Seed, 4E 201.png',
+            'Skyrim - Sundas, 4꞉57 PM, 17th of Last Seed, 4E 201.png',
+            'The Blue Palace - Sundas, 11꞉15 PM, 17th of Last Seed, 4E 201.png',
+            'The Blue Palace - Sundas, 11꞉55 PM, 17th of Last Seed, 4E 201.png',
+            'The Blue Palace - Sundas, 4꞉00 PM, 17th of Last Seed, 4E 201.png',
+            'The Blue Palace - Sundas, 4꞉06 PM, 17th of Last Seed, 4E 201.png'
         ];
+
+        return knownScreenshots.map(filename => ({
+            name: filename,
+            url: `./screenshots/${encodeURIComponent(filename)}`,
+            title: this.formatTitle(filename),
+            description: 'Twisted Skyrim Screenshot'
+        }));
     }
 
     formatTitle(filename) {
