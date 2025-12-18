@@ -17,10 +17,11 @@ const Gameplay = () => {
         <h3>Gameplay Showcase</h3>
         <div className="video-container">
           <iframe 
-            src="https://www.youtube.com/embed/Cd3MuBgtcxg" 
-            title="Twisted Skyrim Gameplay" 
+            src="https://www.youtube.com/embed/pfeQMem6TW0" 
+            title="Twisted Skyrim - Starting the Game" 
             frameBorder="0" 
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+            referrerPolicy="strict-origin-when-cross-origin"
             allowFullScreen>
           </iframe>
         </div>
