@@ -7,6 +7,15 @@ const Changelog = () => {
 
   const convertMarkdownToHTML = useCallback((markdown) => {
     let html = markdown;
+    
+    // Remove the header section (everything before the first ## or until we find "## ")
+    // This removes the logo, navigation table, and horizontal rule
+    const firstH2 = html.search(/^## /m);
+    if (firstH2 !== -1) {
+      html = html.substring(firstH2);
+    }
+    
+    // Convert markdown to HTML
     html = html.replace(/^### (.*$)/gm, '<h3>$1</h3>');
     html = html.replace(/^## (.*$)/gm, '<h2>$1</h2>');
     html = html.replace(/^# (.*$)/gm, '<h1>$1</h1>');
@@ -14,6 +23,7 @@ const Changelog = () => {
     html = html.replace(/\*(.*?)\*/g, '<em>$1</em>');
     html = html.replace(/`([^`]+)`/g, '<code>$1</code>');
     html = html.replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2" target="_blank" rel="noopener noreferrer">$1</a>');
+    
     return html;
   }, []);
 
