@@ -34,7 +34,7 @@
     
     /* Layout */
     --sidebar-width: 250px;
-    --content-max-width: 1200px;
+    --content-max-width: 1600px;
     --border-radius-small: 4px;
     --border-radius-medium: 6px;
     --border-radius-large: 8px;
@@ -80,8 +80,15 @@ body {
     color: var(--color-text-primary);
     line-height: 1.6;
     overflow-x: hidden;
+    min-height: 100vh;
+    margin: 0;
+    padding: 0;
+}
+
+#root {
     display: flex;
     justify-content: center;
+    width: 100%;
     min-height: 100vh;
 }
 
@@ -106,17 +113,19 @@ body {
     width: 100%;
     max-width: var(--content-max-width);
     min-height: 100vh;
+    margin: 0 auto;
+    position: relative;
 }
 
 /* ==========================================================================
    Sidebar Styles
    ========================================================================== */
 .sidebar {
-    position: relative;
+    position: sticky;
     top: 0;
     left: 0;
     width: var(--sidebar-width);
-    min-height: 100vh;
+    height: 100vh;
     background-color: var(--color-background);
     border-right: 1px solid var(--color-border-light);
     z-index: var(--z-sidebar);
@@ -367,6 +376,7 @@ body {
    ========================================================================== */
 .main-content {
     flex: 1;
+    margin-left: var(--sidebar-width);
     padding: var(--spacing-xxl);
     min-height: 100vh;
     max-width: none;
@@ -384,8 +394,6 @@ body {
     display: block;
     color: var(--color-text-primary);
 }
-
-/* Performance section inherits active styles - no special treatment needed */
 
 /* ==========================================================================
    Section Headers
@@ -864,21 +872,6 @@ h6:hover .anchor-link {
 }
 
 /* ==========================================================================
-   Performance Section Styling (Cleaned up inheritance)
-   ========================================================================== */
-/* Performance section inherits base styles from content-section automatically */
-/* Search highlights inherit from base .search-highlight rule */
-
-/* Only override line highlights where necessary */
-#performance .line-highlight,
-.content-section#performance .line-highlight {
-    background-color: var(--color-line-highlight) !important;
-    border-radius: var(--border-radius-small);
-    padding: 2px 4px;
-    transition: background-color var(--transition-medium);
-}
-
-/* ==========================================================================
    Mobile Navigation
    ========================================================================== */
 .mobile-toggle {
@@ -954,6 +947,7 @@ h6:hover .anchor-link {
     }
     
     .main-content {
+        margin-left: 0;
         padding: var(--spacing-lg);
         padding-top: 80px; /* Account for mobile toggle */
     }
@@ -1081,11 +1075,9 @@ h6:hover .anchor-link {
     }
 }
 
-/* ================================
-   CHANGELOG STYLES
-   ================================ 
-*/
-
+/* ==========================================================================
+   Changelog Styles
+   ========================================================================== */
 #changelog .section-header h1 {
     border-bottom: 2px solid var(--color-text-primary);
     padding-bottom: 0.5rem;
@@ -1096,8 +1088,6 @@ h6:hover .anchor-link {
     max-width: 100%;
     overflow: hidden;
 }
-
-
 
 .changelog-official,
 .changelog-fallback {
