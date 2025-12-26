@@ -26,7 +26,7 @@ const Support = () => {
             <div className="support-card">
               <h4>GitHub Issues</h4>
               <p>Report bugs, request features, or track known issues on the official GitHub repository.</p>
-              <a href="https://github.com/LivelyDismay/Learn-To-Mod/blob/main/Main.md" target="_blank" rel="noopener noreferrer" className="support-button">
+              <a href="https://github.com/Oghma-Infinium/Twisted-Skyrim/issues" target="_blank" rel="noopener noreferrer" className="support-button">
                 View GitHub
               </a>
               <p className="support-note">Best for: Bug reports, feature requests, technical issues</p>
@@ -42,7 +42,7 @@ const Support = () => {
             <div className="support-card">
               <h4>Patreon</h4>
               <p>Support ongoing development with monthly contributions and get early access to updates.</p>
-              <a href="https://www.patreon.com/livthedream" target="_blank" rel="noopener noreferrer" className="support-button patreon">
+              <a href="https://www.patreon.com/c/TwistedModding" target="_blank" rel="noopener noreferrer" className="support-button patreon">
                 Support on Patreon
               </a>
             </div>
@@ -50,7 +50,7 @@ const Support = () => {
             <div className="support-card">
               <h4>Ko-fi</h4>
               <p>Make a one-time donation to show your appreciation.</p>
-              <a href="https://ko-fi.com/livthedream" target="_blank" rel="noopener noreferrer" className="support-button kofi">
+              <a href="https://ko-fi.com/twistedmodding1" target="_blank" rel="noopener noreferrer" className="support-button kofi">
                 Donate on Ko-fi
               </a>
             </div>
@@ -85,7 +85,7 @@ const Support = () => {
 
         <div className="support-section">
           <h3>Credits & Attribution</h3>
-          <p>Twisted Skyrim is made possible by the incredible work of thousands of mod authors in the Skyrim modding community. Full credits can be found in the Load Order Library and within Mod Organizer 2.</p>
+          <p>Twisted Skyrim is made possible by the incredible work of thousands of mod authors in the Skyrim modding community.</p>
           <p><strong>Special thanks to:</strong> The Wabbajack team, all mod authors whose work is included in this list, and the dedicated community members who provide support and feedback.</p>
         </div>
       </div>
