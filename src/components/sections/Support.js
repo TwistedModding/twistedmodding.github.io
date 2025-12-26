@@ -20,7 +20,7 @@ const Support = () => {
               <a href="https://discord.gg/wakingdreams" target="_blank" rel="noopener noreferrer" className="support-button">
                 Join Discord
               </a>
-              <p className="support-note">Best for: Real-time help, quick questions, community discussion</p>
+              <p className="support-note">Best place to quickly receive support or to report bugs.</p>
             </div>
 
             <div className="support-card">
@@ -29,7 +29,7 @@ const Support = () => {
               <a href="https://github.com/Oghma-Infinium/Twisted-Skyrim/issues" target="_blank" rel="noopener noreferrer" className="support-button">
                 View GitHub
               </a>
-              <p className="support-note">Best for: Bug reports, feature requests, technical issues</p>
+              <p className="support-note">Ideal for reporting bugs or suggesting improvements.</p>
             </div>
           </div>
         </div>
