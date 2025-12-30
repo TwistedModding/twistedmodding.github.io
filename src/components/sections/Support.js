@@ -86,7 +86,7 @@ const Support = () => {
         <div className="support-section">
           <h3>Credits & Attribution</h3>
           <p>Twisted Skyrim is made possible by the incredible work of thousands of mod authors in the Skyrim modding community.</p>
-          <p><strong>Special thanks to:</strong> The Wabbajack team, all mod authors whose work is included in this list, and the dedicated community members who provide support and feedback.</p>
+          <p><strong>Special thanks to:</strong> Halgari, Total, Aljo, Arranz, and the entire modding community for their contributions and support.</p>
         </div>
       </div>
     </>

@@ -21,7 +21,7 @@ const Overview = () => {
       
       <div className="content-text">
         <p>
-          Twisted Skyrim is modlist for TES V: Special Edition. Its been made easy to install thanks to Wabbajack. Twisted Skyrim presents you with an entirely hand-crafted suite of visuals, a total combat system overhaul, new & expanded locations, worlds, quests, and achievements.
+          Twisted Skyrim is modlist for TES V: Special Edition. Its been made easy to install thanks to Wabbajack. Twisted Skyrim presents you with an entirely hand-crafted suite of visuals, a completely unique gameplay experience, new & expanded locations, worlds, quests, and achievements.
         </p>
         
         <h3>Design Philosophy</h3>

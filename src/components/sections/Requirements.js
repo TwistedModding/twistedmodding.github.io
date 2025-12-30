@@ -36,7 +36,8 @@ const Requirements = () => {
           <h3>Important Notice</h3>
           <p><strong>Twisted Skyrim requires the full AE upgrade, which means you must purchase the AE edition of the game for the list to function.</strong></p>
           <p><strong>You must update Skyrim to the latest version (1.6.1170) on Steam to install this list.</strong></p>
-          <p><strong>THESE ARE DESKTOP RECOMMENDED SPECS, THIS LIST WILL NOT WORK ON LAPTOPS</strong></p>
+          <p><strong>You must also have the Creation Kit for Skyrim Special Edition installed on the same drive as Skyrim.</strong></p>
+          <p><strong>THESE ARE DESKTOP RECOMMENDED SPECS, THIS LIST WILL NOT WORK ON LAPTOPS.</strong></p>
         </div>
         
         <h3>Storage Requirements</h3>

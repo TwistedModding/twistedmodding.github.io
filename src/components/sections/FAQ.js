@@ -11,15 +11,7 @@ const FAQ = () => {
       <div className="content-text">
         <div className="faq-item">
           <h3>Why am I crashing?</h3>
-          <p>Crashes can happen for many reasons. Here are the most common causes:</p>
-          <ul>
-            <li>You didn't follow the installation guide properly</li>
-            <li>You're missing required files (Creation Club content, latest game version)</li>
-            <li>Your pagefile is not set correctly</li>
-            <li>Your antivirus is interfering with the game</li>
-            <li>You modified the modlist without knowing what you're doing</li>
-            <li>Your hardware doesn't meet the minimum requirements</li>
-          </ul>
+          <p>I have no idea, post a crash log on the discord server for more help.</p>
           <p>Before asking for help, make sure you've followed the installation guide exactly and read through this FAQ.</p>
         </div>
 
@@ -30,7 +22,7 @@ const FAQ = () => {
 
         <div className="faq-item">
           <h3>Can I remove mods I don't like?</h3>
-          <p><strong>No.</strong> Just like adding mods, removing mods will break the list. If you don't like certain aspects of the list, this modlist might not be for you.</p>
+          <p><strong>No.</strong> Just like adding mods, removing mods will break the list. If you don't like certain aspects of the list, this modlist might not be for you. No modlist will be perfect for everyone, so find one that ticks enough of your boxes.</p>
         </div>
 
         <div className="faq-item">
@@ -47,12 +39,12 @@ const FAQ = () => {
 
         <div className="faq-item">
           <h3>What difficulty should I play on?</h3>
-          <p>The list is balanced around <strong>Expert</strong> difficulty. You can adjust it based on your preferences, but Expert is recommended for the intended experience.</p>
+          <p>The list is balanced around <strong>Adept</strong> difficulty. You can adjust it based on your preferences, but Adept is recommended for the intended experience.</p>
         </div>
 
         <div className="faq-item">
           <h3>Can I use a controller?</h3>
-          <p><strong>No.</strong> Controller support is not included and will cause crashes. Twisted Skyrim is designed for keyboard and mouse only.</p>
+          <p><strong>No.</strong> Controller usage is not supported and never will be.</p>
         </div>
 
         <div className="faq-item">
@@ -96,7 +88,6 @@ const FAQ = () => {
           <ul>
             <li>The file was removed from Nexus/source</li>
             <li>Your internet connection is unstable</li>
-            <li>Nexus Premium has expired</li>
             <li>The file requires manual download (check the installation guide for manual download links)</li>
           </ul>
         </div>
@@ -107,27 +98,8 @@ const FAQ = () => {
         </div>
 
         <div className="faq-item">
-          <h3>Why does LOOT say I have dirty plugins?</h3>
-          <p>Ignore LOOT. Do not run LOOT on this modlist. The load order is already optimized and running LOOT will break it.</p>
-        </div>
-
-        <div className="faq-item">
-          <h3>Can I use this list with Skyrim VR?</h3>
-          <p><strong>No.</strong> This list is for Skyrim Special Edition only. It will not work with VR.</p>
-        </div>
-
-        <div className="faq-item">
           <h3>Where do I report bugs?</h3>
-          <p>Report bugs on the <a href="https://discord.gg/wakingdreams" target="_blank" rel="noopener noreferrer">Discord server</a> or on the <a href="https://github.com/LivelyDismay/Learn-To-Mod/blob/main/Main.md" target="_blank" rel="noopener noreferrer">GitHub page</a>.</p>
-        </div>
-
-        <div className="faq-item">
-          <h3>Known Issues</h3>
-          <ul>
-            <li><strong>Black face bug:</strong> Some NPCs may have dark faces. This is a known issue with certain mod combinations and will be fixed in future updates.</li>
-            <li><strong>Save bloat:</strong> Keep multiple save files and don't rely solely on autosaves or quicksaves.</li>
-            <li><strong>Performance in cities:</strong> Cities are performance-intensive areas. Consider using the Performance Guide optimizations.</li>
-          </ul>
+          <p>Report bugs on the <a href="https://discord.gg/wakingdreams" target="_blank" rel="noopener noreferrer">Discord server.</a></p>
         </div>
       </div>
     </>

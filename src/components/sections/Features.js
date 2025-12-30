@@ -4,11 +4,11 @@ const Features = () => {
   const features = [
     {
       title: 'Modern Combat',
-      description: 'Melee combat has been modernized with the help of BFCO, a modern MCO replacement for all intents and purposes. For those unfamiliar, it allows for jump attacks, swimming attacks, and attack speed buffs on movesets.'
+      description: 'Attack commitment, stances, dodging mechanics for both the player and AI, along with intelligent enemy AI to create a challenging and engaging combat experience.'
     },
     {
       title: 'World Overhaul',
-      description: 'Expanded cities, new dungeons, and unique mashups for several locations.'
+      description: 'Expanded cities, new dungeons, new NPCs, and unique mashups for several locations.'
     },
     {
       title: 'New Quests and Lands',
