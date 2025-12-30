@@ -28,6 +28,7 @@ const Requirements = () => {
         <h3>Basic Requirements</h3>
         <ul>
           <li>Skyrim Special Edition + Paid Anniversary Upgrade (Steam version)</li>
+          <li>Creation Kit for Skyrim Special Edition</li>
           <li>Wabbajack</li>
           <li>Microsoft Visual C++ Redistributables</li>
         </ul>
