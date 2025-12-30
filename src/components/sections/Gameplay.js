@@ -98,8 +98,19 @@ const Gameplay = () => {
           </li>
         </ul>
 
+        <h2>Religion Overhaul</h2>
+        <p>Twisted Skyrim reworks the religion system to provide more depth and engagement with the various deities, upgrading the buffs you receive based on doing certain tasks.</p>
+        <ul>
+          <li><a href="https://www.nexusmods.com/skyrimspecialedition/mods/120398" target="_blank" rel="noopener noreferrer">Paragon</a> - An complete overhaul to the religion system.</li>
+            <ul>
+              <li>Breaks down Deity buffs into three categories: Blessings, Acolyte, and Champion. Blessings are the base buff you get for praying at a shrine, Acolyte is acheived after during general tasks based on the Deity, and Champion is the highest tier achieved after doing specific tasks.</li>
+              <li>Archon turns Shrine Blessings into permanent bonuses, however you can only pray to one deity at a time. Acolyte and Champion bonuses will only apply if you have the Deity's Shrine Blessing.</li>
+              <li>Read the entire mod page for more details and information on each specific Deity you may follow.</li>
+            </ul>
+        </ul>
+
         <h2>Leveling and Progression</h2>
-        <p>Twisted Skyrim reaplces the vanilla leveling system to have the player engage with the world around them more.</p>
+        <p>Twisted Skyrim replaces the vanilla leveling system to have the player engage with the world around them more.</p>
 
         <h3>Changes to skill leveling</h3>
         <p>Skill leveling has been replaced with a system that relies on your actual level using <a href="https://www.nexusmods.com/skyrimspecialedition/mods/89940" target="_blank" rel="noopener noreferrer">Static Skill Leveling</a>.</p>
