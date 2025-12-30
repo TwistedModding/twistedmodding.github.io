@@ -30,6 +30,9 @@ const Changelog = () => {
     html = html.replace(/`([^`]+)`/g, '<code>$1</code>');
     html = html.replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2" target="_blank" rel="noopener noreferrer">$1</a>');
     
+    // Convert line breaks to <br> (but not inside lists or after headings)
+    html = html.replace(/(?<!<\/h[1-6]>)(?<!<\/li>)(?<!<\/ul>)\n(?!<[h#ul])/g, '<br>\n');
+    
     return html;
   }, []);
 
