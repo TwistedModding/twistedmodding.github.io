@@ -8,7 +8,7 @@ const Screenshots = () => {
 
   const loadScreenshots = useCallback(async () => {
     try {
-      const response = await fetch('https://api.github.com/repos/TwistedModding/twistedmodding.github.io/contents/screenshots');
+      const response = await fetch('https://api.github.com/repos/TwistedModding/twistedmodding.github.io/contents/screenshots?ref=source');
       if (response.ok) {
         const files = await response.json();
         const imageFiles = files
