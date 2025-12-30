@@ -8,8 +8,6 @@ const Changelog = () => {
   const convertMarkdownToHTML = useCallback((markdown) => {
     let html = markdown;
     
-    // Remove the header section (everything before the first ## or until we find "## ")
-    // This removes the logo, navigation table, and horizontal rule
     const firstH2 = html.search(/^## /m);
     if (firstH2 !== -1) {
       html = html.substring(firstH2);
@@ -19,19 +17,26 @@ const Changelog = () => {
     html = html.replace(/^### (.*$)/gm, '<h3>$1</h3>');
     html = html.replace(/^## (.*$)/gm, '<h2>$1</h2>');
     html = html.replace(/^# (.*$)/gm, '<h1>$1</h1>');
-    
-    // Convert unordered lists (lines starting with * or -)
     html = html.replace(/^[*-] (.+)$/gm, '<li>$1</li>');
-    // Wrap consecutive <li> elements in <ul>
     html = html.replace(/(<li>.*<\/li>\n?)+/g, (match) => `<ul>${match}</ul>`);
-    
     html = html.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
     html = html.replace(/\*([^\s*](?:.*?[^\s*])?)\*/g, '<em>$1</em>');
     html = html.replace(/`([^`]+)`/g, '<code>$1</code>');
     html = html.replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2" target="_blank" rel="noopener noreferrer">$1</a>');
-    
-    // Convert line breaks to <br> (but not inside lists or after headings)
-    html = html.replace(/(?<!<\/h[1-6]>)(?<!<\/li>)(?<!<\/ul>)\n(?!<[h#ul])/g, '<br>\n');
+    html = html.replace(/\n\n+/g, '</p><p>');
+    html = '<p>' + html + '</p>';
+    html = html.replace(/<p>(<h[1-6]>)/g, '$1');
+    html = html.replace(/(<\/h[1-6]>)<\/p>/g, '$1');
+    html = html.replace(/<p>(<ul>)/g, '$1');
+    html = html.replace(/(<\/ul>)<\/p>/g, '$1');
+    html = html.replace(/<p>(<details>)/g, '$1');
+    html = html.replace(/(<\/details>)<\/p>/g, '$1');
+    html = html.replace(/<p>(<summary>)/g, '$1');
+    html = html.replace(/(<\/summary>)<\/p>/g, '$1');
+    html = html.replace(/<p><\/p>/g, '');
+    html = html.replace(/<p>([^<]*?)\n([^<]*?)<\/p>/g, (match, before, after) => {
+      return `<p>${before}<br>\n${after}</p>`;
+    });
     
     return html;
   }, []);
