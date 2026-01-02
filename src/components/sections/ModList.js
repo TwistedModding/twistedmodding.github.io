@@ -13,7 +13,7 @@ const ModList = () => {
         
         <div className="modlist-container">
           <iframe 
-            src="https://loadorderlibrary.com/lists/twisted-skyrim-2" 
+            src="https://loadorderlibrary.com/lists/twisted-skyrim-4" 
             title="Twisted Skyrim Mod List"
             width="100%"
             height="800"
