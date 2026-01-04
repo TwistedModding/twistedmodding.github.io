@@ -109,7 +109,7 @@ const Performance = () => {
         <ol>
           <li>In Mod Organizer, select <strong>DynDOLOD</strong> from the executable dropdown</li>
           <li>Ignore all warnings that pop up while its starting.</li>
-          <li>Make sure the options match the following screenshot exactly, making sure that all the worldspaces in the top left are selected. Afterwards, click <code>Start</code>.</li>
+          <li>Make sure the options match the following screenshot exactly, making sure that all the worldspaces in the top left are selected. Afterwards, click <code>Ok</code>.</li>
           <li><strong>Ignore all warnings that occur during generation.</strong></li>
           <li>After generation is complete, the files should end up in <code>C:\Twisted Skyrim\tools\DynDOLOD\DynDOLOD_Output</code>. Cut and paste them into <code>C:\Twisted Skyrim\mods\DynDOLOD Output</code>.</li>
           <li>Enable the mod in MO2 and hit <code>F5</code> to refresh the mod list.</li>
