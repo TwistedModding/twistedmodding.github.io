@@ -101,6 +101,11 @@ const FAQ = () => {
           <h3>Where do I report bugs?</h3>
           <p>Report bugs on the <a href="https://discord.gg/wakingdreams" target="_blank" rel="noopener noreferrer">Discord server.</a></p>
         </div>
+
+        <div className="faq-item">
+          <h3>Why can't I attack teammates, why can't I shout at the greybeards for the main quest?</h3>
+          <p>Sneak and then attack.</p>
+        </div>
       </div>
     </>
   );
