@@ -101,7 +101,7 @@ const Gameplay = () => {
         <h2>Religion Overhaul</h2>
         <p>Twisted Skyrim reworks the religion system to provide more depth and engagement with the various deities, upgrading the buffs you receive based on doing certain tasks.</p>
         <ul>
-          <li><a href="https://www.nexusmods.com/skyrimspecialedition/mods/120398" target="_blank" rel="noopener noreferrer">Paragon</a> - An complete overhaul to the religion system.</li>
+          <li><a href="https://www.nexusmods.com/skyrimspecialedition/mods/160141" target="_blank" rel="noopener noreferrer">Archon</a> - An complete overhaul to the religion system.</li>
             <ul>
               <li>Breaks down Deity buffs into three categories: Blessings, Acolyte, and Champion. Blessings are the base buff you get for praying at a shrine, Acolyte is acheived after during general tasks based on the Deity, and Champion is the highest tier achieved after doing specific tasks.</li>
               <li>Archon turns Shrine Blessings into permanent bonuses, however you can only pray to one deity at a time. Acolyte and Champion bonuses will only apply if you have the Deity's Shrine Blessing.</li>

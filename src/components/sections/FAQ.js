@@ -103,7 +103,7 @@ const FAQ = () => {
         </div>
 
         <div className="faq-item">
-          <h3>Why can't I attack teammates, why can't I shout at the greybeards for the main quest?</h3>
+          <h3>Why can't I attack neutral or friendly NPCs? Why can't I shout at the greybeards for the main quest?</h3>
           <p>Sneak and then attack.</p>
         </div>
       </div>
