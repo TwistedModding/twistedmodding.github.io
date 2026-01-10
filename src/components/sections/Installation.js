@@ -178,9 +178,6 @@ const Installation = () => {
         8. Navigate to your Install folder for the list and click "Select Folder"<br />
         9. <strong>(OPTIONAL)</strong> You can repeat these steps for the other executables: ModOrganizer.exe</p>
 
-        <h4>Widescreen Fixes</h4>
-        <p>Basic 21x9 support is included in the list. Enable the mods <code>Edge UI - Modern Skyrim Interface 21x9</code> & <code>Edge UI - Explorer Addon 21x9</code> in MO2</p>
-
         <h4>Controller and Gamepad Setup</h4>
         <p>This list will NOT officially add any controller or gamepad support. Currently the game crashes with a controller plugged in and honestly I'm gonna keep it like that cause I like it.</p>
       </div>
