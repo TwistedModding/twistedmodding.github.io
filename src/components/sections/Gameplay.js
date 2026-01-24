@@ -163,8 +163,6 @@ const Gameplay = () => {
         <p>Potions have been signficantly buffed due to the damage and health changes by SkyValor, and I highly recommend staying stocked up.</p>
         
         <p><a href="https://www.nexusmods.com/skyrimspecialedition/mods/51310" target="_blank" rel="noopener noreferrer">Dragon War</a> completely overhauls dragon behaviors and resistances. The dragon fights are much more unpredictable and difficult. Reading through this is basically required as without knowing resistances, you're in for a very long fight.</p>
-        
-        <p><a href="https://www.nexusmods.com/skyrimspecialedition/mods/154357" target="_blank" rel="noopener noreferrer">Skybane - The Logic of Death</a> completely overhauls NPC resistances (all of those except dragons). Everything now has a weakness, but will also have resistances. This means that carrying multiple damage types is highly recommended.</p>
 
         <div className="warning">
           <p><strong>Beware the bears.</strong></p>
