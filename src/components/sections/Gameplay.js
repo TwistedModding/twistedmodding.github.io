@@ -171,7 +171,6 @@ const Gameplay = () => {
         </div>
 
         <h2>Starting A New Game!</h2>
-
           <ul>
             <li>Once at the main menu, select <code>New Game</code>.</li>
             <li>Create your character as normal.</li>
@@ -185,6 +184,13 @@ const Gameplay = () => {
             <li>Speak to the statue and select your start, then sleep in the bed behind you.</li>
           </ul>
 
+          <h2>Quests</h2>
+            <ul>
+              <li>DAc0da can be started after reaching level 25, completing The Horn of Jurgen Windcaller, The Eye of Magnus, & Arniel's Endeavor.</li>
+              <li>Vigilant can be started after completing DAc0da.</li>
+              <li>Glenmoril can be started after completing Discerning the Transmundane & At the Summit of Apocrypha.</li>
+              <li>Unslaad can be started after completing the main questline, Censored Fate, Act 4 of Vigilant, Sacred Anatomancer(Vigilant), & Feast of Love(Glenmoril).</li>
+            </ul>
       </div>
     </>
   );
