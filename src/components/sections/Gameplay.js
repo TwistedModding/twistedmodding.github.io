@@ -158,9 +158,7 @@ const Gameplay = () => {
         
         <p>A poise system has been added, and if the enemies (or yours) poise gets broken, a stagger will occur which is an opportunity for you, or them to attack without punishment. Archers can take advantage of headshots to deal bonus poise damage to keep them off of you for longer.</p>
         
-        <p><a href="https://www.nexusmods.com/skyrimspecialedition/mods/106240" target="_blank" rel="noopener noreferrer">SkyValor</a> changes experience gain, damage, health pools, resource regeneration, and much more. Give it a thorough read.</p>
-        
-        <p>Potions have been signficantly buffed due to the damage and health changes by SkyValor, and I highly recommend staying stocked up.</p>
+        <p><a href="https://www.nexusmods.com/skyrimspecialedition/mods/93258" target="_blank" rel="noopener noreferrer">Know Your Enemy</a> Changes resistances of all NPCs and gear. Every NPC has a weakness and resistances to certain damage types.</p>
         
         <p><a href="https://www.nexusmods.com/skyrimspecialedition/mods/51310" target="_blank" rel="noopener noreferrer">Dragon War</a> completely overhauls dragon behaviors and resistances. The dragon fights are much more unpredictable and difficult. Reading through this is basically required as without knowing resistances, you're in for a very long fight.</p>
 
